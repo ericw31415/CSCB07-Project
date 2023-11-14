@@ -1,4 +1,4 @@
-package ca.utoronto.cscb07project.ui.post;
+package ca.utoronto.cscb07project.ui.events;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import ca.utoronto.cscb07project.databinding.FragmentPostBinding;
+import ca.utoronto.cscb07project.databinding.FragmentEventsBinding;
 
-public class PostFragment extends Fragment {
+public class EventsFragment extends Fragment {
 
-    private FragmentPostBinding binding;
+    private FragmentEventsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        PostViewModel postViewModel =
-                new ViewModelProvider(this).get(PostViewModel.class);
+        EventsViewModel eventsViewModel =
+                new ViewModelProvider(this).get(EventsViewModel.class);
 
-        binding = FragmentPostBinding.inflate(inflater, container, false);
+        binding = FragmentEventsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textPost;
-        postViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textEvents;
+        eventsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

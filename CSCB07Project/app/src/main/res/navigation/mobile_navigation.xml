@@ -12,20 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="ca.utoronto.cscb07project.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
-        android:id="@+id/navigation_post"
-        android:name="ca.utoronto.cscb07project.ui.post.PostFragment"
-        android:label="@string/title_post"
-        tools:layout="@layout/fragment_post" >
-        <action
-            android:id="@+id/action_navigation_post_self"
-            app:destination="@id/navigation_post" />
-    </fragment>
+        android:id="@+id/navigation_events"
+        android:name="ca.utoronto.cscb07project.ui.events.EventsFragment"
+        android:label="@string/title_events"
+        tools:layout="@layout/fragment_events" />
 
     <fragment
         android:id="@+id/navigation_notifications"

@@ -1,16 +1,16 @@
-package ca.utoronto.cscb07project.ui.post;
+package ca.utoronto.cscb07project.ui.events;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class PostViewModel extends ViewModel {
+public class EventsViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public PostViewModel() {
+    public EventsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is POSt fragment");
+        mText.setValue("This is events fragment");
     }
 
     public LiveData<String> getText() {
