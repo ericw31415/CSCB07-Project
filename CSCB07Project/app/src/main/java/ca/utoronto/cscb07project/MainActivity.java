@@ -16,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import ca.utoronto.cscb07project.databinding.ActivityMainBinding;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginSignoutActivity;
+import ca.utoronto.cscb07project.ui.signup.SignupActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToLoginSignOut(View view) {
         Intent intent = new Intent(this, LoginSignoutActivity.class);
+        startActivity(intent);
+    }
+
+    public void toSignUp(View view) {
+        Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
     }
 

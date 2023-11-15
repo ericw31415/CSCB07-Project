@@ -4,20 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import ca.utoronto.cscb07project.R;
-import ca.utoronto.cscb07project.databinding.ActivityMainBinding;
+import ca.utoronto.cscb07project.ui.signup.UserModel;
 
 public class LoginSignoutActivity extends AppCompatActivity implements LoginSignoutView{
 

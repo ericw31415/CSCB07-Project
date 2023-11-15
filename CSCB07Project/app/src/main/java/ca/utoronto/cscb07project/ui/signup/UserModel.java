@@ -1,16 +1,14 @@
-package ca.utoronto.cscb07project.ui.loginsignout;
+package ca.utoronto.cscb07project.ui.signup;
 
 public class UserModel {
-    private String userID;
     private String email;
     private String password;
     private String fName;
     private String lName;
     private boolean isAdmin;
 
-    public UserModel(String userID, String email, String password, boolean isAdmin,
+    public UserModel(String email, String password, boolean isAdmin,
                      String fName, String lName) {
-        this.userID = userID;
         this.email = email;
         this.password = password;
         this.isAdmin = isAdmin;
@@ -20,10 +18,6 @@ public class UserModel {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getUserID(){
-        return userID;
     }
 
     public String getPassword(){
@@ -58,17 +52,9 @@ public class UserModel {
         this.lName = lName;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @Override
-    public String toString(){
-        return fName + " " + lName + ", " + userID;
-    }
 
 }
