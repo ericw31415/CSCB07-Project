@@ -7,8 +7,8 @@ public class UserModel {
     private String lName;
     private boolean isAdmin;
 
-    public UserModel(String email, String password, boolean isAdmin,
-                     String fName, String lName) {
+    public UserModel(String email, String password,
+                     String fName, String lName, boolean isAdmin) {
         this.email = email;
         this.password = password;
         this.isAdmin = isAdmin;
