@@ -3,6 +3,7 @@ package ca.utoronto.cscb07project;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
@@ -15,12 +16,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import ca.utoronto.cscb07project.databinding.ActivityMainBinding;
+import ca.utoronto.cscb07project.ui.POStCheck.POStCheckActivity;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginSignoutActivity;
 import ca.utoronto.cscb07project.ui.signup.SignupActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+
+    private Button POStCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
+        POStCheck = (Button) findViewById(R.id.button3); //---
+        POStCheck.setOnClickListener(this::goToPOStCheck); //---
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -53,5 +59,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
     }
+
+    //---
+    public void goToPOStCheck(View view) {
+        int viewID = view.getId();
+
+        if (viewID == R.id.button3){
+            startActivity(new Intent(this, POStCheckActivity.class));
+        }
+    }
+    //---
 
 }
