@@ -7,4 +7,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="POSt_Descrip">The Computer Science POSt requires specific grades in the courses
         listed below. Please provide your numerical grades.</string>
+    <string name="POSt_req1">The Computer Science POSt requires: \n\n 1. A CGPA of at least 2.5 after
+        taking: \n CSC/MAT A67 \n CSC A48 \n MAT A22 \n MAT A31 \n MAT A37</string>
+    <string name="POSt_req2">2. A grade of at least B in CSC
+        A48</string>
+    <string name="POSt_req3">3. A grade of at least C- in two of: \n CSC/MAT A67 \n MAT A22 \n
+        MAT A37</string>
+
 </resources>
