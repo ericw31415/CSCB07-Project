@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class getGPA {
 
-    //is making these methods static going to cause issues?
+    // is making these methods static going to cause issues?
     public static boolean passedReq1(double a67, double a48, double a22, double a31, double a37){
         double cgpa = (findGPA(a67) + findGPA(a48) + findGPA(a22) + findGPA(a31) + findGPA(a37))/5;
         return cgpa >= 2.5;
@@ -12,7 +12,6 @@ public class getGPA {
 
     public static double gpaCalc(double a67, double a48, double a22, double a31, double a37){
         return (findGPA(a67) + findGPA(a48) + findGPA(a22) + findGPA(a31) + findGPA(a37))/5;
-        //return cgpa;
     }
 
     public static boolean passedReq2(double a48){

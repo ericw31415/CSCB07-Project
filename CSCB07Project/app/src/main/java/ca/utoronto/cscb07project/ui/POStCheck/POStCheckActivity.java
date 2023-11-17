@@ -22,25 +22,17 @@ import ca.utoronto.cscb07project.ui.POStCheck.POStCheckCalc;
 
 public class POStCheckActivity extends AppCompatActivity {
 
-    private Button POStProceed;
-
-    //private DatabaseReference grades;
-    private EditText csca67, csca48, mata22, mata31, mata37;
-    private DatabaseReference userRef;
+    public Button POStProceed;
+    public EditText csca67, csca48, mata22, mata31, mata37;
+    public DatabaseReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_check);
 
-        /**
-        POSt Check PROCEED button
-        POStProceed = (Button) findViewById(R.id.button6);
-        POStProceed.setOnClickListener(this::toPOStCheckCalc);
-         */
-
-        //send grades to firebase
-        //TO DO: store user grades under the user that is signed in
+        // send grades to firebase
+        // TO DO: store user grades under the user that is signed in
         userRef = FirebaseDatabase.getInstance().getReference().child("users").child("Tamam");
 
         csca67 = findViewById(R.id.editTextNumberDecimal);
@@ -83,12 +75,14 @@ public class POStCheckActivity extends AppCompatActivity {
                         String key = "POSt Courses Grades"; //userRef.push().getKey();
                         userRef.child(key).setValue(gradesMap);
 
-                        // move to results screen after clicking PROCEED
-                        //startActivity(new Intent(POStCheckActivity.this, POStCheckCalc.class));
-
                         // Display result of POStCheck on next screen
                         Intent POStRes= new Intent(POStCheckActivity.this, POStCheckCalc.class);
+                        POStRes.putExtra("a67In", decimGrade1);
                         POStRes.putExtra("a48In", decimGrade2);
+                        POStRes.putExtra("a22In", decimGrade3);
+                        POStRes.putExtra("a31In", decimGrade4);
+                        POStRes.putExtra("a37In", decimGrade5);
+
                         startActivity(POStRes);
                     }
                     else{
@@ -111,15 +105,5 @@ public class POStCheckActivity extends AppCompatActivity {
     private boolean isValidGrade(double value){
         return value >= 0 && value <= 100;
     }
-
-    /**
-    public void toPOStCheckCalc(View view){
-        int viewID = view.getId();
-
-        if (viewID == R.id.button6){
-            startActivity(new Intent(this, POStCheckCalc.class));
-        }
-    }
-     */
 
 }

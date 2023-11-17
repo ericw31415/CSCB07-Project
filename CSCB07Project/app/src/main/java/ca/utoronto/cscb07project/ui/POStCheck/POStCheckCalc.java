@@ -19,51 +19,19 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class POStCheckCalc extends AppCompatActivity {
-
-    //String a48, a67, a22, a31, a37;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_check_calc);
-        /**
-        DatabaseReference userGrades = FirebaseDatabase.getInstance().getReference().child("users").child("Tamam").child("POSt Courses Grades");
 
-        userGrades.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    a48 = dataSnapshot.child("CSC A48 Grade").getValue().toString();
-                    a67 = dataSnapshot.child("CSC A67 Grade").getValue().toString();
-                    a22 = dataSnapshot.child("MATA A22 Grade").getValue().toString();
-                    a31 = dataSnapshot.child("MATA A31 Grade").getValue().toString();
-                    a37 = dataSnapshot.child("MATA A37 Grade").getValue().toString();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError error){
-                Log.e(TAG, "Failed to read value", error.toException());
-            }
-        });
-         */
-
-//issue possibly here
-        double a67In = getIntent().getDoubleExtra("decimGrade1", 0.0);
+        double a67In = getIntent().getDoubleExtra("a67In", 0.0);
         double a48In = getIntent().getDoubleExtra("a48In", 0.0);
         double a22In = getIntent().getDoubleExtra("a22In", 0.0);
         double a31In = getIntent().getDoubleExtra("a31In", 0.0);
         double a37In = getIntent().getDoubleExtra("a37In", 0.0);
 
-        /**
-        double a67In = Double.parseDouble(a67);
-        double a48In = Double.parseDouble(a48);
-        double a22In = Double.parseDouble(a22);
-        double a31In = Double.parseDouble(a31);
-        double a37In = Double.parseDouble(a37);
-         */
-
-        //call requirement checking functions with user input grades
-        //TO DO: store GPA for users on firebase
+        // call requirement checking functions with user input grades
+        // TO DO: store GPA for users on firebase
         boolean Req1 = getGPA.passedReq1(a67In, a48In, a22In, a31In, a37In);
         boolean Req2 = getGPA.passedReq2(a48In);
         boolean Req3 = getGPA.passedReq3(a67In, a22In, a37In);
@@ -84,11 +52,6 @@ public class POStCheckCalc extends AppCompatActivity {
 
             TextView req3Res = findViewById(R.id.textView24);
             req3Res.setText("Status: PASSED");
-
-
-            //state requirement 1 to make POSt
-            //TextView POStReqs = findViewById(R.id.textView10);
-            //POStReqs.setText(getString(R.string.POSt_req1));
         }
         else{
             TextView result = findViewById(R.id.textView9);
@@ -125,10 +88,6 @@ public class POStCheckCalc extends AppCompatActivity {
                 TextView req3Res = findViewById(R.id.textView24);
                 req3Res.setText("Status: PASSED");
             }
-
-            //state requirement 1
-            //TextView POStReqs = findViewById(R.id.textView10);
-            //POStReqs.setText(getString(R.string.POSt_req1));
         }
     }
 
