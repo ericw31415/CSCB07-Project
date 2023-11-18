@@ -35,7 +35,7 @@ public class LoginPresenter implements PresenterForLogin{
         logOutModel.logOut(new ModelForLogout.logOutResponse() {
             @Override
             public void successLogout() {
-                view.successfulLogin();
+                view.loggedOut();
             }
         });
     }
