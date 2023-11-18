@@ -6,16 +6,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.signup.UserModel;
 
-public class LoginSignoutActivity extends AppCompatActivity implements LoginSignoutView{
+public class LoginSignoutActivity extends AppCompatActivity implements LogInOutView{
 
-    UserModel user;
-    LoginSignoutView view;
+    LoginPresenter presenter;
 
 
     @Override
@@ -23,28 +24,9 @@ public class LoginSignoutActivity extends AppCompatActivity implements LoginSign
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_signout);
         loadFragment(new LoginUserFragment());
+        presenter = new LoginPresenter(this);
 
     }
-
-    public void tryLogin(View view) {
-        Toast.makeText(this, "Login Attempt", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void successfulSignIn() {
-        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void failedSignIn() {
-
-    }
-
-    @Override
-    public void SignOut() {
-
-    }
-
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -53,4 +35,19 @@ public class LoginSignoutActivity extends AppCompatActivity implements LoginSign
         transaction.commit();
     }
 
+    public void tryLogin(View view) {
+        String email = ((TextView)findViewById(R.id.emailText)).getText().toString();
+        String password = ((TextView)findViewById(R.id.passwordText)).getText().toString();
+        presenter.tryLogin(email, password);
+    }
+
+    @Override
+    public void successfulLogin() {
+        Log.d("success", "logged in good");
+    }
+
+    @Override
+    public void unsuccessfulLogin() {
+        Log.d("failure", "logged in not good");
+    }
 }
