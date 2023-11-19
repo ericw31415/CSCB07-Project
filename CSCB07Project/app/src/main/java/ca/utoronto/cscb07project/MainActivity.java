@@ -39,9 +39,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        //POST Check button
-        POStCheck = (Button) findViewById(R.id.button3);
-        POStCheck.setOnClickListener(this::goToPOStCheck);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -62,12 +59,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void goToPOStCheck(View view) {
-        int viewID = view.getId();
-
-        if (viewID == R.id.button3){
-            startActivity(new Intent(this, POStCheckActivity.class));
-        }
+    public void goToPostCheck(View view) {
+        startActivity(new Intent(this, POStCheckActivity.class));
     }
-
 }

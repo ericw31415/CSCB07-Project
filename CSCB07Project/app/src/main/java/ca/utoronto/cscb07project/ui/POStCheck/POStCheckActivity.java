@@ -42,61 +42,60 @@ public class POStCheckActivity extends AppCompatActivity {
         mata37 = findViewById(R.id.editTextNumberDecimal6);
         POStProceed = (Button) findViewById(R.id.button6);
 
-        POStProceed.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                // turn user grades input into strings
-                String a67In = csca67.getText().toString().trim();
-                String a48In = csca48.getText().toString().trim();
-                String a22In = mata22.getText().toString().trim();
-                String a31In = mata31.getText().toString().trim();
-                String a37In = mata37.getText().toString().trim();
+        POStProceed.setOnClickListener(v -> {
+            // turn user grades input into strings
+            String a67In = csca67.getText().toString().trim();
+            String a48In = csca48.getText().toString().trim();
+            String a22In = mata22.getText().toString().trim();
+            String a31In = mata31.getText().toString().trim();
+            String a37In = mata37.getText().toString().trim();
 
-                if(!a67In.isEmpty() && !a48In.isEmpty() && !a22In.isEmpty() && !a31In.isEmpty() &&
-                        !a37In.isEmpty()){
-                    double decimGrade1 = Double.parseDouble(a67In);
-                    double decimGrade2 = Double.parseDouble(a48In);
-                    double decimGrade3 = Double.parseDouble(a22In);
-                    double decimGrade4 = Double.parseDouble(a31In);
-                    double decimGrade5 = Double.parseDouble(a37In);
+            
 
-                    //make sure user input grades are between 0 and 100
-                    if(isValidGrade(decimGrade1) && isValidGrade(decimGrade2)&& isValidGrade
-                            (decimGrade3)&& isValidGrade(decimGrade4)&& isValidGrade(decimGrade5)){
-                        // hashmap to represent grades
-                        Map<String, Object> gradesMap = new HashMap<>();
-                        gradesMap.put("CSC A67 Grade", decimGrade1);
-                        gradesMap.put("CSC A48 Grade", decimGrade2);
-                        gradesMap.put("MAT A22 Grade", decimGrade3);
-                        gradesMap.put("MAT A31 Grade", decimGrade4);
-                        gradesMap.put("MAT A37 Grade", decimGrade5);
+            if(!a67In.isEmpty() && !a48In.isEmpty() && !a22In.isEmpty() && !a31In.isEmpty() &&
+                    !a37In.isEmpty()){
+                double decimGrade1 = Double.parseDouble(a67In);
+                double decimGrade2 = Double.parseDouble(a48In);
+                double decimGrade3 = Double.parseDouble(a22In);
+                double decimGrade4 = Double.parseDouble(a31In);
+                double decimGrade5 = Double.parseDouble(a37In);
 
-                        // create section under user
-                        String key = "POSt Courses Grades"; //userRef.push().getKey();
-                        userRef.child(key).setValue(gradesMap);
+                //make sure user input grades are between 0 and 100
+                if(isValidGrade(decimGrade1) && isValidGrade(decimGrade2)&& isValidGrade
+                        (decimGrade3)&& isValidGrade(decimGrade4)&& isValidGrade(decimGrade5)){
+                    // hashmap to represent grades
+                    Map<String, Object> gradesMap = new HashMap<>();
+                    gradesMap.put("CSC A67 Grade", decimGrade1);
+                    gradesMap.put("CSC A48 Grade", decimGrade2);
+                    gradesMap.put("MAT A22 Grade", decimGrade3);
+                    gradesMap.put("MAT A31 Grade", decimGrade4);
+                    gradesMap.put("MAT A37 Grade", decimGrade5);
 
-                        // Display result of POStCheck on next screen
-                        Intent POStRes= new Intent(POStCheckActivity.this, POStCheckCalc.class);
-                        POStRes.putExtra("a67In", decimGrade1);
-                        POStRes.putExtra("a48In", decimGrade2);
-                        POStRes.putExtra("a22In", decimGrade3);
-                        POStRes.putExtra("a31In", decimGrade4);
-                        POStRes.putExtra("a37In", decimGrade5);
+                    // create section under user
+                    String key = "POSt Courses Grades"; //userRef.push().getKey();
+                    userRef.child(key).setValue(gradesMap);
 
-                        startActivity(POStRes);
-                    }
-                    else{
-                        // Tell user that grade values are invalid
-                        Toast.makeText(POStCheckActivity.this,
-                                "The provided grades are invalid", Toast.LENGTH_SHORT).show();
-                    }
+                    // Display result of POStCheck on next screen
+                    Intent POStRes= new Intent(POStCheckActivity.this, POStCheckCalc.class);
+                    POStRes.putExtra("a67In", decimGrade1);
+                    POStRes.putExtra("a48In", decimGrade2);
+                    POStRes.putExtra("a22In", decimGrade3);
+                    POStRes.putExtra("a31In", decimGrade4);
+                    POStRes.putExtra("a37In", decimGrade5);
+
+                    startActivity(POStRes);
                 }
                 else{
-                    // Tell user that 1 or more fields are empty
+                    // Tell user that grade values are invalid
                     Toast.makeText(POStCheckActivity.this,
-                            "The required fields have not been filled", Toast.LENGTH_SHORT).show();
-
+                            "The provided grades are invalid", Toast.LENGTH_SHORT).show();
                 }
+            }
+            else{
+                // Tell user that 1 or more fields are empty
+                Toast.makeText(POStCheckActivity.this,
+                        "The required fields have not been filled", Toast.LENGTH_SHORT).show();
+
             }
         });
 

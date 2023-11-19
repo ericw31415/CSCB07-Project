@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.ui.loginsignout.LoginUserFragment;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -75,6 +76,8 @@ public class SignupActivity extends AppCompatActivity {
                         Log.d("error", "error");
                     }
                 });
+        loadFragment(new LoginUserFragment());
+        Toast.makeText(this, "Account Created! Login!", Toast.LENGTH_SHORT).show();
     }
 
 

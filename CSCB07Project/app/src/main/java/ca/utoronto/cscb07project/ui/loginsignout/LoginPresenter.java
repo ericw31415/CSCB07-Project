@@ -1,7 +1,5 @@
 package ca.utoronto.cscb07project.ui.loginsignout;
 
-import android.util.Log;
-
 public class LoginPresenter implements PresenterForLogin{
     private LogInOutView view;
     private LoginModel loginModel;
@@ -32,12 +30,7 @@ public class LoginPresenter implements PresenterForLogin{
 
     @Override
     public void tryLogOut() {
-        logOutModel.logOut(new ModelForLogout.logOutResponse() {
-            @Override
-            public void successLogout() {
-                view.loggedOut();
-            }
-        });
+        logOutModel.logOut(() -> view.loggedOut());
     }
 
 }
