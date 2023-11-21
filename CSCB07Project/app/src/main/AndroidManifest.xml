@@ -22,6 +22,9 @@
             android:name=".ui.POStCheck.POStCheckActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.complaints.ComplaintActivity"
+            android:exported="false"/>
+        <activity
             android:name=".ui.loginsignout.LoginSignoutActivity"
             android:exported="false" />
         <activity

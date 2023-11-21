@@ -13,5 +13,8 @@
         A48</string>
     <string name="POSt_req3">3. A grade of at least C- in two of: \n CSC/MAT A67 \n MAT A22 \n
         MAT A37</string>
-
+    <string name="menu_complaints">Complaint menu</string>
+    <string name="submit_complaint"> Submit Complaint</string>
+    <string name="complaint_details_hint"> will tell you to submit details</string>
+    <string name="complaint_title_hint"> will tell you to give the complaint title</string>
 </resources>
