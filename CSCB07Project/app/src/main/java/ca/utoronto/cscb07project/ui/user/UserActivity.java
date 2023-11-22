@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,8 @@ public class UserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user);
         loadFragment(new LoggedInFragment());
 
+        UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -48,26 +51,26 @@ public class UserActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     String firstName = dataSnapshot.child("fName").getValue(String.class);
                     String lastName = dataSnapshot.child("lName").getValue(String.class);
+                    String email = dataSnapshot.child("email").getValue(String.class);
                     Boolean isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
 
-                    if(isAdmin){
+                    userDataViewModel.setUserInfo(firstName, lastName, email, isAdmin);
+
+                    if (isAdmin) {
                         loadFragment(new AdminHome());
-                    }else{
+                    } else {
                         loadFragment(new UserHome());
                     }
-
-                    ((TextView)findViewById(R.id.greeting)).setText("Hello " + firstName + " " + lastName + "!");
-                    Log.d("IsAdmin", isAdmin.toString());
-                    Log.d("User Data", "First Name: " + firstName + ", Last Name: " + lastName);
                 } else {
                     Log.d("User Data", "DataSnapshot does not exist");
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("Error", "Database Error: " + error.getMessage());
             }
         });
-
     }
+
 }
