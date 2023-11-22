@@ -15,6 +15,9 @@ public class LoginModel implements ModelForLogin{
 
     @Override
     public void login(String email, String password, loginResponse response) {
+        if(email.isEmpty() || password.isEmpty()){
+            response.inputError();
+        }
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

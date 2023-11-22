@@ -1,18 +1,16 @@
 package ca.utoronto.cscb07project.ui.loginsignout;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
-import ca.utoronto.cscb07project.ui.signup.UserModel;
 
 public class LoginSignoutActivity extends AppCompatActivity implements LogInOutView{
 
@@ -47,8 +44,8 @@ public class LoginSignoutActivity extends AppCompatActivity implements LogInOutV
     }
 
     public void tryLogin(View view) {
-        String email = ((TextView)findViewById(R.id.emailText)).getText().toString();
-        String password = ((TextView)findViewById(R.id.passwordText)).getText().toString();
+        String email = ((TextView)findViewById(R.id.emailText)).getText().toString().trim();
+        String password = ((TextView)findViewById(R.id.passwordText)).getText().toString().trim();
         presenter.tryLogin(email, password);
     }
 
@@ -86,8 +83,8 @@ public class LoginSignoutActivity extends AppCompatActivity implements LogInOutV
     }
     @Override
     public void unsuccessfulLogin() {
-        
         Log.d("failure", "logged in not good");
+        Toast.makeText(this, "Incorrect Password or Username", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -95,5 +92,11 @@ public class LoginSignoutActivity extends AppCompatActivity implements LogInOutV
         loadFragment(new LoginUserFragment());
         Toast.makeText(this, "You are logged out!", Toast.LENGTH_SHORT).show();
         Log.d("Log", "Logging Out");
+    }
+
+    @Override
+    public void invalidInput() {
+        Log.d("failure", "bad login credentials");
+        Toast.makeText(this, "Make Sure Email and Password is Filled", Toast.LENGTH_SHORT).show();
     }
 }

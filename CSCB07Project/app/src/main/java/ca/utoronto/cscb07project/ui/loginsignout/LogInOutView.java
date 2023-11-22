@@ -4,4 +4,5 @@ public interface LogInOutView {
     void successfulLogin();
     void unsuccessfulLogin();
     void loggedOut();
+    void invalidInput();
 }

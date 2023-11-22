@@ -24,6 +24,11 @@ public class LoginPresenter implements PresenterForLogin{
             public void loginFailure(String error) {
                 view.unsuccessfulLogin();
             }
+
+            @Override
+            public void inputError() {
+                view.invalidInput();
+            }
         });
 
     }

@@ -6,6 +6,7 @@ public interface ModelForLogin {
         void loginSuccess();
 
         void loginFailure(String error);
+        void inputError();
     }
 
 }
