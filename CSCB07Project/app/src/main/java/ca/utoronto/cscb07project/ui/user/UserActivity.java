@@ -35,7 +35,6 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        Log.d("success", "logged in good");
         loadFragment(new LoggedInFragment());
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -49,7 +48,16 @@ public class UserActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     String firstName = dataSnapshot.child("fName").getValue(String.class);
                     String lastName = dataSnapshot.child("lName").getValue(String.class);
+                    Boolean isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+
+                    if(isAdmin){
+                        loadFragment(new AdminHome());
+                    }else{
+                        loadFragment(new UserHome());
+                    }
+
                     ((TextView)findViewById(R.id.greeting)).setText("Hello " + firstName + " " + lastName + "!");
+                    Log.d("IsAdmin", isAdmin.toString());
                     Log.d("User Data", "First Name: " + firstName + ", Last Name: " + lastName);
                 } else {
                     Log.d("User Data", "DataSnapshot does not exist");
@@ -60,5 +68,6 @@ public class UserActivity extends AppCompatActivity {
                 Log.d("Error", "Database Error: " + error.getMessage());
             }
         });
+
     }
 }
