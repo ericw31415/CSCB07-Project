@@ -86,6 +86,7 @@ public class LoginSignoutActivity extends AppCompatActivity implements LogInOutV
     }
     @Override
     public void unsuccessfulLogin() {
+        
         Log.d("failure", "logged in not good");
     }
 

@@ -46,13 +46,17 @@ public class SignupActivity extends AppCompatActivity {
         EditText password = findViewById(R.id.password);
         Switch adminSwitch = findViewById(R.id.adminSwitch);
 
-        String userEmail = email.getText().toString();
-        String userFirstName = firstName.getText().toString();
-        String userLastName = lastName.getText().toString();
-        String userPassword = password.getText().toString();
+        String userEmail = email.getText().toString().trim();
+        String userFirstName = firstName.getText().toString().trim();
+        String userLastName = lastName.getText().toString().trim();
+        String userPassword = password.getText().toString().trim();
         boolean isAdmin = adminSwitch.isChecked();
 
-        createUser(new UserModel(userEmail, userPassword, userFirstName, userLastName, isAdmin));
+        if(userEmail.isEmpty() || userFirstName.isEmpty() || userLastName.isEmpty() || userPassword.isEmpty()){
+            Toast.makeText(this,"Make sure all fields are filled!", Toast.LENGTH_SHORT).show();
+        }else{
+            createUser(new UserModel(userEmail, userPassword, userFirstName, userLastName, isAdmin));
+        }
     }
 
     public void createUser(UserModel user){

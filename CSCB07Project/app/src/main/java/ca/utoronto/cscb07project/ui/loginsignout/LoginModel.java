@@ -1,6 +1,8 @@
 package ca.utoronto.cscb07project.ui.loginsignout;
 
 
+import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginModel implements ModelForLogin{
@@ -16,6 +18,7 @@ public class LoginModel implements ModelForLogin{
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        Log.d("Test", "Success");
                         response.loginSuccess();
                     } else {
                         response.loginFailure(task.getException().getMessage());
