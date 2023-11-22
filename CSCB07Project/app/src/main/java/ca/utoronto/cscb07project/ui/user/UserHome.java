@@ -3,7 +3,6 @@ package ca.utoronto.cscb07project.ui.user;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.Observer;
 
@@ -12,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import ca.utoronto.cscb07project.R;
 
@@ -27,6 +28,8 @@ public class UserHome extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private UserDataViewModel userDataViewModel;
+
+    private TextView fnameTextView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -65,6 +68,10 @@ public class UserHome extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_user_home, container, false);
+
+        fnameTextView = view.findViewById(R.id.userfirstname);
+
         // Inflate the layout for this fragment
         userDataViewModel = new ViewModelProvider(requireActivity()).get(UserDataViewModel.class);
 
@@ -74,17 +81,10 @@ public class UserHome extends Fragment {
             public void onChanged(String firstName) {
                 // Update UI with the first name d
                 Log.d("Test", firstName);
+                fnameTextView.setText(firstName);
             }
         });
 
-        // Observe changes to last name
-        userDataViewModel.getLastName().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String lastName) {
-                // Update UI with the last name
-                Log.d("Test", lastName);
-            }
-        });
         // Observe changes to email
         userDataViewModel.getUserEmail().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -103,6 +103,6 @@ public class UserHome extends Fragment {
             }
         });
 
-        return inflater.inflate(R.layout.fragment_user_home, container, false);
+        return view;
     }
 }
