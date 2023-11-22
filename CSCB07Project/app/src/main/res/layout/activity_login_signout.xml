@@ -20,7 +20,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/loginFrame"
+        android:id="@+id/userFrame"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         tools:layout_editor_absoluteX="2dp">
     </FrameLayout>
