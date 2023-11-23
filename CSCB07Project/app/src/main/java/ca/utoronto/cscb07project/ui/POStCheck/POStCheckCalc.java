@@ -38,7 +38,8 @@ public class POStCheckCalc extends AppCompatActivity {
 
         if(Req1 && Req2 && Req3){
             TextView result = findViewById(R.id.textView9);
-            result.setText("You currently qualify for the Computer Science POSt!");
+            result.setText("You currently qualify for the Computer Science Major and Specialist " +
+                    "POSt!");
 
             TextView gpaRes = findViewById(R.id.textView20);
             double gpaVal = getGPA.gpaCalc(a67In, a48In, a22In, a31In, a37In);
@@ -55,7 +56,8 @@ public class POStCheckCalc extends AppCompatActivity {
         }
         else{
             TextView result = findViewById(R.id.textView9);
-            result.setText("You do not meet the requirements for the Computer Science POSt.");
+            result.setText("You do not meet the requirements for the Computer Science Major and " +
+                    "Specialist POSt.");
 
             TextView gpaRes = findViewById(R.id.textView20);
             double gpaVal = getGPA.gpaCalc(a67In, a48In, a22In, a31In, a37In);
