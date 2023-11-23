@@ -80,8 +80,14 @@ public class UserHome extends Fragment {
             @Override
             public void onChanged(String firstName) {
                 // Update UI with the first name d
+                userDataViewModel.getLastName().observe(getViewLifecycleOwner(), new Observer<String>() {
+                    @Override
+                    public void onChanged(String lastName) {
+                        Log.d("Test", lastName);
+                        fnameTextView.setText(firstName +" " + lastName);
+                    }
+                });
                 Log.d("Test", firstName);
-                fnameTextView.setText(firstName);
             }
         });
 
