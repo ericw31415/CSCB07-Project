@@ -76,7 +76,6 @@ public class UserActivity extends AppCompatActivity {
             }
         });
     }
-
     public void logOut(View view) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signOut();
