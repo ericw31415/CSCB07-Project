@@ -7,9 +7,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.loginsignout.LoggedInFragment;
+import ca.utoronto.cscb07project.ui.loginsignout.LoginSignoutActivity;
+import ca.utoronto.cscb07project.ui.loginsignout.LoginUserFragment;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -65,7 +70,6 @@ public class UserActivity extends AppCompatActivity {
                     Log.d("User Data", "DataSnapshot does not exist");
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("Error", "Database Error: " + error.getMessage());
@@ -73,4 +77,11 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 
+    public void logOut(View view) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signOut();
+        Intent intent = new Intent(this, LoginSignoutActivity.class);
+        startActivity(intent);
+        Toast.makeText(this, "You are logged out!", Toast.LENGTH_SHORT).show();
+    }
 }
