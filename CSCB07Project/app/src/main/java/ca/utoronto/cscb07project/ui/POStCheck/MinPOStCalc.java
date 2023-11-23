@@ -8,19 +8,12 @@ import android.view.View;
 
 import ca.utoronto.cscb07project.R;
 
-public class MajOrMin extends AppCompatActivity {
+public class MinPOStCalc extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maj_or_min);
+        setContentView(R.layout.activity_min_post_calc);
     }
 
-    public void goToPostCheck(View view) {
-        startActivity(new Intent(this, POStCheckActivity.class));
-    }
-
-    public void ToMinPOStCheck(View view) {
-        startActivity(new Intent(this, MinPOStCheck.class));
-    }
 }

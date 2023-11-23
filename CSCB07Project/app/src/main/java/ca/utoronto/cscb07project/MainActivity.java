@@ -16,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import ca.utoronto.cscb07project.databinding.ActivityMainBinding;
+import ca.utoronto.cscb07project.ui.POStCheck.MajOrMin;
 import ca.utoronto.cscb07project.ui.POStCheck.POStCheckActivity;
 import ca.utoronto.cscb07project.ui.POStCheck.POStCheckCalc;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginSignoutActivity;
@@ -59,7 +60,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
     public void goToPostCheck(View view) {
         startActivity(new Intent(this, POStCheckActivity.class));
+    }
+     */
+
+    public void goToMajOrMin(View view) {
+        startActivity(new Intent(this, MajOrMin.class));
     }
 }
