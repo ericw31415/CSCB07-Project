@@ -3,6 +3,7 @@ package ca.utoronto.cscb07project.ui.events;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ca.utoronto.cscb07project.MainActivity;
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.databinding.FragmentEventDetailsBinding;
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ import java.io.Serializable;
 public class EventDetailsFragment extends Fragment {
     private FragmentEventDetailsBinding binding;
     private Event event;
+    private SharedViewModel viewModel;
 
     public static EventDetailsFragment newInstance(Event event) {
         EventDetailsFragment fragment = new EventDetailsFragment();
@@ -38,7 +41,7 @@ public class EventDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         // Check if getArguments() is not null and contains an "event" key
         if (getArguments() != null && getArguments().containsKey("event")) {
             // Check if the associated value is not null before casting and assigning it to event
@@ -58,6 +61,8 @@ public class EventDetailsFragment extends Fragment {
             binding.buttonRsvp.setOnClickListener(v -> {
                 // Add the user to the event's attending list
                 event.addUserAttending("User"); // Replace "User" with the actual user
+
+                viewModel.rsvpEvent(event);
 
                 // Navigate back to the EventsFragment
                 NavController navController = Navigation.findNavController(view);
