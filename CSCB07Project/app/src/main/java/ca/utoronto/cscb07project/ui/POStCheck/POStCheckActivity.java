@@ -31,9 +31,11 @@ public class POStCheckActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_check);
 
+        /**
         // send grades to firebase
         // TO DO: store user grades under the user that is signed in
         userRef = FirebaseDatabase.getInstance().getReference().child("users").child("Tamam");
+         */
 
         csca67 = findViewById(R.id.editTextNumberDecimal);
         csca48 = findViewById(R.id.editTextNumberDecimal3);
@@ -71,9 +73,11 @@ public class POStCheckActivity extends AppCompatActivity {
                     gradesMap.put("MAT A31 Grade", decimGrade4);
                     gradesMap.put("MAT A37 Grade", decimGrade5);
 
+                    /**
                     // create section under user
                     String key = "POSt Courses Grades"; //userRef.push().getKey();
                     userRef.child(key).setValue(gradesMap);
+                     */
 
                     // Display result of POStCheck on next screen
                     Intent POStRes= new Intent(POStCheckActivity.this, POStCheckCalc.class);
