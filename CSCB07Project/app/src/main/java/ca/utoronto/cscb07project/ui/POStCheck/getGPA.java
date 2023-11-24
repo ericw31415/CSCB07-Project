@@ -1,5 +1,6 @@
 package ca.utoronto.cscb07project.ui.POStCheck;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 public class getGPA {
@@ -11,7 +12,10 @@ public class getGPA {
     }
 
     public static double gpaCalc(double a67, double a48, double a22, double a31, double a37){
-        return (findGPA(a67) + findGPA(a48) + findGPA(a22) + findGPA(a31) + findGPA(a37))/5;
+        double GPA = (findGPA(a67) + findGPA(a48) + findGPA(a22) + findGPA(a31) + findGPA(a37))/5;
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        String roundGPA = decimalFormat.format(GPA);
+        return Double.parseDouble(roundGPA);
     }
 
     public static boolean passedReq2(double a48){

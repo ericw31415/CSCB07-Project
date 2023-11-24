@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.POStCheck.POStCheckCalc">
+    tools:context=".ui.POStCheck.MinPOStCalc">
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/textView27"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:text="Results"
-        android:textColor="@android:color/black"
+        android:text="CS Minor POSt"
+        android:textColor="@color/black"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,109 +20,106 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView9"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="20dp"
-        android:text="TextView"
+        android:id="@+id/textView28"
+        android:layout_width="366dp"
+        android:layout_height="93dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/Min_POSt_Descrip"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="@color/black"
         android:textSize="18sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/textView27" />
 
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="337dp"
-        android:layout_height="153dp"
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="308dp"
+        android:layout_height="68dp"
         android:layout_marginTop="30dp"
-        android:text="@string/POSt_req1"
-        android:textAlignment="center"
-        android:textSize="16sp"
+        android:text="@string/Min_POSt_chk1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/textView29"
+        android:layout_width="301dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/Min_POSt_chk2"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+
+    <CheckBox
+        android:id="@+id/checkBox2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="TextView"
+        android:layout_marginTop="20dp"
+        android:text="CSC A08"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintTop_toBottomOf="@+id/textView29" />
 
-    <TextView
-        android:id="@+id/textView21"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/POSt_req2"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView25" />
-
-    <TextView
-        android:id="@+id/textView22"
+    <CheckBox
+        android:id="@+id/checkBox3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="TextView"
+        android:text="CSC A48"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
 
-    <TextView
-        android:id="@+id/textView23"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/POSt_req3"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView22" />
-
-    <TextView
-        android:id="@+id/textView24"
+    <CheckBox
+        android:id="@+id/checkBox4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="TextView"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:text="CSC/MAT A67"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView23" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox3" />
 
-    <TextView
-        android:id="@+id/textView25"
+    <CheckBox
+        android:id="@+id/checkBox5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="TextView"
+        android:text="MAT A22/A23"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox4" />
+
+    <CheckBox
+        android:id="@+id/checkBox6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="MAT A30/A31/A32"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox5" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:onClick="ToMinPOStCalc"
+        android:text="PROCEED"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
