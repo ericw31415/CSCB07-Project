@@ -5,15 +5,19 @@
     <string name="title_notifications">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="POSt_Descrip">The Computer Science Major and Specialist POSt require specific
-        grades in the courses listed below. Please provide your numerical grades.</string>
-    <string name="POSt_req1">The Computer Science Major and Specialist POSt require: \n\n 1. A
+    <string name="POSt_Descrip">The Computer Science Major and Specialist Program POSt require
+        specific grades in the courses listed below. Please provide your numerical grades.</string>
+    <string name="POSt_req1">Computer Science Major and Specialist Programs require: \n\n 1. A
         CGPA of at least 2.5 after taking: \n CSC/MAT A67 \n CSC A48 \n MAT A22 \n MAT A31 \n
         MAT A37</string>
     <string name="POSt_req2">2. A grade of at least B in CSC
         A48</string>
     <string name="POSt_req3">3. A grade of at least C- in two of: \n CSC/MAT A67 \n MAT A22 \n
         MAT A37</string>
+    <string name="MajSpec_Qualified">You have qualified for the Computer Science Major and the
+        Software Engineering and Comprehensive stream Specialist programs! \n\n Note: Admission
+        to the Information Systems and Entrepreneurship Specialist streams will require a
+        supplemental application.</string>
     <string name="Which_POSt">Which Computer Science POSt program are you checking your
         qualification for? \n\n Qualification requirements will vary depending on your
         selection.</string>
