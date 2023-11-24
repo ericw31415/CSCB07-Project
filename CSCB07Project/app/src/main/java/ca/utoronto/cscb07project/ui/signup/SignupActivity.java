@@ -32,7 +32,7 @@ public class SignupActivity extends AppCompatActivity {
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.userFrame, fragment);
+        transaction.replace(R.id.loginFrame, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }

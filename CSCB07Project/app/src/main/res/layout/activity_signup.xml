@@ -17,7 +17,7 @@
         app:menu="@menu/bottom_nav_menu" />
 
     <FrameLayout
-        android:id="@+id/userFrame"
+        android:id="@+id/loginFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"

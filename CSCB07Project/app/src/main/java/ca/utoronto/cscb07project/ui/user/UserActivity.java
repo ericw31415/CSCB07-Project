@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,14 +24,13 @@ import com.google.firebase.database.ValueEventListener;
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.loginsignout.LoggedInFragment;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginSignoutActivity;
-import ca.utoronto.cscb07project.ui.loginsignout.LoginUserFragment;
 
 public class UserActivity extends AppCompatActivity {
 
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.userFrame, fragment);
+        transaction.replace(R.id.loginFrame, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
