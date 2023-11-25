@@ -7,8 +7,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,6 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.ui.POStCheck.POStCheckActivity;
+import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
 import ca.utoronto.cscb07project.ui.loginsignout.LoggedInFragment;
 
 public class UserLoggedInActivity extends AppCompatActivity {
@@ -69,5 +73,14 @@ public class UserLoggedInActivity extends AppCompatActivity {
                 Log.d("Error", "Database Error: " + error.getMessage());
             }
         });
+    }
+
+    public void goToPostCheck(View view) {
+        startActivity(new Intent(this, POStCheckActivity.class));
+    }
+
+    public void toComplaints(View view) {
+        Intent intent = new Intent(this, ComplaintActivity.class);
+        startActivity(intent);
     }
 }
