@@ -5,32 +5,16 @@
     <string name="title_notifications">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="POSt_Descrip">The Computer Science Major and Specialist Program POSt require
-        specific grades in the courses listed below. Please provide your numerical grades.</string>
-    <string name="POSt_req1">Computer Science Major and Specialist Programs require: \n\n 1. A
-        CGPA of at least 2.5 after taking: \n CSC/MAT A67 \n CSC A48 \n MAT A22 \n MAT A31 \n
-        MAT A37</string>
+    <string name="POSt_Descrip">The Computer Science POSt requires specific grades in the courses
+        listed below. Please provide your numerical grades.</string>
+    <string name="POSt_req1">The Computer Science POSt requires: \n\n 1. A CGPA of at least 2.5 after
+        taking: \n CSC/MAT A67 \n CSC A48 \n MAT A22 \n MAT A31 \n MAT A37</string>
     <string name="POSt_req2">2. A grade of at least B in CSC
         A48</string>
     <string name="POSt_req3">3. A grade of at least C- in two of: \n CSC/MAT A67 \n MAT A22 \n
         MAT A37</string>
-    <string name="MajSpec_Qualified">You have qualified for the Computer Science Major and the
-        Software Engineering and Comprehensive stream Specialist programs! \n\n Note: Admission
-        to the Information Systems and Entrepreneurship Specialist streams will require a
-        supplemental application.</string>
-    <string name="Which_POSt">Which Computer Science POSt program are you checking your
-        qualification for? \n\n Qualification requirements will vary depending on your
-        selection.</string>
-    <string name="Min_POSt_Descrip">The questions below pertain to the qualification requirements of
-        the Computer Science Minor POSt. Please provide your responses below. </string>
-    <string name="Min_POSt_chk1">Please check the box if you have completed 4.0 credits worth of
-        courses. </string>
-    <string name="Min_POSt_chk2">Please check the boxes of the courses listed below which you have
-        completed: </string>
-    <string name="Min_POSt_req1"> The Computer Science Minor POSt requires: \n\n 1. The completion
-        of 4.0 credits worth of courses.\n\n</string>
-    <string name="Min_POSt_req2"> 2. The completion of all required A-level CSC and MAT courses,
-        including CSCA08, CSCA48, and one of CSC/MAT A67, MATA22/23, MATA30/31/31.</string>
-
-
+    <string name="menu_complaints">Complaint menu</string>
+    <string name="submit_complaint"> Submit Complaint</string>
+    <string name="complaint_details_hint"> will tell you to submit details</string>
+    <string name="complaint_title_hint"> will tell you to give the complaint title</string>
 </resources>
