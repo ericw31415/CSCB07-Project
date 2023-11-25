@@ -7,11 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,14 +20,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.loginsignout.LoggedInFragment;
-import ca.utoronto.cscb07project.ui.loginsignout.LoginSignoutActivity;
 
-public class UserActivity extends AppCompatActivity {
+public class UserLoggedInActivity extends AppCompatActivity {
 
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.loginFrame, fragment);
+        transaction.replace(R.id.userFrame, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
@@ -73,12 +69,5 @@ public class UserActivity extends AppCompatActivity {
                 Log.d("Error", "Database Error: " + error.getMessage());
             }
         });
-    }
-    public void logOut(View view) {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.signOut();
-        Intent intent = new Intent(this, LoginSignoutActivity.class);
-        startActivity(intent);
-        Toast.makeText(this, "You are logged out!", Toast.LENGTH_SHORT).show();
     }
 }

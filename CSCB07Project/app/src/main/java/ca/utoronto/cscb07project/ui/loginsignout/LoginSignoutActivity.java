@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.utoronto.cscb07project.R;
-import ca.utoronto.cscb07project.ui.user.UserActivity;
+import ca.utoronto.cscb07project.ui.user.UserLoggedInActivity;
 
 public class LoginSignoutActivity extends AppCompatActivity implements LogInOutView{
 
@@ -30,7 +30,7 @@ public class LoginSignoutActivity extends AppCompatActivity implements LogInOutV
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.loginFrame, fragment);
+        transaction.replace(R.id.userFrame, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
@@ -47,7 +47,7 @@ public class LoginSignoutActivity extends AppCompatActivity implements LogInOutV
 
     @Override
     public void successfulLogin() {
-        Intent intent = new Intent(this, UserActivity.class);
+        Intent intent = new Intent(this, UserLoggedInActivity.class);
         startActivity(intent);
     }
     @Override
