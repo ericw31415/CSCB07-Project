@@ -15,7 +15,7 @@ import android.widget.Toast;
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.user.UserLoggedInActivity;
 
-public class LoginSignoutActivity extends AppCompatActivity implements LogInOutView{
+public class LoginActivity extends AppCompatActivity implements LogInOutView{
 
     LoginPresenter presenter;
 
@@ -31,7 +31,6 @@ public class LoginSignoutActivity extends AppCompatActivity implements LogInOutV
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.userFrame, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 

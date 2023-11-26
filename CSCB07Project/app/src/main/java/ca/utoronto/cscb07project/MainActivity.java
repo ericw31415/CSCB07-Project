@@ -3,7 +3,6 @@ package ca.utoronto.cscb07project;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -16,18 +15,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ca.utoronto.cscb07project.databinding.ActivityMainBinding;
-import ca.utoronto.cscb07project.ui.POStCheck.POStCheckActivity;
-import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
-import ca.utoronto.cscb07project.ui.loginsignout.LoginSignoutActivity;
+import ca.utoronto.cscb07project.ui.loginsignout.LoginActivity;
 import ca.utoronto.cscb07project.ui.signup.SignupActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-
-    private Button POStCheck;
-
-    private Button complaintButton;
 
 
     @Override
@@ -51,25 +44,15 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-
-
     }
 
-    public void goToLoginSignOut(View view) {
-        Intent intent = new Intent(this, LoginSignoutActivity.class);
+    public void goToLogin(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
     public void toSignUp(View view) {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
-    }
-    public void toComplaints(View view) {
-        Intent intent = new Intent(this, ComplaintActivity.class);
-        startActivity(intent);
-    }
-
-    public void goToPostCheck(View view) {
-        startActivity(new Intent(this, POStCheckActivity.class));
     }
 }
