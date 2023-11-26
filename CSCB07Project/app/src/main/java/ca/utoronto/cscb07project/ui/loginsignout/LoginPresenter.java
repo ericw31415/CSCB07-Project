@@ -3,13 +3,11 @@ package ca.utoronto.cscb07project.ui.loginsignout;
 public class LoginPresenter implements PresenterForLogin{
     private LogInOutView view;
     private LoginModel loginModel;
-    private LogOutModel logOutModel;
 
 
     LoginPresenter(LogInOutView view){
         this.view = view;
         this.loginModel= new LoginModel();
-        this.logOutModel = new LogOutModel();
     }
 
     @Override
@@ -31,11 +29,6 @@ public class LoginPresenter implements PresenterForLogin{
             }
         });
 
-    }
-
-    @Override
-    public void tryLogOut() {
-        logOutModel.logOut(() -> view.loggedOut());
     }
 
 }

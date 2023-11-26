@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import ca.utoronto.cscb07project.R;
 
@@ -61,6 +62,9 @@ public class LoadingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_loading, container, false);
+        View view = inflater.inflate(R.layout.fragment_loading, container, false);
+        ProgressBar progressBar = view.findViewById(R.id.progressBar);
+        progressBar.setIndeterminate(true); // Enable indeterminate mode
+        return view;
     }
 }

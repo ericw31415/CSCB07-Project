@@ -23,7 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.POStCheck.POStCheckActivity;
 import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
-import ca.utoronto.cscb07project.ui.loginsignout.LoggedInFragment;
 
 public class UserLoggedInActivity extends AppCompatActivity {
 
@@ -31,7 +30,6 @@ public class UserLoggedInActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.userFrame, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -39,7 +37,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        loadFragment(new LoggedInFragment());
+        loadFragment(new LoadingFragment());
 
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 

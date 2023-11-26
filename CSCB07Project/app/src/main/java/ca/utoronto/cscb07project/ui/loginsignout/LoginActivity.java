@@ -40,10 +40,6 @@ public class LoginActivity extends AppCompatActivity implements LogInOutView{
         presenter.tryLogin(email, password);
     }
 
-    public void toSignOut(View view) {
-        presenter.tryLogOut();
-    }
-
     @Override
     public void successfulLogin() {
         Intent intent = new Intent(this, UserLoggedInActivity.class);
@@ -53,13 +49,6 @@ public class LoginActivity extends AppCompatActivity implements LogInOutView{
     public void unsuccessfulLogin() {
         Toast.makeText(this, "Wrong email or password", Toast.LENGTH_SHORT).show();
         Log.d("failure", "logged in not good");
-    }
-
-    @Override
-    public void loggedOut() {
-        loadFragment(new LoginUserFragment());
-        Toast.makeText(this, "You are logged out!", Toast.LENGTH_SHORT).show();
-        Log.d("Log", "Logging Out");
     }
 
     @Override
