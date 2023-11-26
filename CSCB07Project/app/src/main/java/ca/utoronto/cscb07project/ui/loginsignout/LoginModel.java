@@ -17,15 +17,17 @@ public class LoginModel implements ModelForLogin{
     public void login(String email, String password, loginResponse response) {
         if(email.isEmpty() || password.isEmpty()){
             response.inputError();
+        }else{
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("Test", "Success");
+                            response.loginSuccess();
+                        } else {
+                            response.loginFailure(task.getException().getMessage());
+                        }
+                    });
         }
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("Test", "Success");
-                        response.loginSuccess();
-                    } else {
-                        response.loginFailure(task.getException().getMessage());
-                    }
-                });
+
     }
 }
