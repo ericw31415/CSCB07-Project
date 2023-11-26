@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,8 +24,10 @@ import com.google.firebase.database.ValueEventListener;
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.POStCheck.POStCheckActivity;
 import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
+import ca.utoronto.cscb07project.ui.loginsignout.LoginUserFragment;
 
 public class UserLoggedInActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
 
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -41,7 +44,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        this.mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference userRef = database.getReference("users").child(currentUser.getUid());
@@ -80,5 +83,11 @@ public class UserLoggedInActivity extends AppCompatActivity {
     public void toComplaints(View view) {
         Intent intent = new Intent(this, ComplaintActivity.class);
         startActivity(intent);
+    }
+
+    public void logOut(View view) {
+        mAuth.signOut();
+        Toast.makeText(this,"You are now logged out!", Toast.LENGTH_SHORT).show();
+        loadFragment(new LoginUserFragment());
     }
 }
