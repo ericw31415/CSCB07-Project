@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,11 +14,14 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.ui.loginsignout.LoginActivity;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginUserFragment;
 
 public class SignupActivity extends AppCompatActivity {
@@ -72,13 +76,20 @@ public class SignupActivity extends AppCompatActivity {
                                 .addOnFailureListener(userCreateError -> {
                                     Log.d("error", "Error adding node");
                                 });
+                        Intent intent = new Intent(this, LoginActivity.class);
+                        startActivity(intent);
+                        Toast.makeText(this, "Account Created! Login!", Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        Log.d("error", "error");
+                        Exception exception = task.getException();
+                        if(exception instanceof FirebaseAuthWeakPasswordException){
+                            Toast.makeText(this, "Please use a different password, too weak.", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(exception instanceof FirebaseAuthUserCollisionException){
+                            Toast.makeText(this, "There already is another user with this account", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
-        loadFragment(new LoginUserFragment());
-        Toast.makeText(this, "Account Created! Login!", Toast.LENGTH_SHORT).show();
     }
 
 
