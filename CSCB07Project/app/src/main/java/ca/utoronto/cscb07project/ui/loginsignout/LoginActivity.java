@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.ui.signup.SignUpFragment;
+import ca.utoronto.cscb07project.ui.signup.SignupActivity;
 import ca.utoronto.cscb07project.ui.user.UserLoggedInActivity;
 
 public class LoginActivity extends AppCompatActivity implements LogInOutView{
@@ -54,5 +56,10 @@ public class LoginActivity extends AppCompatActivity implements LogInOutView{
     @Override
     public void invalidInput() {
 
+    }
+
+    public void toSignUp(View view) {
+        Intent intent = new Intent(this, SignupActivity.class);
+        startActivity(intent);
     }
 }

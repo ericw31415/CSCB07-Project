@@ -33,7 +33,6 @@ public class SignupActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.userFrame, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
