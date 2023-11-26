@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.ui.POStCheck.MajOrMin;
 import ca.utoronto.cscb07project.ui.POStCheck.POStCheckActivity;
 import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginUserFragment;
@@ -76,8 +77,13 @@ public class UserLoggedInActivity extends AppCompatActivity {
         });
     }
 
+    /**
     public void goToPostCheck(View view) {
         startActivity(new Intent(this, POStCheckActivity.class));
+    }
+     */
+    public void goToMajOrMin(View view) {
+        startActivity(new Intent(this, MajOrMin.class));
     }
 
     public void toComplaints(View view) {
