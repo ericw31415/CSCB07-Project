@@ -24,9 +24,6 @@ import ca.utoronto.cscb07project.ui.signup.SignupActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
