@@ -35,6 +35,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.userFrame, fragment);
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -91,6 +92,11 @@ public class UserLoggedInActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ComplaintActivity.class);
         startActivity(intent);
     }
+
+    public void toAdminComplaints(View view){
+        loadFragment(new AdminComplaintsFragment());
+    }
+
 
     public void logOut(View view) {
         mAuth.signOut();

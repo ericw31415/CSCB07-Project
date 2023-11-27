@@ -1,6 +1,8 @@
 package ca.utoronto.cscb07project.ui.complaints;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +13,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import ca.utoronto.cscb07project.R;
 
@@ -20,6 +28,8 @@ public class ComplaintFragment extends Fragment {
 
     private EditText titleEditText;
     private EditText detailsEditText;
+
+    private FirebaseAuth mAuth;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -49,12 +59,23 @@ public class ComplaintFragment extends Fragment {
             return;
         }
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String email = currentUser.getEmail();
+
+        Date currentDate = new Date();
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+                Locale.getDefault());
+        String formattedDate = dateFormat.format(currentDate);
+
         // Submit the complaint to Firebase
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference complaintsRef = database.getReference("Complaints");
         String complaintId = complaintsRef.push().getKey();
         if (complaintId != null) {
-            complaints complaint = new complaints(complaintId, title, details);
+            complaints complaint = new complaints(complaintId, title, details, email, formattedDate);
             complaintsRef.child(complaintId).setValue(complaint)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
