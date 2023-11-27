@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ca.utoronto.cscb07project.R;
@@ -51,6 +53,8 @@ public class AdminComplaintsFragment extends Fragment {
                         complaints.add(complaint);
                     }
                 }
+
+                Collections.reverse(complaints);
                 adapter.notifyDataSetChanged();
             }
 
@@ -60,6 +64,34 @@ public class AdminComplaintsFragment extends Fragment {
             }
         });
 
+
+        adapter.setOnComplaintClickListener(new ComplaintAdapter.OnComplaintClickListener() {
+            @Override
+            public void onComplaintClick(ca.utoronto.cscb07project.ui.complaints.complaints complaint) {
+                toComplaintDetailsFragment(complaint);
+            }
+        });
+
         return view;
     }
+
+    private void toComplaintDetailsFragment(complaints complaint){
+        ComplaintDetailsFragment complaintDetailsFragment = new ComplaintDetailsFragment();
+        Bundle args = new Bundle();
+        args.putString("complaintID", complaint.getComplaintId());
+        args.putString("studentEmail", complaint.getUserEmail());
+        args.putString("title", complaint.getTitle());
+        args.putString("details", complaint.getDetails());
+        args.putString("date", complaint.getDate());
+
+        complaintDetailsFragment.setArguments(args);
+
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.userFrame, complaintDetailsFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
+
 }

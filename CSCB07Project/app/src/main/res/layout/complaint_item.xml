@@ -1,43 +1,41 @@
 <!-- list_item_complaint.xml -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
+
 
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        tools:text="Text1" />
 
     <TextView
         android:id="@+id/textViewDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="@android:color/darker_gray"/>
-
-    <TextView
-        android:id="@+id/textViewDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@android:color/darker_gray"/>
+        android:text="Text2"
+        android:textColor="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/textViewComplaintId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@android:color/darker_gray"/>
+        android:text="Text4"
+        android:textColor="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/textViewUserEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@android:color/darker_gray"/>
+        android:text="Text5"
+        android:textColor="@android:color/darker_gray" />
 </LinearLayout>

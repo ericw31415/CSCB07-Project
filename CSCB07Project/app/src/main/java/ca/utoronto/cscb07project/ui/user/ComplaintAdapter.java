@@ -17,8 +17,17 @@ import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.complaints.complaints;
 
 public class ComplaintAdapter extends ArrayAdapter<complaints> {
+    private OnComplaintClickListener onComplaintClickListener;
     public ComplaintAdapter(Context context, List<complaints> complaints) {
         super(context, 0, complaints);
+    }
+
+    public interface OnComplaintClickListener{
+        void onComplaintClick(complaints complaint);
+    }
+
+    public void setOnComplaintClickListener(OnComplaintClickListener onComplaintClickListener){
+        this.onComplaintClickListener = onComplaintClickListener;
     }
 
     @NonNull
@@ -32,16 +41,25 @@ public class ComplaintAdapter extends ArrayAdapter<complaints> {
 
         TextView textViewTitle = convertView.findViewById(R.id.textViewTitle);
         TextView textViewDate = convertView.findViewById(R.id.textViewDate);
-        TextView textViewDetails = convertView.findViewById(R.id.textViewDetails);
         TextView textViewComplaintId = convertView.findViewById(R.id.textViewComplaintId);
         TextView textViewUserEmail = convertView.findViewById(R.id.textViewUserEmail);
 
         if (complaint != null) {
-            textViewTitle.setText("Title: " + complaint.getTitle());
+            textViewTitle.setText("Complaint: " + complaint.getTitle());
             textViewDate.setText("Date: " + complaint.getDate());
-            textViewDetails.setText("Details: " + complaint.getDetails());
             textViewComplaintId.setText("Complaint ID: " + complaint.getComplaintId());
             textViewUserEmail.setText("User Email: " + complaint.getUserEmail());
+
+            convertView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    if(onComplaintClickListener != null){
+                        onComplaintClickListener.onComplaintClick(complaint);
+                    }
+                }
+            });
+
         }
 
         return convertView;

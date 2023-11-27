@@ -11,6 +11,10 @@ public class complaints {
 
     }
 
+    public complaints(String complaintId, String title, String email, String formattedDate){
+
+    }
+
     // Constructor
     public complaints(String complaintId, String title, String details, String userEmail,
                       String date) {
