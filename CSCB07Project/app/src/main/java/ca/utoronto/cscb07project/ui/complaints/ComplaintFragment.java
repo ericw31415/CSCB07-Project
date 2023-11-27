@@ -27,6 +27,7 @@ import ca.utoronto.cscb07project.R;
 public class ComplaintFragment extends Fragment {
 
     private EditText titleEditText;
+    private EditText complaintDetailsEditText;
     private FirebaseAuth mAuth;
 
     @Override
@@ -37,6 +38,7 @@ public class ComplaintFragment extends Fragment {
 
         // Initialize UI elements
         titleEditText = view.findViewById(R.id.complaintTitleEditText);
+        complaintDetailsEditText = view.findViewById(R.id.complaintDetailsEditText);
         Button submitButton = view.findViewById(R.id.submitComplaintButton);
 
         // Set up the submit button click listener
@@ -48,6 +50,7 @@ public class ComplaintFragment extends Fragment {
     private void submitComplaint() {
         // Collect input data
         String title = titleEditText.getText().toString().trim();
+        String details = complaintDetailsEditText.getText().toString().trim();
 
         // Validate input
         if (title.isEmpty()) {
@@ -68,10 +71,10 @@ public class ComplaintFragment extends Fragment {
 
         // Submit the complaint to Firebase
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference complaintsRef = database.getReference("Complaints");
+        DatabaseReference complaintsRef = database.getReference("complaints");
         String complaintId = complaintsRef.push().getKey();
         if (complaintId != null) {
-            complaints complaint = new complaints(complaintId, title, email, formattedDate);
+            complaints complaint = new complaints(complaintId, title, email, formattedDate, details);
             complaintsRef.child(complaintId).setValue(complaint)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {

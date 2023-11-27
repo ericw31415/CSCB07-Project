@@ -40,7 +40,7 @@ public class AdminComplaintsFragment extends Fragment {
 
         // Initialize Firebase
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Complaints");
+        databaseReference = firebaseDatabase.getReference("complaints");
 
         // Read data from Firebase
         databaseReference.addValueEventListener(new ValueEventListener() {

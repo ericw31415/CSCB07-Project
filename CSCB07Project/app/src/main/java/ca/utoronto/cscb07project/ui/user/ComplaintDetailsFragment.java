@@ -84,7 +84,7 @@ public class ComplaintDetailsFragment extends Fragment {
             String date = args.getString("date");
 
             ((TextView) view.findViewById(R.id.studentEmail)).setText("Student Email: "+ studentEmail);
-            ((TextView) view.findViewById(R.id.textViewTitle300)).setText(title);
+            ((TextView) view.findViewById(R.id.complaintTitle)).setText(title);
             ((TextView) view.findViewById(R.id.complaintText)).setText(details);
             ((TextView) view.findViewById(R.id.complaintDate)).setText("Sent On: " + date);
 

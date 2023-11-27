@@ -8,7 +8,7 @@
     tools:context=".ui.user.ComplaintDetailsFragment">
 
     <TextView
-        android:id="@+id/textViewTitle300"
+        android:id="@+id/complaintTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -46,7 +46,7 @@
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle300" />
+        app:layout_constraintTop_toBottomOf="@+id/complaintTitle" />
 
     <TextView
         android:id="@+id/complaintText3"
