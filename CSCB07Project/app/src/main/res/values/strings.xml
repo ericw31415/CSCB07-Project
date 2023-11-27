@@ -35,4 +35,5 @@
     <string name="complaint_details_hint">Enter complaint details</string>
     <string name="submit_complaint">Submit Complaint</string>
     <string name="menu_complaints">Complaints</string>
+    <string name="title_activity_announcment">Announcment</string>
 </resources>

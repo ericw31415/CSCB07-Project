@@ -3,26 +3,21 @@ package ca.utoronto.cscb07project.ui.complaints;
 public class complaints {
     private String complaintId;
     private String title;
-    private String details;
     private String userEmail;
     private String date;
+    private String details;
 
     public complaints(){
 
     }
-
-    public complaints(String complaintId, String title, String email, String formattedDate){
-
-    }
-
     // Constructor
-    public complaints(String complaintId, String title, String details, String userEmail,
-                      String date) {
+    public complaints(String complaintId, String title, String userEmail,
+                      String date, String details) {
         this.complaintId = complaintId;
         this.title = title;
-        this.details = details;
         this.userEmail = userEmail;
         this.date = date;
+        this.details = details;
     }
 
     public String getDate(){
@@ -46,16 +41,10 @@ public class complaints {
         return title;
     }
 
+
+
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
     }
 
     public String getUserEmail() {
@@ -64,5 +53,13 @@ public class complaints {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getDetails() {
+        return this.details;
+    }
+
+    public void setDetails(String details){
+        this.details = details;
     }
 }

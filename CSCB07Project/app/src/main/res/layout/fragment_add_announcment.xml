@@ -7,25 +7,25 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/complaintTitleEditText"
+        android:id="@+id/AnnouncementTitleEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/complaint_title_hint"
+        android:hint="Enter Announcement Title"
         android:inputType="text"
         android:maxLines="1" />
 
     <EditText
-        android:id="@+id/complaintDetailsEditText"
+        android:id="@+id/AnnouncementDescriptionEditText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="top"
-        android:hint="@string/complaint_details_hint"
+        android:hint="Enter Announcement Description"
         android:inputType="textMultiLine"
         android:minLines="5" />
 
     <Button
-        android:id="@+id/submitComplaintButton"
+        android:id="@+id/postAnnouncementButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
