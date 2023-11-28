@@ -1,5 +1,6 @@
 package ca.utoronto.cscb07project.ui.POStCheck;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,8 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -24,7 +31,11 @@ public class POStCheckActivity extends AppCompatActivity {
 
     public Button POStProceed;
     public EditText csca67, csca48, mata22, mata31, mata37;
+
+    //Storing result on firebase
     public DatabaseReference userRef;
+    public FirebaseUser currUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +47,9 @@ public class POStCheckActivity extends AppCompatActivity {
         // TO DO: store user grades under the user that is signed in
         userRef = FirebaseDatabase.getInstance().getReference().child("users").child("Tamam");
          */
+        currUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = currUser.getUid();
+        userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
 
         csca67 = findViewById(R.id.editTextNumberDecimal);
         csca48 = findViewById(R.id.editTextNumberDecimal3);
@@ -78,6 +92,8 @@ public class POStCheckActivity extends AppCompatActivity {
                     String key = "POSt Courses Grades"; //userRef.push().getKey();
                     userRef.child(key).setValue(gradesMap);
                      */
+                    String key = "Major and Specialist POSt Courses Grades";
+                    userRef.child(key).setValue(gradesMap);
 
                     // Display result of POStCheck on next screen
                     Intent POStRes= new Intent(POStCheckActivity.this, POStCheckCalc.class);
@@ -108,5 +124,24 @@ public class POStCheckActivity extends AppCompatActivity {
     private boolean isValidGrade(double value){
         return value >= 0 && value <= 100;
     }
+
+    /**
+    public void loadGrades(String userId){
+        FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("Major and Specialist POSt Courses Grades").child("CSC A48 Grade").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String a48Grade = snapshot.getValue(String.class);
+                    csca48.setText(a48Grade);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+     */
 
 }
