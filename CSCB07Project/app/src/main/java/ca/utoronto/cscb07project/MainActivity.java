@@ -16,32 +16,29 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import ca.utoronto.cscb07project.databinding.ActivityMainBinding;
-import ca.utoronto.cscb07project.ui.events.EventsFragment;
 import ca.utoronto.cscb07project.ui.home.HomeFragment;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginActivity;
-import ca.utoronto.cscb07project.ui.notifications.NotificationsFragment;
 import ca.utoronto.cscb07project.ui.signup.SignupActivity;
 
 public class MainActivity extends AppCompatActivity {
+    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        loadFragment(new HomeFragment());
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.navigation_notifications) {
-                loadFragment(new NotificationsFragment());
-            } else if (itemId == R.id.navigation_events) {
-                loadFragment(new EventsFragment());
-            } else if (itemId == R.id.navigation_home) {
-                loadFragment(new HomeFragment());
-            }
-            return true;
-        });
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_events, R.id.navigation_notifications)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
     public void goToLogin(View view) {
@@ -52,12 +49,5 @@ public class MainActivity extends AppCompatActivity {
     public void toSignUp(View view) {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
-    }
-
-    private void loadFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.mainFrame, fragment);
-        transaction.commit();
     }
 }
