@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,9 @@ public class EventDetailsFragment extends Fragment {
                 navController.navigate(R.id.action_eventDetailsFragment_to_eventsFragment);
             });
         }
+        else {
+            Log.e("EventDetailsFragment", "Event is null");
+        }
     }
 
     @Override
@@ -77,11 +81,11 @@ public class EventDetailsFragment extends Fragment {
         binding = null;
     }
     /**
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_details, container, false);
-    }
-    **/
+     @Override
+     public View onCreateView(LayoutInflater inflater, ViewGroup container,
+     Bundle savedInstanceState) {
+     // Inflate the layout for this fragment
+     return inflater.inflate(R.layout.fragment_event_details, container, false);
+     }
+     **/
 }

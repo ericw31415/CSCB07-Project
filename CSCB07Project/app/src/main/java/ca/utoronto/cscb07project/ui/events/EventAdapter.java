@@ -33,9 +33,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         public EventViewHolder(EventItemBinding binding, OnItemClickListener listener) {
             super(binding.getRoot());
             this.binding = binding;
-
             binding.getRoot().setOnClickListener(v -> {
-                if (event != null && listener != null) {
+                if (listener != null && event != null) {
                     listener.onItemClick(event);
                 }
             });

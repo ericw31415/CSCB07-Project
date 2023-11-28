@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 
 import androidx.annotation.Nullable;
@@ -25,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +48,7 @@ public class EventsFragment extends Fragment {
         return binding.getRoot();
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -53,32 +57,24 @@ public class EventsFragment extends Fragment {
 
         allEventsAdapter = new EventAdapter(new ArrayList<>(), event -> {
             EventDetailsFragment fragment = EventDetailsFragment.newInstance(event);
-            NavController navController = Navigation.findNavController(binding.getRoot());
-            navController.navigate(R.id.action_navigation_events_to_eventDetailsFragment, fragment.getArguments());
-        }, this);
-
-        attendingEventsAdapter = new EventAdapter(new ArrayList<>(), event -> {
-            EventDetailsFragment fragment = EventDetailsFragment.newInstance(event);
-            NavController navController = Navigation.findNavController(binding.getRoot());
+            NavController navController = Navigation.findNavController(view);
             navController.navigate(R.id.action_navigation_events_to_eventDetailsFragment, fragment.getArguments());
         }, this);
 
         RecyclerView allEventsRecyclerView = binding.allEventsRecyclerView;
         allEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         allEventsRecyclerView.setAdapter(allEventsAdapter);
+        binding.addEventButton.setOnClickListener(v -> {
+            // Create a new Event object
+            Event event = new Event("hi", "bye");
 
-        RecyclerView attendingEventsRecyclerView = binding.attendingEventsRecyclerView;
-        attendingEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        attendingEventsRecyclerView.setAdapter(attendingEventsAdapter);
-
+            // Add the event to your Firebase database
+            // Replace "events" with the path to your events in the Firebase database
+            FirebaseDatabase.getInstance("https://b07-event-database-default-rtdb.firebaseio.com/").getReference("events").push().setValue(event);
+        });
         viewModel.getAllEventsList().observe(getViewLifecycleOwner(), events -> {
             allEventsAdapter.setEventList(events);
             allEventsAdapter.notifyDataSetChanged();
-        });
-
-        viewModel.getAttendingEventsList().observe(getViewLifecycleOwner(), events -> {
-            attendingEventsAdapter.setEventList(events);
-            attendingEventsAdapter.notifyDataSetChanged();
         });
 
         FloatingActionButton addEventButton = binding.addEventButton;
@@ -95,9 +91,13 @@ public class EventsFragment extends Fragment {
         dialogBinding.submitButton.setOnClickListener(v -> {
             String title = dialogBinding.titleEditText.getText().toString();
             String date = dialogBinding.dateEditText.getText().toString();
-            Event event = new Event(title, date);
-            viewModel.addEvent(event);
-            dialog.dismiss();
+            if (!title.isEmpty() && !date.isEmpty()) {
+                Event event = new Event(title, date);
+                viewModel.addEvent(event);
+                dialog.dismiss();
+            } else {
+                Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            }
         });
 
         dialogBinding.cancelButton.setOnClickListener(v -> dialog.dismiss());

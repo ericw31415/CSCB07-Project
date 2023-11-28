@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "804384748707",
+    "firebase_url": "https://b07-event-database-default-rtdb.firebaseio.com",
+    "project_id": "b07-event-database",
+    "storage_bucket": "b07-event-database.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804384748707:android:c28f5fccd1c189565e3b16",
+        "android_client_info": {
+          "package_name": "ca.utoronto.cscb07project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAun7Znu23KPBzlC-coWTMwk4atxxtCerE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,6 +7,8 @@ public class Event implements Serializable {
     private String title;
     private String date;
     private List<String> usersAttending;
+    public Event() {
+    }
 
     public Event(String title, String date) {
         this.title = title;
