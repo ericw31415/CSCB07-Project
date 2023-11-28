@@ -10,6 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.databinding.FragmentFeedbackBinding;
 import ca.utoronto.cscb07project.ui.events.EventsFragment;
@@ -72,9 +77,19 @@ public class FeedbackFragment extends Fragment {
         binding.button8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //firebase, find user ID
+                FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
+                String userId = currUser.getUid();
+                //DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference().child("event feedback");//need to refer to specific event dynamically
+
+
                 String event = binding.editTextText2.getText().toString();
                 float rating = binding.ratingBar.getRating();
                 String feedback = binding.editTextTextMultiLine.getText().toString();
+
+                // Store feedback under user ID in the "event feedback" category
+                DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("event feedback").child(userId);
 
                 // Placeholder message
                 Toast myToast = Toast.makeText(getActivity(), event + " (" + rating + "): " + feedback, Toast.LENGTH_SHORT);

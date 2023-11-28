@@ -97,6 +97,10 @@ public class UserLoggedInActivity extends AppCompatActivity {
         loadFragment(new AdminComplaintsFragment());
     }
 
+    public void toAdminEventFeedback(View view){
+        loadFragment(new AdminEventFeedbackFragment());
+    }
+
 
     public void logOut(View view) {
         mAuth.signOut();
