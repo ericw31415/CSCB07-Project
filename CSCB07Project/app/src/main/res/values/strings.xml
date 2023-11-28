@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CSCB07 Project</string>
+    <string name="app_name">UTSC CS Connect</string>
     <string name="title_home">Home</string>
     <string name="title_events">Events</string>
     <string name="title_notifications">Notifications</string>
@@ -35,4 +35,6 @@
     <string name="complaint_details_hint">Enter complaint details</string>
     <string name="submit_complaint">Submit Complaint</string>
     <string name="menu_complaints">Complaints</string>
+    <string name="home_description">Check POSt qualifications, discover new events, write complaints and reviews</string>
+    <string name="login">Login</string>
 </resources>
