@@ -21,8 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ca.utoronto.cscb07project.R;
-import ca.utoronto.cscb07project.ui.loginsignout.LoginActivity;
-import ca.utoronto.cscb07project.ui.loginsignout.LoginUserFragment;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -60,7 +58,7 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
-    public void createUser(UserModel user){
+    public void createUser(UserModel user){/*
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = database.getReference("users");
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -89,7 +87,7 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(this, "There already is another user with this account", Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
+                });*/
     }
 
 

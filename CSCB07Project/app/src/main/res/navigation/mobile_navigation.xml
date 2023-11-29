@@ -18,7 +18,11 @@
         android:id="@+id/navigation_home"
         android:name="ca.utoronto.cscb07project.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_loginUserFragment"
+            app:destination="@id/loginUserFragment" />
+    </fragment>
 
 
     <fragment
@@ -42,4 +46,9 @@
         android:name="ca.utoronto.cscb07project.ui.complaints.ComplaintFragment"
         android:label="@string/menu_complaints"
         tools:layout="@layout/fragment_complaint" />
+    <fragment
+        android:id="@+id/loginUserFragment"
+        android:name="ca.utoronto.cscb07project.ui.login.LoginUserFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
 </navigation>
