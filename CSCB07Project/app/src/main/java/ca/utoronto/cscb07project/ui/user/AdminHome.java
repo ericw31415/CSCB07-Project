@@ -3,6 +3,7 @@ package ca.utoronto.cscb07project.ui.user;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -61,6 +62,7 @@ public class AdminHome extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,11 +76,12 @@ public class AdminHome extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_home, container, false);
+
         Button newEventsButton = view.findViewById(R.id.button8);
         newEventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavController navController = Navigation.findNavController(requireView());
+                NavController navController = Navigation.findNavController(v);
                 navController.navigate(R.id.action_navigation_admin_home_to_navigation_events);
             }
         });
@@ -122,5 +125,9 @@ public class AdminHome extends Fragment {
         });
 
         return view;
+    }
+    public void navigateToEventsFragment(View view) {
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(R.id.action_navigation_admin_home_to_navigation_events);
     }
 }

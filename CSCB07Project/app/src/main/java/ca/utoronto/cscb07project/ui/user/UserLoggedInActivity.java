@@ -25,6 +25,7 @@ import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.POStCheck.MajOrMin;
 import ca.utoronto.cscb07project.ui.POStCheck.POStCheckActivity;
 import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
+import ca.utoronto.cscb07project.ui.events.EventsFragment;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginActivity;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginUserFragment;
 
@@ -95,6 +96,10 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
     public void toAdminComplaints(View view){
         loadFragment(new AdminComplaintsFragment());
+    }
+
+    public void toEventsFragment(View view){
+        loadFragment(new EventsFragment());
     }
 
 
