@@ -94,6 +94,9 @@ public class UserLoggedInActivity extends AppCompatActivity {
         loadFragment(new AdminComplaintsFragment());
     }
 
+    public void toAdminEventFeedback(View view){
+        loadFragment(new AdminEventsFeedback());
+    }
 
     public void logOut(View view) {
         /*

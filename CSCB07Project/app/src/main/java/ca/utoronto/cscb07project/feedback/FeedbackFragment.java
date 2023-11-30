@@ -91,7 +91,7 @@ public class FeedbackFragment extends Fragment {
                 String feedback = binding.editTextTextMultiLine.getText().toString();
 
                 //feedback object
-                Feedback userFeedback = new Feedback(userRef, event, rating, feedback);
+                Feedback userFeedback = new Feedback(userRef, event, rating, feedback);//Implement Feedback.java as an Interface?
 
                 //reference Firebase
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
