@@ -2,13 +2,22 @@ package ca.utoronto.cscb07project.ui.user;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.databinding.FragmentFeedbackBinding;
+import ca.utoronto.cscb07project.feedback.Feedback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,10 +66,33 @@ public class AdminEventsFeedback extends Fragment {
         }
     }
 
+    FragmentFeedbackBinding binding;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_admin_events_feedback, container, false);
+        binding = FragmentFeedbackBinding.inflate(inflater, container, false);
+        //inflater.inflate(R.layout.fragment_admin_events_feedback, container, false);
+
+        //reference firebase
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference feedbackRef = database.getReference("feedback");
+
+        //listener to pull data
+        feedbackRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot snap : snapshot.getChildren()){
+                    Feedback feedback = snap.getValue(Feedback.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        return binding.getRoot();
     }
 }
