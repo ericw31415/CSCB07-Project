@@ -1,18 +1,16 @@
-package ca.utoronto.cscb07project.ui.loginsignout;
+package ca.utoronto.cscb07project.ui.login;
 
-public class LoginPresenter implements PresenterForLogin{
-    private LogInOutView view;
-    private LoginModel loginModel;
+public class LoginFragmentPresenter {
+    private LoginFragmentView view;
+    private LoginFragmentModel loginModel;
 
-
-    LoginPresenter(LogInOutView view){
+    public LoginFragmentPresenter(LoginFragmentView view) {
         this.view = view;
-        this.loginModel= new LoginModel();
+        this.loginModel = new LoginFragmentModel();
     }
 
-    @Override
     public void tryLogin(String email, String password) {
-        loginModel.login(email, password, new ModelForLogin.loginResponse() {
+        loginModel.tryLogin(email, password, new LoginResponse() {
             @Override
             public void loginSuccess() {
                 view.successfulLogin();
@@ -28,7 +26,5 @@ public class LoginPresenter implements PresenterForLogin{
                 view.invalidInput();
             }
         });
-
     }
-
 }

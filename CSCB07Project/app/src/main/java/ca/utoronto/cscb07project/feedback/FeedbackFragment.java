@@ -68,6 +68,8 @@ public class FeedbackFragment extends Fragment {
         }
     }
 
+    public DatabaseReference userRef;
+    public FirebaseUser currUser;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,18 +80,25 @@ public class FeedbackFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                //firebase, find user ID
-                FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
+                //get current user's ID
+                currUser = FirebaseAuth.getInstance().getCurrentUser();
                 String userId = currUser.getUid();
-                //DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference().child("event feedback");//need to refer to specific event dynamically
+                userRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
 
-
+                //get user input: event, rating, feedback
                 String event = binding.editTextText2.getText().toString();
                 float rating = binding.ratingBar.getRating();
                 String feedback = binding.editTextTextMultiLine.getText().toString();
 
-                // Store feedback under user ID in the "event feedback" category
-                DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("event feedback").child(userId);
+                //feedback object
+                Feedback userFeedback = new Feedback(userRef, event, rating, feedback);//Implement Feedback.java as an Interface?
+
+                //reference Firebase
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference feedbackRef = database.getReference("feedback");//change to refer to where we want feedback stored
+
+                //push feedback to firebase
+                feedbackRef.push().setValue(userFeedback);
 
                 // Placeholder message
                 Toast myToast = Toast.makeText(getActivity(), event + " (" + rating + "): " + feedback, Toast.LENGTH_SHORT);
