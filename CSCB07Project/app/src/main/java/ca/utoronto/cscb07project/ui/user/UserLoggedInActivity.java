@@ -48,7 +48,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference userRef = database.getReference("users").child(currentUser.getUid());
-
+        Log.d("ID", currentUser.getUid().toString());
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

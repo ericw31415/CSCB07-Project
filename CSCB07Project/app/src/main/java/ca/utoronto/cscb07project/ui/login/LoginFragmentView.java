@@ -59,6 +59,7 @@ public class LoginFragmentView extends Fragment {
 
     public void successfulLogin() {
         // TODO: Use a fragment instead
+        Toast.makeText(getActivity(), "Successful Login", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), UserLoggedInActivity.class);
         startActivity(intent);
     }
