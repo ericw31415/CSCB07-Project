@@ -3,16 +3,21 @@ package ca.utoronto.cscb07project.ui.user;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.ui.events.EventsFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,7 +74,14 @@ public class AdminHome extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_home, container, false);
-
+        Button newEventsButton = view.findViewById(R.id.button8);
+        newEventsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = Navigation.findNavController(requireView());
+                navController.navigate(R.id.action_navigation_admin_home_to_navigation_events);
+            }
+        });
         fnameTextView = view.findViewById(R.id.userfirstname);
 
         // Inflate the layout for this fragment

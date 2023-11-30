@@ -18,7 +18,13 @@ import ca.utoronto.cscb07project.databinding.FragmentEventDetailsBinding;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class EventDetailsFragment extends Fragment {
     private FragmentEventDetailsBinding binding;
@@ -28,7 +34,8 @@ public class EventDetailsFragment extends Fragment {
     public static EventDetailsFragment newInstance(Event event) {
         EventDetailsFragment fragment = new EventDetailsFragment();
         Bundle args = new Bundle();
-        args.putSerializable("event", event);
+        args.putSerializable("title", event.getTitle());
+        args.putLong("date", event.getDate().getTimeInMillis());
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,36 +50,33 @@ public class EventDetailsFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        // Check if getArguments() is not null and contains an "event" key
-        if (getArguments() != null && getArguments().containsKey("event")) {
-            // Check if the associated value is not null before casting and assigning it to event
-            Serializable eventSerializable = getArguments().getSerializable("event");
-            if (eventSerializable instanceof Event) {
-                event = (Event) eventSerializable;
-            }
+
+        if (getArguments() != null) {
+            String title = getArguments().getString("title");
+            long dateTimestamp = getArguments().getLong("date");
+            Calendar date = Calendar.getInstance();
+            date.setTimeInMillis(dateTimestamp);
+            event = new Event(title, date);
         }
 
-        // Check if event is not null before using it
         if (event != null) {
-            // Set the event details
             binding.textViewTitle.setText(event.getTitle());
-            binding.textViewDate.setText(event.getDate());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String dateString = format.format(event.getDate().getTime());
+            binding.textViewDate.setText(dateString);
+        }
 
-            // Set the click listener for the RSVP button
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userEmail = currentUser.getEmail();
+
             binding.buttonRsvp.setOnClickListener(v -> {
-                // Add the user to the event's attending list
-                event.addUserAttending("User"); // Replace "User" with the actual user
-
-                viewModel.rsvpEvent(event);
-
-                // Navigate back to the EventsFragment
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(R.id.action_eventDetailsFragment_to_eventsFragment);
+                viewModel.rsvpEvent(event, userEmail);
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_navigation_event_details_to_navigation_events);
             });
         }
-        else {
-            Log.e("EventDetailsFragment", "Event is null");
-        }
+
     }
 
     @Override

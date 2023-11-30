@@ -12,8 +12,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import ca.utoronto.cscb07project.databinding.EventItemBinding;
 import androidx.fragment.app.Fragment;
@@ -43,7 +45,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         public void bind(Event event) {
             this.event = event;
             binding.textViewTitle.setText(event.getTitle());
-            binding.textViewDate.setText(event.getDate());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String dateString = format.format(event.getDate().getTime());
+            binding.textViewDate.setText(dateString);
         }
     }
 
@@ -78,6 +82,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         return eventList.size();
     }
 }
+
+
+
+
 
 
 

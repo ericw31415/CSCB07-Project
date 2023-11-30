@@ -1,19 +1,29 @@
 package ca.utoronto.cscb07project.ui.events;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.io.Serializable;
 public class Event implements Serializable {
 
     private String title;
-    private String date;
+    private Calendar date;
     private List<String> usersAttending;
+
     public Event() {
     }
 
-    public Event(String title, String date) {
+    public Event(String title, Calendar date) {
         this.title = title;
         this.date = date;
         this.usersAttending = new ArrayList<>();
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public void setDate(Calendar date) {
+        this.date = date;
     }
 
     public String getTitle() {
@@ -24,13 +34,9 @@ public class Event implements Serializable {
         this.title = title;
     }
 
-    public String getDate() {
-        return date;
-    }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+
+
 
     public List<String> getUsersAttending() {
         return usersAttending;

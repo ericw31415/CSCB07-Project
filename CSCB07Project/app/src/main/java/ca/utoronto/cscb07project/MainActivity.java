@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseOptions secondaryOptions = new FirebaseOptions.Builder()
-                .setApplicationId("1:804384748707:android:c28f5fccd1c189565e3b16")
-                .setApiKey("AIzaSyAun7Znu23KPBzlC-coWTMwk4atxxtCerE")
-                .setDatabaseUrl("https://b07-event-database-default-rtdb.firebaseio.com")
-                .setProjectId("b07-event-database")
+                .setApplicationId("1:568217251391:android:25b9a28033be47e2e8528a")
+                .setApiKey("AIzaSyCp9Pgw40WZbdaBZSVvyLnWhjrt-_ImNHE")
+                .setDatabaseUrl("https://cscb07-group-default-rtdb.firebaseio.com/")
+                .setProjectId("cscb07-group")
                 .build();
 
         FirebaseApp.initializeApp(this, secondaryOptions, "secondary");

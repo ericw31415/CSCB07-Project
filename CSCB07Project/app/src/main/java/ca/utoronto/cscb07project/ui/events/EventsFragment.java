@@ -27,10 +27,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class EventsFragment extends Fragment {
     private List<Event> allEventsList;
@@ -40,11 +46,19 @@ public class EventsFragment extends Fragment {
     private EventAdapter attendingEventsAdapter;
     private FragmentEventsBinding binding;
     private SharedViewModel viewModel;
+    FloatingActionButton addEventButton;
+    private RecyclerView attendingEventsRecyclerView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentEventsBinding.inflate(inflater, container, false);
+        addEventButton = binding.addEventButton;
+        attendingEventsRecyclerView = binding.attendingEventsRecyclerView;
+        attendingEventsAdapter = new EventAdapter(new ArrayList<>(), null, this);
+        attendingEventsRecyclerView.setAdapter(attendingEventsAdapter);
+
         return binding.getRoot();
     }
 
@@ -52,33 +66,44 @@ public class EventsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            viewModel.getUser(userId).observe(getViewLifecycleOwner(), user -> {
+                if (user != null && user.isAdmin()) {
+                    addEventButton.setVisibility(View.VISIBLE); // Show the floating action button
+                } else {
+                    addEventButton.setVisibility(View.GONE); // Hide the floating action button
+                }
+            });
+        } else {
+            addEventButton.setVisibility(View.GONE); // Hide the floating action button if no user is logged in
+        }
 
         viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         allEventsAdapter = new EventAdapter(new ArrayList<>(), event -> {
             EventDetailsFragment fragment = EventDetailsFragment.newInstance(event);
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_navigation_events_to_eventDetailsFragment, fragment.getArguments());
+            NavController navController = Navigation.findNavController(requireView());
+            navController.navigate(R.id.action_navigation_events_to_navigation_event_details, fragment.getArguments());
         }, this);
 
         RecyclerView allEventsRecyclerView = binding.allEventsRecyclerView;
         allEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         allEventsRecyclerView.setAdapter(allEventsAdapter);
-        binding.addEventButton.setOnClickListener(v -> {
-            // Create a new Event object
-            Event event = new Event("hi", "bye");
 
-            // Add the event to your Firebase database
-            // Replace "events" with the path to your events in the Firebase database
-            FirebaseDatabase.getInstance("https://b07-event-database-default-rtdb.firebaseio.com/").getReference("events").push().setValue(event);
-        });
         viewModel.getAllEventsList().observe(getViewLifecycleOwner(), events -> {
             allEventsAdapter.setEventList(events);
             allEventsAdapter.notifyDataSetChanged();
+            eventList = events;
         });
 
         FloatingActionButton addEventButton = binding.addEventButton;
         addEventButton.setOnClickListener(v -> showAddEventDialog());
+
+
     }
 
     private void showAddEventDialog() {
@@ -90,11 +115,18 @@ public class EventsFragment extends Fragment {
 
         dialogBinding.submitButton.setOnClickListener(v -> {
             String title = dialogBinding.titleEditText.getText().toString();
-            String date = dialogBinding.dateEditText.getText().toString();
-            if (!title.isEmpty() && !date.isEmpty()) {
-                Event event = new Event(title, date);
-                viewModel.addEvent(event);
-                dialog.dismiss();
+            String dateString = dialogBinding.dateEditText.getText().toString();
+            if (!title.isEmpty() && !dateString.isEmpty()) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                Calendar date = Calendar.getInstance();
+                try {
+                    date.setTime(format.parse(dateString));
+                    Event event = new Event(title, date);
+                    viewModel.addEvent(event);
+                    dialog.dismiss();
+                } catch (ParseException e) {
+                    Toast.makeText(getContext(), "Invalid date format", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
             }
