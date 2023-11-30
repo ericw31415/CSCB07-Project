@@ -20,8 +20,8 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_navigation_home_to_loginUserFragment"
-            app:destination="@id/loginUserFragment" />
+            android:id="@+id/action_navigation_home_to_loginFragmentView"
+            app:destination="@id/navigation_login" />
     </fragment>
 
 
@@ -47,8 +47,17 @@
         android:label="@string/menu_complaints"
         tools:layout="@layout/fragment_complaint" />
     <fragment
-        android:id="@+id/loginUserFragment"
-        android:name="ca.utoronto.cscb07project.ui.login.LoginUserFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        android:id="@+id/navigation_login"
+        android:name="ca.utoronto.cscb07project.ui.login.LoginFragmentView"
+        android:label="@string/title_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_navigation_login_to_navigation_signup"
+            app:destination="@id/navigation_signup" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_signup"
+        android:name="ca.utoronto.cscb07project.ui.signup.SignupFragment"
+        android:label="@string/title_signup"
+        tools:layout="@layout/fragment_signup" />
 </navigation>

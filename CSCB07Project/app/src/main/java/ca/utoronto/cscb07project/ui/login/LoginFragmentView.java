@@ -1,25 +1,18 @@
 package ca.utoronto.cscb07project.ui.login;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.fragment.NavHostFragment;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import ca.utoronto.cscb07project.R;
-import ca.utoronto.cscb07project.databinding.FragmentFeedbackBinding;
 import ca.utoronto.cscb07project.databinding.FragmentLoginBinding;
 import ca.utoronto.cscb07project.ui.home.HomeFragment;
-import ca.utoronto.cscb07project.ui.signup.SignupActivity;
-import ca.utoronto.cscb07project.ui.user.UserLoggedInActivity;
 
 public class LoginFragmentView extends Fragment {
     private FragmentLoginBinding binding;
@@ -44,9 +37,17 @@ public class LoginFragmentView extends Fragment {
         binding.tologin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = binding.emailText.getText().toString();
+                String email = binding.emailText.getText().toString().trim();
                 String password = binding.passwordText.getText().toString();
                 presenter.tryLogin(email, password);
+            }
+        });
+
+        binding.tologin2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(LoginFragmentView.this)
+                        .navigate(R.id.action_navigation_login_to_navigation_signup);
             }
         });
 

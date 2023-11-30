@@ -3,7 +3,6 @@
     <string name="title_home">Home</string>
     <string name="title_events">Events</string>
     <string name="title_notifications">Notifications</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="POSt_Descrip">The Computer Science Major and Specialist Program POSt require
         specific grades in the courses listed below. Please provide your numerical grades.</string>
     <string name="POSt_req1">Computer Science Major and Specialist Programs require: \n\n 1. A
@@ -37,4 +36,6 @@
     <string name="menu_complaints">Complaints</string>
     <string name="home_description">Check POSt qualifications, discover new events, write complaints and reviews</string>
     <string name="login">Login</string>
+    <string name="title_login">Login</string>
+    <string name="title_signup">Signup</string>
 </resources>

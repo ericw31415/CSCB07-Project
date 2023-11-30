@@ -4,7 +4,6 @@ public class LoginFragmentPresenter {
     private LoginFragmentView view;
     private LoginFragmentModel loginModel;
 
-
     public LoginFragmentPresenter(LoginFragmentView view) {
         this.view = view;
         this.loginModel = new LoginFragmentModel();

@@ -28,17 +28,11 @@
             android:name=".ui.POStCheck.POStCheckCalc"
             android:exported="false" />
         <activity
-            android:name=".ui.signup.SignupActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.POStCheck.POStCheckActivity"
             android:exported="false" />
         <activity
             android:name=".ui.complaints.ComplaintActivity"
             android:exported="false"/>
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
