@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.data.User;
 import ca.utoronto.cscb07project.databinding.FragmentSignupBinding;
 
 /**
@@ -100,15 +101,15 @@ public class SignupFragment extends Fragment {
         if (email.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || password.isEmpty())
             Toast.makeText(getActivity(), "Make sure all fields are filled!", Toast.LENGTH_SHORT).show();
         else
-            createUser(new UserModel(email, firstName, lastName, password, isAdmin));
+            createUser(new User(email, firstName, lastName, password, isAdmin));
     }
 
-    public void createUser(UserModel user) {
+    public void createUser(User user) {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference usersRef = db.getReference("users");
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        auth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
+        auth.createUserWithEmailAndPassword(user.email, user.password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
