@@ -23,10 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.POStCheck.MajOrMin;
-import ca.utoronto.cscb07project.ui.POStCheck.POStCheckActivity;
 import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
-import ca.utoronto.cscb07project.ui.loginsignout.LoginActivity;
-import ca.utoronto.cscb07project.ui.loginsignout.LoginUserFragment;
 
 public class UserLoggedInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -56,10 +53,10 @@ public class UserLoggedInActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String firstName = dataSnapshot.child("fName").getValue(String.class);
-                    String lastName = dataSnapshot.child("lName").getValue(String.class);
+                    String firstName = dataSnapshot.child("firstName").getValue(String.class);
+                    String lastName = dataSnapshot.child("lastName").getValue(String.class);
                     String email = dataSnapshot.child("email").getValue(String.class);
-                    Boolean isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+                    Boolean isAdmin = dataSnapshot.child("isAdmin").getValue(Boolean.class);
 
                     userDataViewModel.setUserInfo(firstName, lastName, email, isAdmin);
 
@@ -99,9 +96,11 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
 
     public void logOut(View view) {
+        /*
         mAuth.signOut();
         Toast.makeText(this,"You are now logged out!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+         */
     }
 }
