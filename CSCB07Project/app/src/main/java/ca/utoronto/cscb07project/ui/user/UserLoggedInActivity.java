@@ -53,10 +53,10 @@ public class UserLoggedInActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String firstName = dataSnapshot.child("fName").getValue(String.class);
-                    String lastName = dataSnapshot.child("lName").getValue(String.class);
+                    String firstName = dataSnapshot.child("firstName").getValue(String.class);
+                    String lastName = dataSnapshot.child("lastName").getValue(String.class);
                     String email = dataSnapshot.child("email").getValue(String.class);
-                    Boolean isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+                    Boolean isAdmin = dataSnapshot.child("isAdmin").getValue(Boolean.class);
 
                     userDataViewModel.setUserInfo(firstName, lastName, email, isAdmin);
 

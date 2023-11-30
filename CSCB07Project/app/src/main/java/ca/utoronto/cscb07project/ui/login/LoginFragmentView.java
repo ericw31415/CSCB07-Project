@@ -1,5 +1,6 @@
 package ca.utoronto.cscb07project.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +11,11 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import ca.utoronto.cscb07project.MainActivity;
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.databinding.FragmentLoginBinding;
 import ca.utoronto.cscb07project.ui.home.HomeFragment;
+import ca.utoronto.cscb07project.ui.user.UserLoggedInActivity;
 
 public class LoginFragmentView extends Fragment {
     private FragmentLoginBinding binding;
@@ -55,9 +58,9 @@ public class LoginFragmentView extends Fragment {
     }
 
     public void successfulLogin() {
-        Toast.makeText(getActivity(), "Good login", Toast.LENGTH_SHORT).show();
-        // Intent intent = new Intent(this, UserLoggedInActivity.class);
-        // startActivity(intent);
+        // TODO: Use a fragment instead
+        Intent intent = new Intent(getActivity(), UserLoggedInActivity.class);
+        startActivity(intent);
     }
 
     public void unsuccessfulLogin() {
