@@ -1,6 +1,7 @@
 package ca.utoronto.cscb07project.ui.events;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import ca.utoronto.cscb07project.R;
@@ -38,6 +40,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import ca.utoronto.cscb07project.data.User;
+import ca.utoronto.cscb07project.ui.user.UserDataViewModel;
+
 public class EventsFragment extends Fragment {
     private List<Event> allEventsList;
     private List<Event> eventList;
@@ -48,18 +52,40 @@ public class EventsFragment extends Fragment {
     private SharedViewModel viewModel;
     FloatingActionButton addEventButton;
     private RecyclerView attendingEventsRecyclerView;
+    private TextView attendingEventsTitle;
 
-
+    private UserDataViewModel userDataViewModel;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = FragmentEventsBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        attendingEventsTitle = binding.attendingEventsTitle;
+
+        userDataViewModel = new ViewModelProvider(requireActivity()).get(UserDataViewModel.class);
+        userDataViewModel.getIsAdmin().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isAdmin) {
+                if (isAdmin) {
+                    attendingEventsTitle.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "User is admin", Toast.LENGTH_SHORT).show();
+                } else {
+                    attendingEventsTitle.setVisibility(View.VISIBLE);
+                    Toast.makeText(getContext(), "User is not admin", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         addEventButton = binding.addEventButton;
+
         attendingEventsRecyclerView = binding.attendingEventsRecyclerView;
+        attendingEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         attendingEventsAdapter = new EventAdapter(new ArrayList<>(), null, this);
         attendingEventsRecyclerView.setAdapter(attendingEventsAdapter);
 
-        return binding.getRoot();
+        return view;
     }
 
 
@@ -72,14 +98,17 @@ public class EventsFragment extends Fragment {
         if (currentUser != null) {
             String userId = currentUser.getUid();
             viewModel.getUser(userId).observe(getViewLifecycleOwner(), user -> {
-                if (user != null && user.isAdmin()) { // Changed from user.getAdmin() to user.isAdmin()
-                    addEventButton.setVisibility(View.VISIBLE); // Show the floating action button
+                if (user != null && user.isAdmin()) {
+                    addEventButton.setVisibility(View.VISIBLE);
+                    attendingEventsTitle.setVisibility(View.GONE);
                 } else {
-                    addEventButton.setVisibility(View.GONE); // Hide the floating action button
+                    addEventButton.setVisibility(View.GONE);
+                    attendingEventsTitle.setVisibility(View.VISIBLE);
                 }
             });
         } else {
-            addEventButton.setVisibility(View.GONE); // Hide the floating action button if no user is logged in
+            addEventButton.setVisibility(View.GONE);
+            attendingEventsTitle.setVisibility(View.VISIBLE);
         }
 
         viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);

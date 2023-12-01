@@ -5,13 +5,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.ui.events.EventsFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,10 +73,15 @@ public class UserHome extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_home, container, false);
 
+
         fnameTextView = view.findViewById(R.id.userfirstname);
 
         // Inflate the layout for this fragment
         userDataViewModel = new ViewModelProvider(requireActivity()).get(UserDataViewModel.class);
+
+
+
+
 
         // Observe changes to first name
         userDataViewModel.getFirstName().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -102,8 +116,25 @@ public class UserHome extends Fragment {
                 Log.d("Test", isAdmin.toString());
             }
         });
+        Button myEventsButton = view.findViewById(R.id.button8);
+        myEventsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                EventsFragment eventsFragment = new EventsFragment(); // Assuming EventsFragment is the fragment you want to display
+                fragmentTransaction.replace(R.id.nav_host_fragment_container, eventsFragment);
+                fragmentTransaction.addToBackStack(null); // Add this line if you want the back button to return to the UserHome Fragment
+                fragmentTransaction.commit();
+            }
+        });
+
+
 
         return view;
     }
+
+
 
 }

@@ -4,6 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
     app:startDestination="@id/navigation_home">
+    <fragment
+        android:id="@+id/userHome"
+        android:name="ca.utoronto.cscb07project.ui.user.UserHome"
+        android:label="User Home">
+        <action
+            android:id="@+id/action_userHome_to_navigation_events"
+            app:destination="@id/navigation_events" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_event_details"
@@ -34,6 +43,15 @@
             android:id="@+id/action_navigation_events_to_navigation_event_details"
             app:destination="@id/navigation_event_details" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_user_home"
+        android:name="ca.utoronto.cscb07project.ui.user.UserHome"
+        android:label="User Home"
+        tools:layout="@layout/fragment_user_home">
+        <action
+            android:id="@+id/action_userHome_to_eventsFragment"
+            app:destination="@id/navigation_events" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -54,8 +72,14 @@
         tools:layout="@layout/fragment_admin_home" >
         <action
             android:id="@+id/action_navigation_admin_home_to_navigation_events"
-            app:destination="@id/navigation_events" />
+            app:destination="@id/fragment_events" />
     </fragment>
+
+    <fragment
+        android:id="@+id/fragment_events"
+        android:name="ca.utoronto.cscb07project.ui.events.EventsFragment"
+        android:label="Events"
+        tools:layout="@layout/fragment_events" />
 
     <fragment
         android:id="@+id/navigation_login"
@@ -72,4 +96,6 @@
         android:name="ca.utoronto.cscb07project.ui.signup.SignupFragment"
         android:label="@string/title_signup"
         tools:layout="@layout/fragment_signup" />
+
+
 </navigation>

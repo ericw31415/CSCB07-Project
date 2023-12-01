@@ -13,6 +13,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 
+import java.util.List;
+
 import ca.utoronto.cscb07project.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,15 +27,25 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        FirebaseApp secondaryApp = null;
+        List<FirebaseApp> firebaseApps = FirebaseApp.getApps(this);
+        for(FirebaseApp app : firebaseApps){
+            if(app.getName().equals("secondary")){
+                secondaryApp = app;
+                break;
+            }
+        }
 
-        FirebaseOptions secondaryOptions = new FirebaseOptions.Builder()
-                .setApplicationId("1:568217251391:android:25b9a28033be47e2e8528a")
-                .setApiKey("AIzaSyCp9Pgw40WZbdaBZSVvyLnWhjrt-_ImNHE")
-                .setDatabaseUrl("https://cscb07-group-default-rtdb.firebaseio.com/")
-                .setProjectId("cscb07-group")
-                .build();
+        if (secondaryApp == null) {
+            FirebaseOptions secondaryOptions = new FirebaseOptions.Builder()
+                    .setApplicationId("1:568217251391:android:25b9a28033be47e2e8528a")
+                    .setApiKey("AIzaSyCp9Pgw40WZbdaBZSVvyLnWhjrt-_ImNHE")
+                    .setDatabaseUrl("https://cscb07-group-default-rtdb.firebaseio.com/")
+                    .setProjectId("cscb07-group")
+                    .build();
 
-        FirebaseApp.initializeApp(this, secondaryOptions, "secondary");
+            secondaryApp = FirebaseApp.initializeApp(this, secondaryOptions, "secondary");
+        }
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         final NavController navController = navHostFragment.getNavController(); // Make navController final
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
