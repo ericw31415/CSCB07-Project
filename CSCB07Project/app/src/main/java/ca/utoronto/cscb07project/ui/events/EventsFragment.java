@@ -25,6 +25,7 @@ import ca.utoronto.cscb07project.databinding.FragmentEventsBinding;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -115,10 +116,14 @@ public class EventsFragment extends Fragment {
 
         allEventsAdapter = new EventAdapter(new ArrayList<>(), event -> {
             EventDetailsFragment fragment = EventDetailsFragment.newInstance(event);
-            NavController navController = Navigation.findNavController(view); // Get the NavController using the view
-            navController.navigate(R.id.action_navigation_events_to_navigation_event_details, fragment.getArguments());
+            if (getActivity() != null) {
+                NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                if (navHostFragment != null) {
+                    NavController navController = navHostFragment.getNavController();
+                    navController.navigate(R.id.action_navigation_event_details_to_navigation_events);
+                }
+            }
         }, this);
-
         RecyclerView allEventsRecyclerView = binding.allEventsRecyclerView;
         allEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         allEventsRecyclerView.setAdapter(allEventsAdapter);

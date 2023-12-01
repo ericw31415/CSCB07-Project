@@ -29,7 +29,7 @@ import ca.utoronto.cscb07project.ui.events.EventsFragment;
 
 
 
-public class UserLoggedInActivity extends AppCompatActivity {
+public class UserLoggedInActivity extends AppCompatActivity implements OnMyEventsButtonClickListener {
     private FirebaseAuth mAuth;
 
     private void loadFragment(Fragment fragment) {
@@ -47,7 +47,6 @@ public class UserLoggedInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        loadFragment(new LoadingFragment());
 
         UserDataViewModel userDataViewModel = new ViewModelProvider(this).get(UserDataViewModel.class);
 
@@ -68,16 +67,11 @@ public class UserLoggedInActivity extends AppCompatActivity {
                     userDataViewModel.setUserInfo(firstName, lastName, email, isAdmin);
 
                     if (isAdmin) {
-                        loadFragment(new AdminHome());
+                        getSupportFragmentManager().beginTransaction().replace(R.id.userFrame, new AdminHome()).commit();
                     } else {
                         UserHome userHomeFragment = new UserHome();
-                        userHomeFragment.setOnMyEventsButtonClickListener(new OnMyEventsButtonClickListener() {
-                            @Override
-                            public void onMyEventsButtonClick() {
-                                loadFragment(new EventsFragment());
-                            }
-                        });
-                        loadFragment(userHomeFragment);
+                        userHomeFragment.setOnMyEventsButtonClickListener(UserLoggedInActivity.this);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.userFrame, userHomeFragment).commit();
                     }
                 } else {
                     Log.d("User Data", "DataSnapshot does not exist");
@@ -117,6 +111,8 @@ public class UserLoggedInActivity extends AppCompatActivity {
     public void toAdminEventFeedback(View view){
         loadFragment(new AdminEventsFeedback());
     }
+
+
 
 
     public void logOut(View view) {
