@@ -1,14 +1,8 @@
 package ca.utoronto.cscb07project;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -20,19 +14,18 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 
 import ca.utoronto.cscb07project.databinding.ActivityMainBinding;
-import ca.utoronto.cscb07project.ui.events.EventsFragment;
-import ca.utoronto.cscb07project.ui.home.HomeFragment;
-import ca.utoronto.cscb07project.ui.loginsignout.LoginActivity;
-import ca.utoronto.cscb07project.ui.notifications.NotificationsFragment;
-import ca.utoronto.cscb07project.ui.signup.SignupActivity;
 
 public class MainActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
+    private AppBarConfiguration appBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         FirebaseOptions secondaryOptions = new FirebaseOptions.Builder()
                 .setApplicationId("1:568217251391:android:25b9a28033be47e2e8528a")
                 .setApiKey("AIzaSyCp9Pgw40WZbdaBZSVvyLnWhjrt-_ImNHE")
@@ -42,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseApp.initializeApp(this, secondaryOptions, "secondary");
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
+        final NavController navController = navHostFragment.getNavController(); // Make navController final
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -55,17 +48,17 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+
+        appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_events, R.id.navigation_notifications)
+                .build();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
-    public void goToLogin(View view) {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
-
-    public void toSignUp(View view) {
-        Intent intent = new Intent(this, SignupActivity.class);
-        startActivity(intent);
-    }
-
-
 }

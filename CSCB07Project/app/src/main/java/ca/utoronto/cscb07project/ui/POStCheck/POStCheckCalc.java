@@ -30,6 +30,31 @@ public class POStCheckCalc extends AppCompatActivity {
         double a31In = getIntent().getDoubleExtra("a31In", 0.0);
         double a37In = getIntent().getDoubleExtra("a37In", 0.0);
 
+        //new code
+        boolean Req1 = getGPA.passedReq1(a67In, a48In, a22In, a31In, a37In);
+        boolean Req2 = getGPA.passedReq2(a48In);
+        boolean Req3 = getGPA.passedReq3(a67In, a22In, a37In);
+
+        TextView result = findViewById(R.id.textView9);
+        TextView gpaRes = findViewById(R.id.textView20);
+        TextView req1Res = findViewById(R.id.textView25);
+        TextView req2Res = findViewById(R.id.textView22);
+        TextView req3Res = findViewById(R.id.textView24);
+
+        result.setText(Req1 && Req2 && Req3 ? getResources().getString(R.string.MajSpec_Qualif) :
+                "You do not meet the requirements for the Computer Science Major and Specialist POSt.");
+
+        double gpaVal = getGPA.gpaCalc(a67In, a48In, a22In, a31In, a37In);
+        gpaRes.setText("GPA = " + gpaVal);
+
+        updateRequirementStatus(req1Res, Req1);
+        updateRequirementStatus(req2Res, Req2);
+        updateRequirementStatus(req3Res, Req3);
+
+
+
+
+        /**
         // call requirement checking functions with user input grades
         // TO DO: store GPA for users on firebase
         boolean Req1 = getGPA.passedReq1(a67In, a48In, a22In, a31In, a37In);
@@ -90,6 +115,10 @@ public class POStCheckCalc extends AppCompatActivity {
                 req3Res.setText("Status: PASSED");
             }
         }
+         */
+    }
+    private void updateRequirementStatus(TextView textView, boolean requirementPassed) {
+        textView.setText("Status: " + (requirementPassed ? "PASSED" : "FAILED"));
     }
 
 }

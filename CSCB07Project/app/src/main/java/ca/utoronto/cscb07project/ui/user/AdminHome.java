@@ -77,14 +77,8 @@ public class AdminHome extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_home, container, false);
 
-        Button newEventsButton = view.findViewById(R.id.button8);
-        newEventsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_navigation_admin_home_to_navigation_events);
-            }
-        });
+
+
         fnameTextView = view.findViewById(R.id.userfirstname);
 
         // Inflate the layout for this fragment
@@ -126,8 +120,5 @@ public class AdminHome extends Fragment {
 
         return view;
     }
-    public void navigateToEventsFragment(View view) {
-        NavController navController = Navigation.findNavController(requireView());
-        navController.navigate(R.id.action_navigation_admin_home_to_navigation_events);
-    }
+
 }

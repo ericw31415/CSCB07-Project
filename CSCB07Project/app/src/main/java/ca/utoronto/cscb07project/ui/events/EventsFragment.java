@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import ca.utoronto.cscb07project.data.User;
 import androidx.appcompat.app.AlertDialog;
 
 import androidx.annotation.Nullable;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-
+import ca.utoronto.cscb07project.data.User;
 public class EventsFragment extends Fragment {
     private List<Event> allEventsList;
     private List<Event> eventList;
@@ -72,7 +72,7 @@ public class EventsFragment extends Fragment {
         if (currentUser != null) {
             String userId = currentUser.getUid();
             viewModel.getUser(userId).observe(getViewLifecycleOwner(), user -> {
-                if (user != null && user.isAdmin()) {
+                if (user != null && user.isAdmin()) { // Changed from user.getAdmin() to user.isAdmin()
                     addEventButton.setVisibility(View.VISIBLE); // Show the floating action button
                 } else {
                     addEventButton.setVisibility(View.GONE); // Hide the floating action button

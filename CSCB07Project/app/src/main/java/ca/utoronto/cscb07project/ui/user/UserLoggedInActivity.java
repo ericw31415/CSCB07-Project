@@ -23,11 +23,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.POStCheck.MajOrMin;
-import ca.utoronto.cscb07project.ui.POStCheck.POStCheckActivity;
 import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
+
 import ca.utoronto.cscb07project.ui.events.EventsFragment;
-import ca.utoronto.cscb07project.ui.loginsignout.LoginActivity;
-import ca.utoronto.cscb07project.ui.loginsignout.LoginUserFragment;
+
+
 
 public class UserLoggedInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -52,7 +52,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference userRef = database.getReference("users").child(currentUser.getUid());
-
+        Log.d("ID", currentUser.getUid().toString());
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,15 +98,23 @@ public class UserLoggedInActivity extends AppCompatActivity {
         loadFragment(new AdminComplaintsFragment());
     }
 
+
     public void toEventsFragment(View view){
         loadFragment(new EventsFragment());
     }
 
 
+    public void toAdminEventFeedback(View view){
+        loadFragment(new AdminEventsFeedback());
+    }
+
+
     public void logOut(View view) {
+        /*
         mAuth.signOut();
         Toast.makeText(this,"You are now logged out!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+         */
     }
 }

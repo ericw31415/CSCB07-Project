@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import ca.utoronto.cscb07project.ui.signup.UserModel;
+import ca.utoronto.cscb07project.data.User;
 
 public class SharedViewModel extends ViewModel {
     private final MutableLiveData<List<Event>> allEventsList = new MutableLiveData<>(new ArrayList<>());
@@ -76,12 +76,13 @@ public class SharedViewModel extends ViewModel {
             }
         });
     }
-    public LiveData<UserModel> getUser(String userId) {
-        MutableLiveData<UserModel> userLiveData = new MutableLiveData<>();
+    public LiveData<User> getUser(String userId) {
+        MutableLiveData<User> userLiveData = new MutableLiveData<>();
+
         usersRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserModel user = dataSnapshot.getValue(UserModel.class);
+                User user = dataSnapshot.getValue(User.class);
                 userLiveData.setValue(user);
             }
 

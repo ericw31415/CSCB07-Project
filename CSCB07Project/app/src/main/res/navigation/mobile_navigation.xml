@@ -19,7 +19,11 @@
         android:id="@+id/navigation_home"
         android:name="ca.utoronto.cscb07project.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_loginFragmentView"
+            app:destination="@id/navigation_login" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_events"
@@ -30,8 +34,6 @@
             android:id="@+id/action_navigation_events_to_navigation_event_details"
             app:destination="@id/navigation_event_details" />
     </fragment>
-
-    <!-- Add the missing action -->
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -44,6 +46,7 @@
         android:name="ca.utoronto.cscb07project.ui.complaints.ComplaintFragment"
         android:label="@string/menu_complaints"
         tools:layout="@layout/fragment_complaint" />
+
     <fragment
         android:id="@+id/fragment_admin_home"
         android:name="ca.utoronto.cscb07project.ui.user.AdminHome"
@@ -51,16 +54,22 @@
         tools:layout="@layout/fragment_admin_home" >
         <action
             android:id="@+id/action_navigation_admin_home_to_navigation_events"
-            app:destination="@id/fragment_events" />
+            app:destination="@id/navigation_events" />
     </fragment>
 
     <fragment
-        android:id="@+id/fragment_events"
-        android:name="ca.utoronto.cscb07project.ui.events.EventsFragment"
-        android:label="Events"
-        tools:layout="@layout/fragment_events" />
+        android:id="@+id/navigation_login"
+        android:name="ca.utoronto.cscb07project.ui.login.LoginFragmentView"
+        android:label="@string/title_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_navigation_login_to_navigation_signup"
+            app:destination="@id/navigation_signup" />
+    </fragment>
 
-
-
+    <fragment
+        android:id="@+id/navigation_signup"
+        android:name="ca.utoronto.cscb07project.ui.signup.SignupFragment"
+        android:label="@string/title_signup"
+        tools:layout="@layout/fragment_signup" />
 </navigation>
-
