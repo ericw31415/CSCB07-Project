@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -55,16 +56,15 @@ public class SharedViewModel extends ViewModel {
                 for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     Event event = new Event();
                     event.setTitle(eventSnapshot.child("title").getValue(String.class));
-                    String dateString = eventSnapshot.child("date").getValue(String.class);
+                    String dateString = eventSnapshot.child("date").getValue(String.class); // Retrieve date as String
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                     Calendar date = Calendar.getInstance();
                     try {
-                        date.setTime(format.parse(dateString));
+                        date.setTime(format.parse(dateString)); // Convert String to Calendar
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                     event.setDate(date);
-                    // Add more fields if needed
                     events.add(event);
                 }
                 setAllEventsList(events);
@@ -75,6 +75,7 @@ public class SharedViewModel extends ViewModel {
                 Log.e("SharedViewModel", "Error fetching events: " + databaseError.getMessage());
             }
         });
+
     }
     public LiveData<User> getUser(String userId) {
         MutableLiveData<User> userLiveData = new MutableLiveData<>();
@@ -130,7 +131,9 @@ public class SharedViewModel extends ViewModel {
 
         Map<String, Object> eventMap = new HashMap<>();
         eventMap.put("title", event.getTitle());
-        eventMap.put("date", event.getDate().getTimeInMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String dateString = format.format(event.getDate().getTime());
+        eventMap.put("date", dateString);
         // Add more fields if needed
         eventsRef.push().setValue(eventMap);
     }

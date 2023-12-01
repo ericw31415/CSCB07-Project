@@ -1,5 +1,6 @@
 package ca.utoronto.cscb07project.ui.events;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -146,6 +147,23 @@ public class EventsFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setView(dialogBinding.getRoot());
         AlertDialog dialog = builder.create();
+
+        dialogBinding.dateEditText.setFocusable(false);
+        dialogBinding.dateEditText.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    getContext(),
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        String dateString = String.format(Locale.getDefault(), "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
+                        dialogBinding.dateEditText.setText(dateString);
+                    },
+                    year, month, day);
+            datePickerDialog.show();
+        });
 
         dialogBinding.submitButton.setOnClickListener(v -> {
             String title = dialogBinding.titleEditText.getText().toString();
