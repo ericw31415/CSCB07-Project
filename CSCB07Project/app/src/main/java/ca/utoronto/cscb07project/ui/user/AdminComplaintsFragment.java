@@ -143,7 +143,7 @@ public class AdminComplaintsFragment extends Fragment {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_add_announcement, container, false);
+            return inflater.inflate(R.layout.fragment_admin_complaints, container, false);
         }
     }
 }

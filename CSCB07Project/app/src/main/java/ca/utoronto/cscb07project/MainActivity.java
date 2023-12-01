@@ -21,6 +21,7 @@ import ca.utoronto.cscb07project.ui.home.HomeFragment;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginActivity;
 import ca.utoronto.cscb07project.ui.notifications.NotificationsFragment;
 import ca.utoronto.cscb07project.ui.signup.SignupActivity;
+import ca.utoronto.cscb07project.ui.user.All_Announcement_Fragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_notifications) {
-                loadFragment(new NotificationsFragment());
+                loadFragment(new All_Announcement_Fragment());
             } else if (itemId == R.id.navigation_events) {
                 loadFragment(new EventsFragment());
             } else if (itemId == R.id.navigation_home) {

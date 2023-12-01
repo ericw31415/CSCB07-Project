@@ -47,7 +47,7 @@ public class AnnouncementAdapter extends ArrayAdapter<Announcement>{
         if (announcement != null) {
             textViewTitle.setText("Announcement: " + announcement.getTitle());
             textViewDate.setText("Date: " + announcement.getDate());
-            textViewComplaintId.setText("Complaint ID: " + announcement.getAnnouncmentId());
+            textViewComplaintId.setText("Complaint ID: " + announcement.getAnnouncementId());
 
             convertView.setOnClickListener(new View.OnClickListener(){
 

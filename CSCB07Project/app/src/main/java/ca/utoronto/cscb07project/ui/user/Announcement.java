@@ -2,46 +2,52 @@ package ca.utoronto.cscb07project.ui.user;
 
 import java.io.Serializable;
 
-public class Announcement{
+public class Announcement implements Serializable {
     private String title;
-    private String announcmentId;
+    private String announcementId; // Corrected spelling
     private String date;
     private String description;
 
-    public Announcement(String title, String date, String description, String announcmentid) {
+    public Announcement(String title, String date, String description, String announcementId) {
         this.title = title;
         this.date = date;
         this.description = description;
-        this.announcmentId = announcmentid;
+        this.announcementId = announcementId; // Corrected spelling
     }
 
-    public String getTitle(){
+    public Announcement() {
+
+    }
+
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getDate(){
+    public String getDate() {
         return date;
     }
 
-    public void setDate(String date){
+    public void setDate(String date) {
         this.date = date;
     }
-    public String getDescription(){
+
+    public String getDescription() {
         return description;
     }
-    public void setDescription(String description){
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getAnnouncmentId(){return announcmentId;}
+    public String getAnnouncementId() { // Corrected spelling
+        return announcementId; // Corrected spelling
+    }
 
-    public void setAnnouncmentId(String announcmentId){this.announcmentId = announcmentId;}
-
-
+    public void setAnnouncementId(String announcementId) { // Corrected spelling
+        this.announcementId = announcementId; // Corrected spelling
+    }
 }
-
-

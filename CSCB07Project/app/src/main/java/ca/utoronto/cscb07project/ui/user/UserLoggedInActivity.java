@@ -104,4 +104,8 @@ public class UserLoggedInActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
+
+    public void goAddAnnouncements(View view) {
+        loadFragment(new AddAnnouncmentFragment());
+    }
 }

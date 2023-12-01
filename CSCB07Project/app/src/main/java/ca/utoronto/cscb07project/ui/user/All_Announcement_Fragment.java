@@ -40,7 +40,7 @@ public class All_Announcement_Fragment extends Fragment {
 
         // Initialize Firebase
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("");
+        databaseReference = firebaseDatabase.getReference("Announcements");
 
         // Read data from Firebase
         databaseReference.addValueEventListener(new ValueEventListener() {
