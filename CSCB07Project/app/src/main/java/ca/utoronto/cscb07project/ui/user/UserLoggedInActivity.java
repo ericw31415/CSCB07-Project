@@ -39,6 +39,9 @@ public class UserLoggedInActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+    public void onMyEventsButtonClick() {
+        loadFragment(new EventsFragment());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,14 @@ public class UserLoggedInActivity extends AppCompatActivity {
                     if (isAdmin) {
                         loadFragment(new AdminHome());
                     } else {
-                        loadFragment(new UserHome());
+                        UserHome userHomeFragment = new UserHome();
+                        userHomeFragment.setOnMyEventsButtonClickListener(new OnMyEventsButtonClickListener() {
+                            @Override
+                            public void onMyEventsButtonClick() {
+                                loadFragment(new EventsFragment());
+                            }
+                        });
+                        loadFragment(userHomeFragment);
                     }
                 } else {
                     Log.d("User Data", "DataSnapshot does not exist");

@@ -115,7 +115,7 @@ public class EventsFragment extends Fragment {
 
         allEventsAdapter = new EventAdapter(new ArrayList<>(), event -> {
             EventDetailsFragment fragment = EventDetailsFragment.newInstance(event);
-            NavController navController = Navigation.findNavController(requireView());
+            NavController navController = Navigation.findNavController(view); // Get the NavController using the view
             navController.navigate(R.id.action_navigation_events_to_navigation_event_details, fragment.getArguments());
         }, this);
 

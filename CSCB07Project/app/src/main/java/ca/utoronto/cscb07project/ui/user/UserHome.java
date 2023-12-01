@@ -36,6 +36,8 @@ public class UserHome extends Fragment {
     private UserDataViewModel userDataViewModel;
 
     private TextView fnameTextView;
+    private OnMyEventsButtonClickListener mListener;
+
 
     public UserHome() {
         // Required empty public constructor
@@ -57,6 +59,10 @@ public class UserHome extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setOnMyEventsButtonClickListener(OnMyEventsButtonClickListener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -120,13 +126,9 @@ public class UserHome extends Fragment {
         myEventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                EventsFragment eventsFragment = new EventsFragment(); // Assuming EventsFragment is the fragment you want to display
-                fragmentTransaction.replace(R.id.nav_host_fragment_container, eventsFragment);
-                fragmentTransaction.addToBackStack(null); // Add this line if you want the back button to return to the UserHome Fragment
-                fragmentTransaction.commit();
+                if (mListener != null) {
+                    mListener.onMyEventsButtonClick();
+                }
             }
         });
 
