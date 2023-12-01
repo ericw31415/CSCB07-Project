@@ -1,6 +1,7 @@
 package ca.utoronto.cscb07project.ui.events;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -219,6 +220,32 @@ public class EventsFragment extends Fragment {
         attendingEventsList.add(event);
         attendingEventsAdapter.notifyDataSetChanged();
     }
+    public void onItemClick(Event event) {
+        EventDetailsFragment fragment = EventDetailsFragment.newInstance(event);
+        fragment.show(getParentFragmentManager(), "eventDetails");
+
+    }
+    public void showEventDetails(Event event) {
+        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.setContentView(R.layout.fragment_event_details);
+
+        // Set event details
+        TextView textViewTitle = dialog.findViewById(R.id.textViewTitle);
+        textViewTitle.setText(event.getTitle());
+
+        TextView textViewDate = dialog.findViewById(R.id.textViewDate);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String dateString = format.format(event.getDate().getTime());
+        textViewDate.setText(dateString);
+
+        Button buttonRsvp = dialog.findViewById(R.id.buttonRsvp);
+        buttonRsvp.setOnClickListener(v -> {
+            // Handle RSVP click
+        });
+
+        dialog.show();
+    }
+
 
     @Override
     public void onDestroyView() {

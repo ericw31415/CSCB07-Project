@@ -49,6 +49,9 @@ public class Event implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+    public void setUsersAttending(List<String> usersAttending) {
+        this.usersAttending = usersAttending;
+    }
 
 
 
