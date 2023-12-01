@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -116,8 +117,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         Button buttonRsvp = dialog.findViewById(R.id.buttonRsvp);
         buttonRsvp.setOnClickListener(v -> {
-            // Handle RSVP click
+            SharedViewModel viewModel = new ViewModelProvider(fragment.requireActivity()).get(SharedViewModel.class);
+            viewModel.rsvpEvent(event, "userEmail"); // replace "userEmail" with the actual user email
         });
+
 
         dialog.show();
     }

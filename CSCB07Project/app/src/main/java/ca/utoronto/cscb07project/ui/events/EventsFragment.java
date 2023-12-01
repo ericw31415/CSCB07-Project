@@ -31,17 +31,26 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
 import ca.utoronto.cscb07project.data.User;
 import ca.utoronto.cscb07project.ui.user.UserDataViewModel;
 
@@ -96,8 +105,11 @@ public class EventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        DatabaseReference eventsRef = viewModel.getEventsRef();
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userEmail = currentUser != null ? currentUser.getEmail() : null;
+
         if (currentUser != null) {
             String userId = currentUser.getUid();
             viewModel.getUser(userId).observe(getViewLifecycleOwner(), user -> {
@@ -225,6 +237,51 @@ public class EventsFragment extends Fragment {
         fragment.show(getParentFragmentManager(), "eventDetails");
 
     }
+    public void rsvpEvent(Event event, String userEmail) {
+        DatabaseReference eventRef = viewModel.getEventsRef().child(event.getEventId());
+        DatabaseReference rsvpRef = FirebaseDatabase.getInstance().getReference("rsvp");
+
+        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int maxUsers = dataSnapshot.child("maxUsers").getValue(Integer.class);
+
+                rsvpRef.orderByChild("title").equalTo(event.getTitle()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        int rsvpCount = (int) dataSnapshot.getChildrenCount();
+
+                        if (rsvpCount < maxUsers) {
+                            String key = rsvpRef.push().getKey();
+                            Map<String, Object> rsvp = new HashMap<>();
+                            rsvp.put("title", event.getTitle());
+                            rsvp.put("studentEmail", userEmail);
+                            rsvpRef.child(key).setValue(rsvp);
+                        } else {
+                            // Show a message to the user that the event is full
+                            // You can use a callback or LiveData to communicate this to the UI
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Handle error
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle error
+            }
+        });
+    }
+
+
+
+
+
+
     public void showEventDetails(Event event) {
         Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Translucent_NoTitleBar);
         dialog.setContentView(R.layout.fragment_event_details);
@@ -240,8 +297,13 @@ public class EventsFragment extends Fragment {
 
         Button buttonRsvp = dialog.findViewById(R.id.buttonRsvp);
         buttonRsvp.setOnClickListener(v -> {
-            // Handle RSVP click
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                String userEmail = currentUser.getEmail();
+                rsvpEvent(event, userEmail);
+            }
         });
+
 
         dialog.show();
     }

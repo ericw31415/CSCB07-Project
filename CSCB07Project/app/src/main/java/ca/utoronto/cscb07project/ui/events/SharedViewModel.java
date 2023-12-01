@@ -55,9 +55,12 @@ public class SharedViewModel extends ViewModel {
                 List<Event> events = new ArrayList<>();
                 for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     Event event = new Event();
+                    event.setEventId(eventSnapshot.getKey());
                     event.setTitle(eventSnapshot.child("title").getValue(String.class));
                     String dateString = eventSnapshot.child("date").getValue(String.class);
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+
                     Calendar date = Calendar.getInstance();
                     try {
                         date.setTime(format.parse(dateString));
@@ -147,12 +150,54 @@ public class SharedViewModel extends ViewModel {
 
 
     public void rsvpEvent(Event event, String userEmail) {
-        String key = rsvpRef.push().getKey();
-        Map<String, Object> rsvp = new HashMap<>();
-        rsvp.put("title", event.getTitle());
-        rsvp.put("studentEmail", userEmail);
-        rsvpRef.child(key).setValue(rsvp);
+        DatabaseReference eventRef = eventsRef.child(event.getEventId());
+        DatabaseReference rsvpRef = FirebaseDatabase.getInstance().getReference("rsvp");
+
+        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int maxUsers = dataSnapshot.child("maxUsers").getValue(Integer.class);
+
+                rsvpRef.orderByChild("title").equalTo(event.getTitle()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        int rsvpCount = (int) dataSnapshot.getChildrenCount();
+
+                        if (rsvpCount < maxUsers) {
+                            String key = rsvpRef.push().getKey();
+                            Map<String, Object> rsvp = new HashMap<>();
+                            rsvp.put("title", event.getTitle());
+                            rsvp.put("studentEmail", userEmail);
+                            rsvpRef.child(key).setValue(rsvp);
+                        } else {
+                            // Show a message to the user that the event is full
+                            // You can use a callback or LiveData to communicate this to the UI
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Handle error
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle error
+            }
+        });
     }
+    public DatabaseReference getEventsRef() {
+        return this.eventsRef;
+    }
+    public DatabaseReference getRsvpRef() {
+        return this.rsvpRef;
+    }
+
+
+
+
 
     public void setAllEventsList(List<Event> events) {
         allEventsList.setValue(events);

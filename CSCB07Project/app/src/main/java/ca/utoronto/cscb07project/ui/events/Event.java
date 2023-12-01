@@ -8,7 +8,9 @@ public class Event implements Serializable {
     private String title;
     private Calendar date;
     private List<String> usersAttending;
-    private int maxUsers; // New field
+    private int maxUsers;
+    private String eventId;
+
 
     public Event() {
     }
@@ -28,6 +30,13 @@ public class Event implements Serializable {
         this.maxUsers = 0; // Default value for maxUsers
         this.usersAttending = new ArrayList<>();
     }
+    public Event(String eventId, String title, Calendar date, int maxUsers) {
+        this.eventId = eventId;
+        this.title = title;
+        this.date = date;
+        this.maxUsers = maxUsers;
+        this.usersAttending = new ArrayList<>();
+    }
     public Calendar getDate() {
         return date;
     }
@@ -45,6 +54,16 @@ public class Event implements Serializable {
     public String getTitle() {
         return title;
     }
+    public String getEventId() {
+        return this.eventId;
+    }
+    public String getId() {
+        return eventId;
+    }
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
 
     public void setTitle(String title) {
         this.title = title;
