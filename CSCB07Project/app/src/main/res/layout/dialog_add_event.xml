@@ -16,6 +16,13 @@
         android:layout_height="wrap_content"
         android:inputType="date" />
 
+    <EditText
+        android:id="@+id/editTextMaxUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Max Users" />
+
     <Button
         android:id="@+id/submitButton"
         android:layout_width="match_parent"
@@ -27,6 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cancel" />
+
 
 </LinearLayout>
 

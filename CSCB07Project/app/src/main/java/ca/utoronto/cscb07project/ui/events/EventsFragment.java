@@ -168,12 +168,14 @@ public class EventsFragment extends Fragment {
         dialogBinding.submitButton.setOnClickListener(v -> {
             String title = dialogBinding.titleEditText.getText().toString();
             String dateString = dialogBinding.dateEditText.getText().toString();
-            if (!title.isEmpty() && !dateString.isEmpty()) {
+            String maxUsersString = dialogBinding.editTextMaxUsers.getText().toString();
+            if (!title.isEmpty() && !dateString.isEmpty() && !maxUsersString.isEmpty()) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 Calendar date = Calendar.getInstance();
                 try {
                     date.setTime(format.parse(dateString));
-                    Event event = new Event(title, date);
+                    int maxUsers = Integer.parseInt(maxUsersString);
+                    Event event = new Event(title, date, maxUsers); // Pass maxUsers to the constructor
                     viewModel.addEvent(event);
                     dialog.dismiss();
                 } catch (ParseException e) {

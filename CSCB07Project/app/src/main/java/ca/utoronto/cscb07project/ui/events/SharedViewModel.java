@@ -56,15 +56,19 @@ public class SharedViewModel extends ViewModel {
                 for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     Event event = new Event();
                     event.setTitle(eventSnapshot.child("title").getValue(String.class));
-                    String dateString = eventSnapshot.child("date").getValue(String.class); // Retrieve date as String
+                    String dateString = eventSnapshot.child("date").getValue(String.class);
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                     Calendar date = Calendar.getInstance();
                     try {
-                        date.setTime(format.parse(dateString)); // Convert String to Calendar
+                        date.setTime(format.parse(dateString));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                     event.setDate(date);
+                    Integer maxUsers = eventSnapshot.child("maxUsers").getValue(Integer.class);
+                    if (maxUsers != null) {
+                        event.setMaxUsers(maxUsers);
+                    }
                     events.add(event);
                 }
                 setAllEventsList(events);
@@ -110,7 +114,8 @@ public class SharedViewModel extends ViewModel {
                 List<Event> events = new ArrayList<>();
                 for (DataSnapshot rsvpSnapshot : dataSnapshot.getChildren()) {
                     String title = rsvpSnapshot.child("title").getValue(String.class);
-                    Event event = new Event(title, null); // Replace null with the actual date if needed
+                    // Create a new Event object with only a title
+                    Event event = new Event(title); // Replace null with the actual date if needed
                     events.add(event);
                 }
                 attendingEvents.setValue(events);
@@ -134,9 +139,12 @@ public class SharedViewModel extends ViewModel {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String dateString = format.format(event.getDate().getTime());
         eventMap.put("date", dateString);
+        eventMap.put("maxUsers", event.getMaxUsers()); // Add maxUsers to the eventMap
         // Add more fields if needed
         eventsRef.push().setValue(eventMap);
     }
+
+
 
     public void rsvpEvent(Event event, String userEmail) {
         String key = rsvpRef.push().getKey();
