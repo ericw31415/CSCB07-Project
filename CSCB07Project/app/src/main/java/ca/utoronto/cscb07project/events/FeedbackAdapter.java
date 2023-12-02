@@ -13,9 +13,10 @@ import java.util.List;
 
 import ca.utoronto.cscb07project.R;
 
-public class FeedbackAdapter {
+public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.EventViewHolder> {
+
     private List<Review> reviews;
-    private FeedbackAdapter.OnItemClickListener listener;
+    private OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onItemClick(Review review);
@@ -27,14 +28,14 @@ public class FeedbackAdapter {
 
     @NonNull
     @Override
-    public FeedbackAdapter.EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.review_item, parent, false);
         return new EventViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FeedbackAdapter.EventViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         Review currentRev = reviews.get(position);
         holder.bind(currentRev, listener);
     }
@@ -44,7 +45,7 @@ public class FeedbackAdapter {
         return reviews.size();
     }
 
-    public void setOnItemClickListener(FeedbackAdapter.OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -64,9 +65,9 @@ public class FeedbackAdapter {
             eventId = itemView.findViewById(R.id.eventId);
         }
 
-        public void bind(final Review review, final EventAdapter.OnItemClickListener listener) {
+        public void bind(final Review review, final OnItemClickListener listener) {
             userEmail.setText(review.getUserEmail());
-            rating.setText(review.getRating());
+            rating.setText(String.valueOf(review.getRating())); // Convert rating to String
             reviewText.setText(review.getReviewText());
             eventId.setText(review.getEventId());
 
