@@ -92,13 +92,13 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="40dp"
             android:onClick="toAttendingEvents"
             android:text="Atttending Events"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView43" />
+            app:layout_constraintTop_toBottomOf="@+id/textView40" />
 
         <TextView
             android:id="@+id/textView27"
@@ -132,7 +132,7 @@
             android:id="@+id/textView40"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:text="Attending Events"
             android:textAlignment="center"
             android:textColor="#000000"
@@ -146,7 +146,7 @@
             android:id="@+id/textView31"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="108dp"
+            android:layout_marginTop="156dp"
             android:text="Comments/Complaints For CMS Department?"
             android:textAlignment="center"
             android:textColor="#000000"
@@ -181,7 +181,7 @@
             android:textAlignment="center"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView31" />
 
@@ -189,14 +189,14 @@
             android:id="@+id/textView43"
             android:layout_width="414dp"
             android:layout_height="46dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="8dp"
             android:paddingLeft="15sp"
             android:paddingRight="15sp"
             android:text="View events you are attending and leave review"
             android:textAlignment="center"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.333"
+            app:layout_constraintHorizontal_bias="0.666"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView40" />
 
@@ -219,9 +219,8 @@
             android:id="@+id/textView34"
             android:layout_width="323dp"
             android:layout_height="6dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="250dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.511"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button12" />
 
