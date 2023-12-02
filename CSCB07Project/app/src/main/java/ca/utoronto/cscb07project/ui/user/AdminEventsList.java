@@ -28,11 +28,6 @@ import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.events.Event;
 import ca.utoronto.cscb07project.events.EventDetailsStudent;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AdminEventsList#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AdminEventsList extends Fragment {
 
     private ListView listView;

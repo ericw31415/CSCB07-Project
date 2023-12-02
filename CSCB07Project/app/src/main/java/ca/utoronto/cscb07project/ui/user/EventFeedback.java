@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.utoronto.cscb07project.R;
-import ca.utoronto.cscb07project.events.Event;
 import ca.utoronto.cscb07project.events.FeedbackAdapter;
 import ca.utoronto.cscb07project.events.Review;
 
@@ -41,31 +41,39 @@ public class EventFeedback extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         reviews = new ArrayList<>();
 
-        // Create FeedbackAdapter and set it to the RecyclerView
-        adapter = new FeedbackAdapter(getContext(), R.layout.review_item, reviews);
+        // Retrieve the eventId from arguments
+        String eventId = getArguments() != null ? getArguments().getString("eventId") : null;
 
-        // The following line is the source of the NullPointerException
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        // Check if recyclerView is not null before proceeding
+        if (recyclerView != null) {
+            Toast.makeText(getContext(), "Test RecyclerView", Toast.LENGTH_SHORT).show();
+            // Create FeedbackAdapter and set it to the RecyclerView
+            adapter = new FeedbackAdapter(getContext(), R.layout.review_item, reviews);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(adapter);
 
-        recyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(new FeedbackAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Review review) {
+                    openFeedbackFragment(review);
+                }
+            });
 
-        adapter.setOnItemClickListener(new FeedbackAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Review review) {
-                openFeedbackFragment(review);
+            // Initialize Realtime Database reference
+            DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("Reviews");
+
+            // Check if eventId is not null before fetching reviews
+            if (eventId != null) {
+                Toast.makeText(getContext(), "EventId good", Toast.LENGTH_SHORT).show();
+                fetchFeedbackFromFirebase(reviewsRef, eventId);
             }
-        });
-
-        // Initialize Realtime Database reference
-        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("Reviews");
-
-        // Replace the child("exampleEventId") with the actual event ID you want to fetch reviews for
-        fetchFeedbackFromFirebase(reviewsRef.child("exampleEventId"));
+        }
     }
 
 
-    private void fetchFeedbackFromFirebase(DatabaseReference reviewsRef) {
-        reviewsRef.addValueEventListener(new ValueEventListener() {
+    private void fetchFeedbackFromFirebase(DatabaseReference reviewsRef, String eventId) {
+        // Assume eventId is not null, make sure you handle cases where it might be null in your actual code
+        reviewsRef.orderByChild("eventId").equalTo(eventId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 reviews.clear();
