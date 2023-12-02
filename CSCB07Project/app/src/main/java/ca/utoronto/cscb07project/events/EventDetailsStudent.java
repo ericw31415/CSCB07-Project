@@ -160,18 +160,34 @@ public class EventDetailsStudent extends Fragment {
     }
 
     private void addRSVPToDatabase(String eventId, String userEmail) {
-        DatabaseReference rsvpsRef = FirebaseDatabase.getInstance().getReference("RSVPS");
-        String key = rsvpsRef.push().getKey();
+        DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId);
+        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Event event = dataSnapshot.getValue(Event.class);
+                    if (event != null) {
+                        // Add the RSVP to the event
+                        event.addRSVP(userEmail);
+                        // Update the event in the database
+                        eventRef.setValue(event);
+                        // Add your logic to handle successful RSVP
+                        Log.d("RSVP", "RSVP added for Event ID: " + eventId);
+                    } else {
+                        Log.e("RSVP", "Event is null");
+                    }
+                } else {
+                    Log.e("RSVP", "Event does not exist");
+                }
+            }
 
-        if (key != null) {
-            RSVP rsvp = new RSVP(eventId, userEmail);
-            rsvpsRef.child(key).setValue(rsvp);
-            Log.d("RSVP", "RSVP added for Event ID: " + eventId);
-            // Add your logic after successfully adding a new RSVP
-        } else {
-            Log.e("RSVP", "Failed to generate key for new RSVP");
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle errors
+            }
+        });
     }
+
 
 
 }

@@ -3,6 +3,9 @@ package ca.utoronto.cscb07project.events;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Event {
 
     private String id;
@@ -10,6 +13,7 @@ public class Event {
     private String location;
     private String dateTime;
     private String description;
+    private List<String> rsvps;
 
     public Event() {
         // Default constructor required for Firebase
@@ -21,6 +25,13 @@ public class Event {
         this.dateTime = dateTime;
         this.location = location;
         this.description = description;
+    }
+
+    public void addRSVP(String userEmail) {
+        if (rsvps == null) {
+            rsvps = new ArrayList<>();
+        }
+        rsvps.add(userEmail);
     }
 
     public String getId() {
@@ -67,6 +78,20 @@ public class Event {
     public String toString() {
         return title + " - " + location;
     }
+
+    public List<String> getRsvps() {
+        return rsvps;
+    }
+
+    public void setRsvps(List<String> rsvps) {
+        this.rsvps = rsvps;
+    }
+
+    // Add this method to the Event class
+    public boolean isUserRSVP(String userEmail) {
+        return rsvps != null && rsvps.contains(userEmail);
+    }
+
 
     public static String generateUniqueId() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Events");
