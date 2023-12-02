@@ -1,5 +1,6 @@
 package ca.utoronto.cscb07project.announcements;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import ca.utoronto.cscb07project.R;
-import ca.utoronto.cscb07project.announcements.Announcement;
 
 public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapter.AnnouncementViewHolder> {
 
@@ -19,9 +19,8 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         void onItemClick(Announcement announcement);
     }
 
-    public AnnouncementAdapter(List<Announcement> announcements, OnItemClickListener listener) {
+    public AnnouncementAdapter(Context context, int announcement_item, List<Announcement> announcements) {
         this.announcements = announcements;
-        this.listener = listener;
     }
 
     @NonNull

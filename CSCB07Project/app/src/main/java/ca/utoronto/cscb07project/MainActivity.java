@@ -8,20 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import ca.utoronto.cscb07project.databinding.ActivityMainBinding;
 import ca.utoronto.cscb07project.ui.events.EventsFragment;
 import ca.utoronto.cscb07project.ui.home.HomeFragment;
 import ca.utoronto.cscb07project.ui.loginsignout.LoginActivity;
-import ca.utoronto.cscb07project.ui.notifications.NotificationsFragment;
 import ca.utoronto.cscb07project.ui.signup.SignupActivity;
-import ca.utoronto.cscb07project.ui.user.All_Announcement_Fragment;
+import ca.utoronto.cscb07project.announcements.All_Announcement_Fragment;
 
 public class MainActivity extends AppCompatActivity {
 
