@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.utoronto.cscb07project.R;
-import ca.utoronto.cscb07project.events2.Event;
+import ca.utoronto.cscb07project.events.Event;
 
 import android.widget.Button;
 import android.widget.TextView;
@@ -149,10 +149,17 @@ public class AddEventFragment extends Fragment {
             String location = this.eventLocation.getText().toString();
             String description = this.eventDesc.getText().toString();
             Log.d("", dateTime);
-            Event event = new Event(title, dateTime, location, description);
 
+            // Generate a unique ID for the event
+            String eventId = Event.generateUniqueId();
+
+            // Create the Event with the generated ID
+            Event event = new Event(eventId, title, dateTime, location, description);
+
+            // Set the event in the "Events" level with the same ID
             DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("Events");
-            eventsRef.push().setValue(event);
+            eventsRef.child(eventId).setValue(event);
         }
+
     }
 }

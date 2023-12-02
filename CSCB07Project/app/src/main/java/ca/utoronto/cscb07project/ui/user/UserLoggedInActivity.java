@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.events.*;
 import ca.utoronto.cscb07project.ui.POStCheck.MajOrMin;
 import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
 
@@ -109,5 +110,9 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
     public void goToAddEvents(View view) {
         loadFragment(new AddEventFragment());
+    }
+
+    public void toEvents(View view) {
+        loadFragment(new EventListFragment());
     }
 }

@@ -9,7 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="toEvents">
 
         <TextView
             android:id="@+id/textView29"
@@ -67,9 +68,11 @@
             android:id="@+id/button8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="My Events"
+            android:layout_marginTop="4dp"
+            android:onClick="toEvents"
+            android:text="Events"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView30" />
 
@@ -91,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="My Events"
+            android:text="Events"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="20sp"
@@ -133,7 +136,7 @@
             android:layout_height="46dp"
             android:paddingLeft="15sp"
             android:paddingRight="15sp"
-            android:text="View events that you RSVP'd and write reviews for events you attended"
+            android:text="View and RSVP Events"
             android:textAlignment="center"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
