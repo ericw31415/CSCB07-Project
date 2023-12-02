@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
-
+    private int participantLimit;
+    private int participantCount;
     private String id;
     private String title;
     private String location;
@@ -19,19 +20,32 @@ public class Event {
         // Default constructor required for Firebase
     }
 
-    public Event(String id, String title, String dateTime, String location, String description) {
+    public Event(String id, String title, String dateTime, String location, String description, int participantLimit) {
         this.id = id;
         this.title = title;
         this.dateTime = dateTime;
         this.location = location;
         this.description = description;
+        this.participantLimit = participantLimit; // setting participantLimit
+        this.participantCount = 0; // initialize participantCount to 0
+        this.rsvps = new ArrayList<>(); // initialize rsvps list
     }
 
-    public void addRSVP(String userEmail) {
+    public boolean addRSVP(String userEmail) {
         if (rsvps == null) {
             rsvps = new ArrayList<>();
         }
-        rsvps.add(userEmail);
+        if(rsvps.size() < participantLimit){
+            rsvps.add(userEmail);
+            participantCount = rsvps.size() ;
+            // Here update the event on Firebase as well
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Events").child(id);
+            databaseReference.setValue(this);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public String getId() {
@@ -91,6 +105,22 @@ public class Event {
     public boolean isUserRSVP(String userEmail) {
         return rsvps != null && rsvps.contains(userEmail);
     }
+    public int getParticipantLimit() {
+        return participantLimit;
+    }
+
+    public void setParticipantLimit(int participantLimit) {
+        this.participantLimit = participantLimit;
+    }
+
+    public int getParticipantCount() {
+        return participantCount;
+    }
+
+    public void setParticipantCount(int participantCount) {
+        this.participantCount = participantCount;
+    }
+
 
 
     public static String generateUniqueId() {

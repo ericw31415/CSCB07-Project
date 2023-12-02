@@ -112,7 +112,6 @@ public class EventDetailsStudent extends Fragment {
             String userEmail = currentUser.getEmail();
 
             if (userEmail != null) {
-                // Rest of the code remains unchanged
                 String eventId = getArguments().getString("eventId");
 
                 if (eventId != null) {
@@ -131,7 +130,6 @@ public class EventDetailsStudent extends Fragment {
                                 if (rsvp != null && rsvp.getEmail().equalsIgnoreCase(userEmail)) {
                                     // Entry already exists, handle accordingly
                                     Log.d("RSVP", "RSVP already exists for Event ID: " + eventId);
-                                    // Add your logic to handle existing RSVP (e.g., show a message)
                                     hasExistingRSVP = true;
                                     break;
                                 }
@@ -159,6 +157,8 @@ public class EventDetailsStudent extends Fragment {
         }
     }
 
+    // ...
+
     private void addRSVPToDatabase(String eventId, String userEmail) {
         DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId);
         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -168,11 +168,16 @@ public class EventDetailsStudent extends Fragment {
                     Event event = dataSnapshot.getValue(Event.class);
                     if (event != null) {
                         // Add the RSVP to the event
-                        event.addRSVP(userEmail);
-                        // Update the event in the database
-                        eventRef.setValue(event);
-                        // Add your logic to handle successful RSVP
-                        Log.d("RSVP", "RSVP added for Event ID: " + eventId);
+                        boolean rsvpAdded = event.addRSVP(userEmail);
+                        if (rsvpAdded) {
+                            // Update the event in the database
+                            eventRef.setValue(event);
+                            // Add your logic to handle successful RSVP
+                            Log.d("RSVP", "RSVP added for Event ID: " + eventId);
+                        } else {
+                            Log.d("RSVP", "The event is full and cannot accept more RSVPs");
+                            // Add your logic to handle this case (e.g., show a message)
+                        }
                     } else {
                         Log.e("RSVP", "Event is null");
                     }
@@ -187,6 +192,8 @@ public class EventDetailsStudent extends Fragment {
             }
         });
     }
+
+// ...
 
 
 

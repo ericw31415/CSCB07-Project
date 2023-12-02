@@ -13,6 +13,7 @@ import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.events.Event;
 
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class AddEventFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    private EditText participantLimit;
     private String mParam1;
     private String mParam2;
     private String title;
@@ -130,6 +132,7 @@ public class AddEventFragment extends Fragment {
         Button btnDateTimePicker = view.findViewById(R.id.btnDatePicker);
         btnDateTimePicker.setOnClickListener(v -> showDateTimePicker());
         Button btnAddEvent = view.findViewById(R.id.addEventButton);
+        this.participantLimit = view.findViewById(R.id.participantLimit);
         this.eventTitle = view.findViewById(R.id.eventTitle);
         this.eventDesc = view.findViewById(R.id.eventDescription);
         this.eventLocation = view.findViewById(R.id.eventLocation);
@@ -142,24 +145,25 @@ public class AddEventFragment extends Fragment {
         if (eventTitle.getText().toString().isEmpty() ||
                 eventDesc.getText().toString().isEmpty() ||
                 eventLocation.getText().toString().isEmpty() ||
+                participantLimit.getText().toString().isEmpty() ||
                 dateTime == null) {
             Toast.makeText(requireContext(), "Invalid Input", Toast.LENGTH_SHORT).show();
         } else {
             String title = this.eventTitle.getText().toString();
             String location = this.eventLocation.getText().toString();
             String description = this.eventDesc.getText().toString();
+            int limit = Integer.parseInt(this.participantLimit.getText().toString());
             Log.d("", dateTime);
 
             // Generate a unique ID for the event
             String eventId = Event.generateUniqueId();
 
             // Create the Event with the generated ID
-            Event event = new Event(eventId, title, dateTime, location, description);
+            Event event = new Event(eventId, title, dateTime, location, description, limit);
 
             // Set the event in the "Events" level with the same ID
             DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("Events");
             eventsRef.child(eventId).setValue(event);
         }
-
     }
 }
