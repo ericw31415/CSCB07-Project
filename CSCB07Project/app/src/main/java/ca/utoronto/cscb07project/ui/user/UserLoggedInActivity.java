@@ -106,4 +106,8 @@ public class UserLoggedInActivity extends AppCompatActivity {
         startActivity(intent);
          */
     }
+
+    public void goToAddEvents(View view) {
+        loadFragment(new AddEventFragment());
+    }
 }
