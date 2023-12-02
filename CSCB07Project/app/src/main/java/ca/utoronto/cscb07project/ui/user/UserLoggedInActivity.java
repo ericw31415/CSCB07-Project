@@ -118,4 +118,8 @@ public class UserLoggedInActivity extends AppCompatActivity {
     public void toAttendingEvents(View view) {
         loadFragment(new UserAttendingEvents());
     }
+
+    public void goAddAnnouncements(View view) {
+        loadFragment(new AddAnnouncmentFragment());
+    }
 }
