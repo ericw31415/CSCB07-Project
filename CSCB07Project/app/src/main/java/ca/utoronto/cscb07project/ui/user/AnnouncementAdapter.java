@@ -27,7 +27,7 @@ public class AnnouncementAdapter extends ArrayAdapter<Announcement>{
         void onAnnouncementClick(Announcement announcement);
     }
 
-    public void setOnAnnouncementClickListener(AnnouncementAdapter.OnAnnouncementClickListener onAnnouncementClickListener){
+    public void setOnAnnouncementClickListener(OnAnnouncementClickListener onAnnouncementClickListener){
         this.onAnnouncementClickListener = onAnnouncementClickListener;
     }
 

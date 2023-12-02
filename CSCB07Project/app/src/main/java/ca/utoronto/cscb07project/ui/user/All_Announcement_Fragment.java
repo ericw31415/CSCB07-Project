@@ -73,15 +73,17 @@ public class All_Announcement_Fragment extends Fragment {
     }
 
     private void toAnnouncmenetDetailsFragment(ca.utoronto.cscb07project.ui.user.Announcement announcement) {
-        // Implement logic to navigate to the Complaint Details Fragment
-        // For example:
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
         Announcement_DetailFragment fragment = new Announcement_DetailFragment();
-        // Pass data to ComplaintDetailsFragment if needed
-        Bundle bundle = new Bundle();
-        bundle.putString("AnnouncementId", announcement.getAnnouncementId());
-        fragment.setArguments(bundle);
-        transaction.replace(R.id.fragment_container, fragment);
+        Bundle args = new Bundle();
+        args.putString("announcementID", announcement.getAnnouncementId());
+        args.putString("title", announcement.getTitle());
+        args.putString("description", announcement.getDescription());
+        args.putString("date", announcement.getDate());
+
+        fragment.setArguments(args);
+
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.userFrame, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
