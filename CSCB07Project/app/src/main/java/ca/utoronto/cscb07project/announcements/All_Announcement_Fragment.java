@@ -70,7 +70,6 @@ public class All_Announcement_Fragment extends Fragment {
                 return itemView;
             }
         };
-
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
