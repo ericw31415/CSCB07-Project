@@ -81,7 +81,7 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="toEvents"
+            android:onClick="toAttendingEvents"
             android:text="Atttending Events"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.492"

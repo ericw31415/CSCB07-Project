@@ -23,7 +23,6 @@ import java.util.List;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.ui.complaints.complaints;
-import ca.utoronto.cscb07project.ui.user.ComplaintAdapter;
 
 public class AdminComplaintsFragment extends Fragment {
     private DatabaseReference databaseReference;
@@ -33,7 +32,7 @@ public class AdminComplaintsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_complaints, container, false);
 
-        ListView listView = view.findViewById(R.id.listView);
+        ListView listView = view.findViewById(R.id.listView500);
         List<complaints> complaints = new ArrayList<>();
         adapter = new ComplaintAdapter(requireContext(), complaints);
         listView.setAdapter(adapter);

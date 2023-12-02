@@ -1,7 +1,6 @@
 package ca.utoronto.cscb07project.events;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,7 @@ public class EventListFragment extends Fragment {
     }
 
     private void setupListView(View view) {
-        listView = view.findViewById(R.id.listView);
+        listView = view.findViewById(R.id.listView500);
         events = new ArrayList<>();
 
         adapter = new ArrayAdapter<Event>(getContext(), R.layout.event_item, events) {
@@ -118,19 +117,5 @@ public class EventListFragment extends Fragment {
         transaction.replace(R.id.userFrame, eventDetailsStudent);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-
-    // Handle RSVP button click
-    public void RSVP(View view) {
-        // Retrieve the event ID from the clicked item (assuming the event ID is stored in the view tag)
-        int position = listView.getPositionForView(view);
-        if (position != ListView.INVALID_POSITION) {
-            Event event = events.get(position);
-            String eventId = event.getId();
-
-            // Perform RSVP action (you can replace this with your actual RSVP logic)
-            Toast.makeText(getContext(), "RSVP clicked for Event ID: " + eventId, Toast.LENGTH_SHORT).show();
-        }
     }
 }

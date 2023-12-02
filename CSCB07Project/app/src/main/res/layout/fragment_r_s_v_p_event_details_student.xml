@@ -1,0 +1,37 @@
+<!-- fragment_rsvp_event_details.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Add your UI elements (TextViews, Buttons, etc.) here -->
+    <TextView
+        android:id="@+id/eventTitleUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Title" />
+
+    <TextView
+        android:id="@+id/eventDateUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Date" />
+
+    <TextView
+        android:id="@+id/eventLocationUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Location" />
+
+    <TextView
+        android:id="@+id/eventDescUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Description" />
+
+    <Button
+        android:id="@+id/leaveReviewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Leave Review" />
+
+</RelativeLayout>
