@@ -121,9 +121,8 @@ public class UserLoggedInActivity extends AppCompatActivity {
     }
 
     public void goAddAnnouncements(View view) {
-        loadFragment(new AddAnnouncmentFragment());
+        loadFragment(new AdminAnnouncements());
     }
-
     public void toUserAnnouncements(View view) {
         loadFragment(new All_Announcement_Fragment());
     }

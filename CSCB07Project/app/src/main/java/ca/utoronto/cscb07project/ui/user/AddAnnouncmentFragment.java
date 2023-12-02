@@ -74,6 +74,7 @@ public class AddAnnouncmentFragment extends Fragment {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Announcement posted", Toast.LENGTH_SHORT).show();
+                            getParentFragmentManager().popBackStack();
                         } else {
                             Toast.makeText(getContext(), "Post failed", Toast.LENGTH_SHORT).show();
                         }

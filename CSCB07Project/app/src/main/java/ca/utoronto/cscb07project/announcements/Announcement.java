@@ -7,19 +7,19 @@ import java.io.Serializable;
 
 public class Announcement implements Serializable {
     private String title;
-    private String announcementID; // Update the variable name
+    private String announcementID;
     private String date;
     private String description;
+
+    public Announcement() {
+        // Required empty public constructor for Firebase
+    }
 
     public Announcement(String title, String date, String description, String announcementID) {
         this.title = title;
         this.date = date;
         this.description = description;
-        this.announcementID = announcementID; // Update the variable name
-    }
-
-    public Announcement() {
-
+        this.announcementID = announcementID;
     }
 
     public String getTitle() {
@@ -46,12 +46,12 @@ public class Announcement implements Serializable {
         this.description = description;
     }
 
-    public String getAnnouncementID() { // Update the method name
-        return announcementID; // Update the variable name
+    public String getAnnouncementID() {
+        return announcementID;
     }
 
-    public void setAnnouncementID(String announcementID) { // Update the method name
-        this.announcementID = announcementID; // Update the variable name
+    public void setAnnouncementID(String announcementID) {
+        this.announcementID = announcementID;
     }
 
     public static String generateUniqueID() {
