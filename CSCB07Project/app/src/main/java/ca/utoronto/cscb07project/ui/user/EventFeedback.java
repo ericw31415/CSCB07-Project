@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import java.util.List;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.events.Event;
+import ca.utoronto.cscb07project.events.FeedbackAdapter;
 import ca.utoronto.cscb07project.events.Review;
 
 /**
@@ -34,6 +37,7 @@ import ca.utoronto.cscb07project.events.Review;
  */
 public class EventFeedback extends Fragment {
 
+    private RecyclerView recyclerView;
     private ListView listView;
     private ArrayAdapter<Review> adapter;
     private List<Review> reviews;
@@ -43,11 +47,30 @@ public class EventFeedback extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_feedback, container, false);
-        setupListView(view);
+        setupRecyclerView(view);
         return view;
     }
 
+    private void setupRecyclerView(View view) {
+        recyclerView = view.findViewById(R.id.recyclerView);
+        reviews = new ArrayList<>();
+
+        // Create FeedbackAdapter and set it to the RecyclerView
+        adapter = new FeedbackAdapter(getContext(), R.layout.review_item, reviews);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        adapter.setOnItemClickListener(new FeedbackAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Review review) {
+                openFeedbackFragment(review);
+            }
+        });
+    }
+
+    /**
     private void setupListView(View view) {
+
         listView = view.findViewById(R.id.listView500);
         reviews = new ArrayList<>();
 
@@ -83,6 +106,7 @@ public class EventFeedback extends Fragment {
         listView.setAdapter(adapter);
 
 
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -95,11 +119,12 @@ public class EventFeedback extends Fragment {
                 String eventId = selectedEvent.getId();
 
                 fetchFeedbackFromFirebase(eventId);
-                 */
+
                 Review selectedReview = reviews.get(position);
                 openFeedbackFragment(selectedReview);
             }
         });
+         */
 
 
         // Initialize Realtime Database reference
@@ -134,7 +159,7 @@ public class EventFeedback extends Fragment {
     }
 
     private void openFeedbackFragment(Review review) {
-        /**
+
         EventFeedback feedback = new EventFeedback();
         Bundle args = new Bundle();
         args.putString("eventId", review.getEventId());
@@ -144,6 +169,6 @@ public class EventFeedback extends Fragment {
         transaction.replace(R.id.userFrame, feedback);
         transaction.addToBackStack(null);
         transaction.commit();
-         */
+
     }
 }
