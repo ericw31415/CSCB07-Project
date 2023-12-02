@@ -121,8 +121,6 @@ public class Event {
         this.participantCount = participantCount;
     }
 
-
-
     public static String generateUniqueId() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Events");
         return databaseReference.push().getKey();

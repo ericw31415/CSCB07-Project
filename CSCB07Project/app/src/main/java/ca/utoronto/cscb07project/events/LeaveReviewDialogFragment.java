@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,8 +16,11 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
 
@@ -82,19 +86,45 @@ public class LeaveReviewDialogFragment extends DialogFragment {
             // Initialize the DatabaseReference
             DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("Reviews");
 
-            // Create a unique key for the review
-            String reviewId = reviewsRef.push().getKey();
+            // Check if a review with the same email and event ID already exists
+            reviewsRef.orderByChild("userEmail").equalTo(userEmail)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            boolean reviewExists = false;
+                            for (DataSnapshot reviewSnapshot : dataSnapshot.getChildren()) {
+                                Review review = reviewSnapshot.getValue(Review.class);
+                                if (review != null && review.getEventId().equals(eventId)) {
+                                    // A review with the same email and event ID already exists
+                                    reviewExists = true;
+                                    break;
+                                }
+                            }
 
-            // Create a Review object with the data
-            Review review = new Review(userEmail, eventId, reviewText, rating);
+                            if (reviewExists) {
+                                Toast.makeText(getContext(), "You have already submitted a review for this event", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Create a unique key for the review
+                                String reviewId = reviewsRef.push().getKey();
 
-            // Save the review data to the database
-            if (reviewId != null) {
-                reviewsRef.child(reviewId).setValue(review);
-            }
+                                // Create a Review object with the data
+                                Review review = new Review(userEmail, eventId, reviewText, rating);
 
-            // Dismiss the dialog
-            dismiss();
+                                // Save the review data to the database
+                                if (reviewId != null) {
+                                    reviewsRef.child(reviewId).setValue(review);
+                                }
+
+                                // Dismiss the dialog
+                                dismiss();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle the error
+                        }
+                    });
         }
     }
 }
