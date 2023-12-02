@@ -9,8 +9,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,8 +67,7 @@ public class RSVPEventDetailsStudent extends Fragment {
         leaveReviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle "Leave Review" button click
-                // You can navigate to the review screen or perform any action you want
+                showReviewDialog();
             }
         });
 
@@ -98,5 +100,12 @@ public class RSVPEventDetailsStudent extends Fragment {
         });
 
         return view;
+    }
+
+    private void showReviewDialog() {
+        if (eventId != null) {
+            LeaveReviewDialogFragment dialog = LeaveReviewDialogFragment.newInstance(eventId);
+            dialog.show(getChildFragmentManager(), "LeaveReviewDialogFragment");
+        }
     }
 }
