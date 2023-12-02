@@ -1,5 +1,6 @@
 package ca.utoronto.cscb07project.ui.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -75,16 +77,16 @@ public class AdminEventsList extends Fragment {
 
         listView.setAdapter(adapter);
 
-        /**
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Handle item click, e.g., open detail fragment
                 Event event = events.get(position);
-                openDetailFragment(event);
+                openFeedbackFragment(event);
             }
         });
-        */
+
 
         // Initialize Realtime Database reference
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -115,14 +117,14 @@ public class AdminEventsList extends Fragment {
         });
     }
 
-    private void openDetailFragment(Event event) {
-        EventDetailsStudent eventDetailsStudent = new EventDetailsStudent();
+    private void openFeedbackFragment(Event event) {
+        EventFeedback feedback = new EventFeedback();
         Bundle args = new Bundle();
         args.putString("eventId", event.getId());
-        eventDetailsStudent.setArguments(args);
+        feedback.setArguments(args);
 
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.userFrame, eventDetailsStudent);
+        transaction.replace(R.id.userFrame, feedback);
         transaction.addToBackStack(null);
         transaction.commit();
     }
