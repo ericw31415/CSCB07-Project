@@ -7,15 +7,15 @@ import java.io.Serializable;
 
 public class Announcement implements Serializable {
     private String title;
-    private String announcementId; // Corrected spelling
+    private String announcementID; // Update the variable name
     private String date;
     private String description;
 
-    public Announcement(String title, String date, String description, String announcementId) {
+    public Announcement(String title, String date, String description, String announcementID) {
         this.title = title;
         this.date = date;
         this.description = description;
-        this.announcementId = announcementId; // Corrected spelling
+        this.announcementID = announcementID; // Update the variable name
     }
 
     public Announcement() {
@@ -46,13 +46,14 @@ public class Announcement implements Serializable {
         this.description = description;
     }
 
-    public String getAnnouncementId() { // Corrected spelling
-        return announcementId; // Corrected spelling
+    public String getAnnouncementID() { // Update the method name
+        return announcementID; // Update the variable name
     }
 
-    public void setAnnouncementId(String announcementId) { // Corrected spelling
-        this.announcementId = announcementId; // Corrected spelling
+    public void setAnnouncementID(String announcementID) { // Update the method name
+        this.announcementID = announcementID; // Update the variable name
     }
+
     public static String generateUniqueID() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Announcements");
         return databaseReference.push().getKey();

@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.announcements.All_Announcement_Fragment;
 import ca.utoronto.cscb07project.events.*;
 import ca.utoronto.cscb07project.ui.POStCheck.MajOrMin;
 import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
@@ -121,5 +122,9 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
     public void goAddAnnouncements(View view) {
         loadFragment(new AddAnnouncmentFragment());
+    }
+
+    public void toUserAnnouncements(View view) {
+        loadFragment(new All_Announcement_Fragment());
     }
 }

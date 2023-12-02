@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -44,7 +45,7 @@ public class All_Announcement_Fragment extends Fragment {
     }
 
     private void setupListView(View view){
-        listView = view.findViewById(R.id.listView);
+        listView = view.findViewById(R.id.listViewAnnouncement);
         announcements = new ArrayList<>();
 
         adapter = new ArrayAdapter<Announcement>(getContext(), R.layout.announcement_item, announcements){
@@ -58,9 +59,9 @@ public class All_Announcement_Fragment extends Fragment {
 
                 Announcement announcement = getItem(position);
                 if(announcement != null){
-                    TextView titleTextView = itemView.findViewById(R.id.AnnouncementTitle);
-                    TextView dateTimeTextView = itemView.findViewById(R.id.AnnouncementDate);
-                    TextView describtionTimeTextView = itemView.findViewById(R.id.AnnouncementDescription);
+                    TextView titleTextView = itemView.findViewById(R.id.textViewTitleAnnouncement);
+                    TextView dateTimeTextView = itemView.findViewById(R.id.textViewDateAnnouncement);
+                    TextView describtionTimeTextView = itemView.findViewById(R.id.textViewAnnouncementId);
 
                     titleTextView.setText(announcement.getTitle());
                     dateTimeTextView.setText(announcement.getDate());
@@ -109,9 +110,10 @@ public class All_Announcement_Fragment extends Fragment {
     }
 
     private void openDetailFragment(Announcement announcement){
+        Toast.makeText(getContext(), announcement.getAnnouncementID(), Toast.LENGTH_SHORT).show();
         Announcement_DetailFragment announcementDetailFragment = new Announcement_DetailFragment();
         Bundle args = new Bundle();
-        args.putString("announcementID", announcement.getAnnouncementId());
+        args.putString("announcementID", announcement.getAnnouncementID());
         announcementDetailFragment.setArguments(args);
 
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();

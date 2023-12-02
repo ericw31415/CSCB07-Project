@@ -27,7 +27,7 @@ import ca.utoronto.cscb07project.ui.user.ComplaintDetailsFragment;
  */
 public class Announcement_DetailFragment extends Fragment {
 
-    private static final String ARG_ANNOUNCEMENT_ID = "announcement_id";
+    private static final String ARG_ANNOUNCEMENT_ID = "announcementID";
 
     private String AnnouncementId;
     private TextView AnnouncementTitle;
@@ -38,13 +38,14 @@ public class Announcement_DetailFragment extends Fragment {
 
     }
 
-    public static Announcement_DetailFragment newInstance(String announcmentId) {
+    public static Announcement_DetailFragment newInstance(String announcementId) {
         Announcement_DetailFragment fragment = new Announcement_DetailFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_ANNOUNCEMENT_ID, announcmentId);
+        args.putString(ARG_ANNOUNCEMENT_ID, announcementId);
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,41 +55,47 @@ public class Announcement_DetailFragment extends Fragment {
         }
     }
 
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
         View view = inflater.inflate(R.layout.fragment_announcement__detail, container, false);
 
         AnnouncementTitle = view.findViewById(R.id.AnnouncementTitle);
         AnnouncementDate = view.findViewById(R.id.AnnouncementDate);
         AnnouncementDescription = view.findViewById(R.id.AnnouncementDescription);
-        this.AnnouncementId = getArguments().getString("AnnouncementID");
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String announcementID = getArguments().getString("AnnouncementID");
-        DatabaseReference eventsRef = database.getReference("Announcement").child(announcementID);
+        if (getArguments() != null) {
+            AnnouncementId = getArguments().getString(ARG_ANNOUNCEMENT_ID);
+            Log.d("test", AnnouncementId.toString());
+            DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("Announcements").child(AnnouncementId);
 
-        eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    String title = dataSnapshot.child("title").getValue(String.class);
-                    String dateTime = dataSnapshot.child("date").getValue(String.class);
-                    String description = dataSnapshot.child("description").getValue(String.class);
+            eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        String title = dataSnapshot.child("title").getValue(String.class);
+                        String dateTime = dataSnapshot.child("date").getValue(String.class);
+                        String description = dataSnapshot.child("description").getValue(String.class);
 
-
-                    AnnouncementTitle.setText(title);
-                    AnnouncementDate.setText(dateTime);
-                    AnnouncementDescription.setText(description);
-                }else{
-                    Log.d("Why", "Not working");
+                        AnnouncementTitle.setText(title);
+                        AnnouncementDate.setText(dateTime);
+                        AnnouncementDescription.setText(description);
+                    } else {
+                        Log.d("Announcement_DetailFrag", "DataSnapshot does not exist");
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("Announcement_DetailFrag", "Error in database operation", error.toException());
+                }
+            });
+        } else {
+            // Handle the case where getArguments() is null
+            Log.e("Announcement_DetailFrag", "Arguments are null");
+        }
 
-            }
-        });
         return view;
     }
 }
