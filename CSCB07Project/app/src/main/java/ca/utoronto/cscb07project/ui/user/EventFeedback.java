@@ -39,7 +39,9 @@ public class EventFeedback extends Fragment {
 
     private RecyclerView recyclerView;
     private ListView listView;
-    private ArrayAdapter<Review> adapter;
+    //private ArrayAdapter<Review> adapter;
+
+    private FeedbackAdapter adapter;
     private List<Review> reviews;
     private List<Event> events;
     private DatabaseReference reviewRef;
@@ -124,7 +126,7 @@ public class EventFeedback extends Fragment {
                 openFeedbackFragment(selectedReview);
             }
         });
-         */
+
 
 
         // Initialize Realtime Database reference
@@ -135,6 +137,7 @@ public class EventFeedback extends Fragment {
         //DatabaseReference eventRef = database.getReference("Events").child();
         //fetchFeedbackFromFirebase(eventRef);
     }
+     */
 
     private void fetchFeedbackFromFirebase(String eventId) {
         DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("Reviews").child(eventId);
