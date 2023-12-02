@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.announcements.Announcement;
 
 public class AddAnnouncmentFragment extends Fragment {
 

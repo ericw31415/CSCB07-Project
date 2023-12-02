@@ -1,4 +1,4 @@
-package ca.utoronto.cscb07project.ui.user;
+package ca.utoronto.cscb07project.announcements;
 
 import android.os.Bundle;
 
@@ -14,10 +14,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.ui.user.ComplaintDetailsFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,16 +26,13 @@ import ca.utoronto.cscb07project.R;
  */
 public class Announcement_DetailFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_ANNOUNCEMENT_ID = "announcement_id";
 
     private TextView AnnouncementID;
     private TextView AnnouncementTitle;
     private TextView AnnouncementText;
     private TextView AnnouncementName;
-    private TextView AnnouncementEmail;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;

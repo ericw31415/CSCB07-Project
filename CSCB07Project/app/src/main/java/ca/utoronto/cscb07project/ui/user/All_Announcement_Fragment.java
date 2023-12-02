@@ -22,6 +22,9 @@ import java.util.Collections;
 import java.util.List;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.announcements.Announcement;
+import ca.utoronto.cscb07project.announcements.AnnouncementAdapter;
+import ca.utoronto.cscb07project.announcements.Announcement_DetailFragment;
 
 public class All_Announcement_Fragment extends Fragment {
     private DatabaseReference databaseReference;
@@ -64,7 +67,7 @@ public class All_Announcement_Fragment extends Fragment {
 
         adapter.setOnAnnouncementClickListener(new AnnouncementAdapter.OnAnnouncementClickListener()  {
             @Override
-            public void onAnnouncementClick(ca.utoronto.cscb07project.ui.user.Announcement announcement) {
+            public void onAnnouncementClick(Announcement announcement) {
              toAnnouncmenetDetailsFragment(announcement);
             }
         });
@@ -72,7 +75,7 @@ public class All_Announcement_Fragment extends Fragment {
         return view;
     }
 
-    private void toAnnouncmenetDetailsFragment(ca.utoronto.cscb07project.ui.user.Announcement announcement) {
+    private void toAnnouncmenetDetailsFragment(Announcement announcement) {
         Announcement_DetailFragment fragment = new Announcement_DetailFragment();
         Bundle args = new Bundle();
         args.putString("announcementID", announcement.getAnnouncementId());

@@ -1,4 +1,7 @@
-package ca.utoronto.cscb07project.ui.user;
+package ca.utoronto.cscb07project.announcements;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 
@@ -49,5 +52,9 @@ public class Announcement implements Serializable {
 
     public void setAnnouncementId(String announcementId) { // Corrected spelling
         this.announcementId = announcementId; // Corrected spelling
+    }
+    public static String generateUniqueID() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Announcements");
+        return databaseReference.push().getKey();
     }
 }
