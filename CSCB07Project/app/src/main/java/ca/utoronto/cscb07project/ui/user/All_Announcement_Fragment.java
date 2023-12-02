@@ -65,4 +65,14 @@ public class All_Announcement_Fragment extends Fragment {
         });
         return view;
     }
+
+        adapter.setOnAnnouncementClickListener(new AnnouncementAdapter.OnAnnouncementClickListener() {
+        @Override
+        public void onComplaintClick(ca.utoronto.cscb07project.ui.complaints.complaints complaint) {
+            toComplaintDetailsFragment(complaint);
+        }
+    });
+
+        return view;
+}
 }
