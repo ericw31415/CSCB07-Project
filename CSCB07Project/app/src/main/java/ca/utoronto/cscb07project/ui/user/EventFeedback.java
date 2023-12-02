@@ -1,20 +1,14 @@
 package ca.utoronto.cscb07project.ui.user;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,21 +24,11 @@ import ca.utoronto.cscb07project.events.Event;
 import ca.utoronto.cscb07project.events.FeedbackAdapter;
 import ca.utoronto.cscb07project.events.Review;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EventFeedback#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class EventFeedback extends Fragment {
 
     private RecyclerView recyclerView;
-    private ListView listView;
-    //private ArrayAdapter<Review> adapter;
-
     private FeedbackAdapter adapter;
     private List<Review> reviews;
-    private List<Event> events;
-    private DatabaseReference reviewRef;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,8 +43,11 @@ public class EventFeedback extends Fragment {
 
         // Create FeedbackAdapter and set it to the RecyclerView
         adapter = new FeedbackAdapter(getContext(), R.layout.review_item, reviews);
-        recyclerView.setAdapter(adapter);
+
+        // The following line is the source of the NullPointerException
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new FeedbackAdapter.OnItemClickListener() {
             @Override
@@ -68,79 +55,16 @@ public class EventFeedback extends Fragment {
                 openFeedbackFragment(review);
             }
         });
-    }
-
-    /**
-    private void setupListView(View view) {
-
-        listView = view.findViewById(R.id.listView500);
-        reviews = new ArrayList<>();
-
-        //create review_item layout
-        adapter = new ArrayAdapter<Review>(getContext(), R.layout.review_item, reviews) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                View itemView = convertView;
-                if (itemView == null) {
-                    itemView = LayoutInflater.from(getContext()).inflate(R.layout.review_item, parent, false);
-                }
-
-                Review review = getItem(position);
-                if (review != null) {
-                    TextView eventId = itemView.findViewById(R.id.eventId);
-                    TextView rating = itemView.findViewById(R.id.rating);
-                    TextView reviewText = itemView.findViewById(R.id.reviewText);
-                    TextView userEmail = itemView.findViewById(R.id.userEmail);
-
-
-                    eventId.setText(review.getEventId());
-                    rating.setText(review.getRating());
-                    reviewText.setText(review.getReviewText());
-                    userEmail.setText(review.getUserEmail());
-
-                }
-
-                return itemView;
-            }
-        };
-
-        listView.setAdapter(adapter);
-
-
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Handle item click, e.g., open detail fragment
-                //Review review = reviews.get(position);
-                //openFeedbackFragment(review);
-                /**
-                Event selectedEvent = events.get(position);
-
-                String eventId = selectedEvent.getId();
-
-                fetchFeedbackFromFirebase(eventId);
-
-                Review selectedReview = reviews.get(position);
-                openFeedbackFragment(selectedReview);
-            }
-        });
-
-
 
         // Initialize Realtime Database reference
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //reviewRef = database.getReference("Reviews");
+        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("Reviews");
 
-        // Fetch events from Realtime Database
-        //DatabaseReference eventRef = database.getReference("Events").child();
-        //fetchFeedbackFromFirebase(eventRef);
+        // Replace the child("exampleEventId") with the actual event ID you want to fetch reviews for
+        fetchFeedbackFromFirebase(reviewsRef.child("exampleEventId"));
     }
-     */
 
-    private void fetchFeedbackFromFirebase(String eventId) {
-        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("Reviews").child(eventId);
+
+    private void fetchFeedbackFromFirebase(DatabaseReference reviewsRef) {
         reviewsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -162,16 +86,6 @@ public class EventFeedback extends Fragment {
     }
 
     private void openFeedbackFragment(Review review) {
-
-        EventFeedback feedback = new EventFeedback();
-        Bundle args = new Bundle();
-        args.putString("eventId", review.getEventId());
-        feedback.setArguments(args);
-
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.userFrame, feedback);
-        transaction.addToBackStack(null);
-        transaction.commit();
-
+        // Handle the action when a review is clicked, e.g., navigate to a detailed view
     }
 }
