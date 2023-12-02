@@ -22,8 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 import ca.utoronto.cscb07project.R;
-import ca.utoronto.cscb07project.ui.complaints.complaints;
-import ca.utoronto.cscb07project.ui.user.ComplaintAdapter;
 
 public class All_Announcement_Fragment extends Fragment {
     private DatabaseReference databaseReference;
@@ -63,16 +61,28 @@ public class All_Announcement_Fragment extends Fragment {
                 Log.e("Firebase", "Failed to read value.", error.toException());
             }
         });
+
+        adapter.setOnAnnouncementClickListener(new AnnouncementAdapter.OnAnnouncementClickListener()  {
+            @Override
+            public void onAnnouncementClick(ca.utoronto.cscb07project.ui.user.Announcement announcement) {
+             toAnnouncmenetDetailsFragment(announcement);
+            }
+        });
+
         return view;
     }
 
-        adapter.setOnAnnouncementClickListener(new AnnouncementAdapter.OnAnnouncementClickListener() {
-        @Override
-        public void onComplaintClick(ca.utoronto.cscb07project.ui.complaints.complaints complaint) {
-            toComplaintDetailsFragment(complaint);
-        }
-    });
-
-        return view;
-}
+    private void toAnnouncmenetDetailsFragment(ca.utoronto.cscb07project.ui.user.Announcement announcement) {
+        // Implement logic to navigate to the Complaint Details Fragment
+        // For example:
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        Announcement_DetailFragment fragment = new Announcement_DetailFragment();
+        // Pass data to ComplaintDetailsFragment if needed
+        Bundle bundle = new Bundle();
+        bundle.putString("AnnouncementId", announcement.getAnnouncementId());
+        fragment.setArguments(bundle);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 }
