@@ -2,17 +2,26 @@ package ca.utoronto.cscb07project.ui.user;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import ca.utoronto.cscb07project.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Announcement_DetailFragment#newInstance} factory method to
+ * Use the {@link ComplaintDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class Announcement_DetailFragment extends Fragment {
@@ -21,6 +30,12 @@ public class Announcement_DetailFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private TextView AnnouncementID;
+    private TextView AnnouncementTitle;
+    private TextView AnnouncementText;
+    private TextView AnnouncementName;
+    private TextView AnnouncementEmail;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -36,7 +51,7 @@ public class Announcement_DetailFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Announcement_DetailFragment.
+     * @return A new instance of fragment ComplaintDetailsFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static Announcement_DetailFragment newInstance(String param1, String param2) {
@@ -60,7 +75,44 @@ public class Announcement_DetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_announcement__detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_announcement__detail, container, false);
+        Bundle args = getArguments();
+
+        if (args != null) {
+            String announcementId = args.getString("announcementId");
+            String title = args.getString("title");
+            String description = args.getString("description");
+            String date = args.getString("date");
+            // Assume "announcementId" is a unique identifier for the announcement node
+
+            ((TextView) view.findViewById(R.id.AnnouncementTitle)).setText(title);
+            ((TextView) view.findViewById(R.id.AnnouncementDescription)).setText(description);
+            ((TextView) view.findViewById(R.id.AnnouncementDate)).setText("Posted on" + date);
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference announcementsRef = database.getReference("Announcements").child(announcementId);
+
+            announcementsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        String title = dataSnapshot.child("title").getValue(String.class);
+                        String description = dataSnapshot.child("description").getValue(String.class);
+                        String date = dataSnapshot.child("date").getValue(String.class);
+
+                        // Update the UI with the retrieved announcement data
+                        ((TextView) view.findViewById(R.id.AnnouncementTitle)).setText(title);
+                        ((TextView) view.findViewById(R.id.AnnouncementDescription)).setText(description);
+                        ((TextView) view.findViewById(R.id.AnnouncementDate)).setText("Sent On: " + date);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle errors
+                }
+            });
+        }
+        return view;
     }
 }
