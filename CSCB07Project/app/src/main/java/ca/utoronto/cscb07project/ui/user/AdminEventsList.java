@@ -46,24 +46,29 @@ public class AdminEventsList extends Fragment {
         listView = view.findViewById(R.id.listView500);
         events = new ArrayList<>();
 
-        adapter = new ArrayAdapter<Event>(getContext(), R.layout.event_item, events) {
+        adapter = new ArrayAdapter<Event>(getContext(), R.layout.admin_event_item, events) {
             @NonNull
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 View itemView = convertView;
                 if (itemView == null) {
-                    itemView = LayoutInflater.from(getContext()).inflate(R.layout.event_item, parent, false);
+                    itemView = LayoutInflater.from(getContext()).inflate(R.layout.admin_event_item, parent, false);
                 }
 
                 Event event = getItem(position);
                 if (event != null) {
-                    TextView titleTextView = itemView.findViewById(R.id.titleTextView);
-                    TextView locationTextView = itemView.findViewById(R.id.locationTextView);
-                    TextView dateTimeTextView = itemView.findViewById(R.id.dateTimeTextView);
+                    TextView titleTextView = itemView.findViewById(R.id.title);
+                    TextView locationTextView = itemView.findViewById(R.id.location);
+                    TextView dateTimeTextView = itemView.findViewById(R.id.dateTime);
+
+                    TextView revCountTextView = itemView.findViewById(R.id.revCount);
+                    TextView avgRatingTextView = itemView.findViewById(R.id.avgRating);
 
                     titleTextView.setText(event.getTitle());
                     locationTextView.setText(event.getLocation());
                     dateTimeTextView.setText(event.getDateTime());
+                    //revCountTextView.setText();
+                    //avgRatingTextView.setText();
                 }
 
                 return itemView;
