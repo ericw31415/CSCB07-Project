@@ -134,7 +134,7 @@ public class EventDetailsStudent extends Fragment {
                                 userEventsRef.child(eventId).setValue(true);
 
                                 // Add a new RSVP under the event's rsvps folder
-                                eventRsvpsRef.child(userId).setValue(userEmail);
+                                eventRsvpsRef.child(String.valueOf(dataSnapshot.getChildrenCount())).setValue(userEmail);
 
                                 // Add your logic to handle successful RSVP
                                 Log.d("RSVP", "RSVP added for Event ID: " + eventId);
@@ -156,4 +156,5 @@ public class EventDetailsStudent extends Fragment {
             Log.e("RSVP", "No user logged in");
         }
     }
+
 }

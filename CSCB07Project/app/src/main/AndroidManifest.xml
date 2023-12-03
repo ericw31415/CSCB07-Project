@@ -46,7 +46,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".CoolFireMeaninglessnessService"
+            android:name=".MessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
