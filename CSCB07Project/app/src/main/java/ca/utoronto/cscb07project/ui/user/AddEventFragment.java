@@ -1,7 +1,12 @@
 package ca.utoronto.cscb07project.ui.user;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -152,6 +157,7 @@ public class AddEventFragment extends Fragment {
 
             // Generate a unique ID for the event
             String eventId = Event.generateUniqueId();
+            sendPushNotification(title, description);
 
             // Create the Event with the generated ID
             Event event = new Event(eventId, title, dateTime, location, description);
@@ -162,4 +168,29 @@ public class AddEventFragment extends Fragment {
         }
 
     }
+
+    private void sendPushNotification(String title, String details) {
+        // Create a notification channel for Android Oreo and higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "default_channel_id",
+                    "Default Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = requireContext().getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+        // Construct the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), "default_channel_id")
+                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setContentTitle(title) // Use the announcement title as notification title
+                .setContentText(details) // Use the announcement details as notification content
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        // Display the notification
+        NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, builder.build());
+    }
+
 }
