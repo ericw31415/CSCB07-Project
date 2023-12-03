@@ -1,16 +1,22 @@
 package ca.utoronto.cscb07project.ui.user;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -21,6 +27,7 @@ import java.util.Locale;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.announcements.Announcement;
+
 
 public class AddAnnouncmentFragment extends Fragment {
 
@@ -74,6 +81,8 @@ public class AddAnnouncmentFragment extends Fragment {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Announcement posted", Toast.LENGTH_SHORT).show();
+
+                            sendPushNotification(title, details);
                             getParentFragmentManager().popBackStack();
                         } else {
                             Toast.makeText(getContext(), "Post failed", Toast.LENGTH_SHORT).show();
@@ -81,6 +90,35 @@ public class AddAnnouncmentFragment extends Fragment {
                     });
         }
     }
+
+    private void sendPushNotification(String title, String details) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the notification channel
+            NotificationChannel channel = new NotificationChannel(
+                    "default_channel_id",
+                    "Default Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = requireContext().getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+        // Delayed notification sending for demonstration purposes
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(() -> sendNotification(), 3000); // Send notification after 3 seconds
+    }
+
+    private void sendNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), "default_channel_id")
+                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setContentTitle("Sample Notification")
+                .setContentText("This is a sample notification.")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, builder.build());
+    }
+
 
     /**
      * A simple {@link Fragment} subclass.
