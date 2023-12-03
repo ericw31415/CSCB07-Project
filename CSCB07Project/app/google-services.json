@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "568217251391",
+    "project_id": "cscb07-group",
+    "storage_bucket": "cscb07-group.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:568217251391:android:25b9a28033be47e2e8528a",
+        "android_client_info": {
+          "package_name": "ca.utoronto.cscb07project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp9Pgw40WZbdaBZSVvyLnWhjrt-_ImNHE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
