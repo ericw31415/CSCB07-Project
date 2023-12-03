@@ -61,6 +61,6 @@ public class Announcement implements Serializable {
         return databaseReference.push().getKey();
     }
 
-    public String getEventID(){return EventID;};
-    public void setEventID(String EventID){this.EventID = EventID;};
+    public String getEventID(){return EventID;}
+    public void setEventID(String EventID){this.EventID = EventID;}
 }
