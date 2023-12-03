@@ -14,21 +14,27 @@
         android:inputType="text"
         android:maxLines="1" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewAnnouncements"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="5dp"
+        android:background="@android:color/white" />
+
     <EditText
         android:id="@+id/AnnouncementDescriptionEditText"
-        android:layout_width="380dp"
-        android:layout_height="431dp"
-        android:layout_weight="1"
-        android:gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="223dp"
         android:hint="Enter Announcement Description"
         android:inputType="textMultiLine"
-        android:minLines="5" />
+        android:maxLines="5"
+        android:scrollbars="vertical" />
 
     <Button
         android:id="@+id/postAnnouncementButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/submit_complaint" />
+        android:text="Post Announcement" />
 
 </LinearLayout>
