@@ -15,7 +15,7 @@
         android:maxLines="1" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAnnouncements"
+        android:id="@+id/recyclerViewEvent"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:padding="5dp"

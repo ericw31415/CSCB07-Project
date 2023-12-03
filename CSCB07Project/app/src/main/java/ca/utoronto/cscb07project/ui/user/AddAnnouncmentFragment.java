@@ -10,29 +10,45 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.announcements.Announcement;
+import ca.utoronto.cscb07project.events.Event;
+import ca.utoronto.cscb07project.events.EventAdapter;
 
 
 public class AddAnnouncmentFragment extends Fragment {
 
     private EditText titleEditText;
     private EditText descriptionEditText;
+
+    private RecyclerView eventsRecyclerView;
+    private EventAdapter eventAdapter;
+    private List<Event> eventsList;
+
+    private DatabaseReference eventsRef;
 
 
     @Override
@@ -46,11 +62,51 @@ public class AddAnnouncmentFragment extends Fragment {
         descriptionEditText = view.findViewById(R.id.AnnouncementDescriptionEditText);
         Button submitButton = view.findViewById(R.id.postAnnouncementButton);
 
+        eventsRecyclerView = view.findViewById(R.id.recyclerViewEvent);
+        eventsList = new ArrayList<>();
+        eventAdapter = new EventAdapter(requireContext(), R.layout.event_item, eventsList);
+        eventsRecyclerView.setAdapter(eventAdapter);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        eventsRef = database.getReference("Events");
+        fetchEventsFromFirebase();
+
+
         // Set up the submit button click listener
         submitButton.setOnClickListener(v -> postAnnouncement());
 
+        eventAdapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Event event) {
+                // Handle item click here if needed
+                // For example, navigate to detail fragment
+            }
+        });
+
         return view;
     }
+
+    private void fetchEventsFromFirebase() {
+        eventsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                eventsList.clear();
+
+                for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                    Event event = eventSnapshot.getValue(Event.class);
+                    eventsList.add(event);
+                }
+
+                eventAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
 
     private void postAnnouncement() {
         // Collect input data
