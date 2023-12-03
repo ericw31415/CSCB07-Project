@@ -24,13 +24,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import ca.utoronto.cscb07project.R;
-import ca.utoronto.cscb07project.announcements.Announcement;
-import ca.utoronto.cscb07project.announcements.AnnouncementAdapter;
-import ca.utoronto.cscb07project.announcements.Announcement_DetailFragment;
 
 public class All_Announcement_Fragment extends Fragment {
 
@@ -40,34 +36,34 @@ public class All_Announcement_Fragment extends Fragment {
     private DatabaseReference announcementsRef;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all__announcement_, container, false);
         setupListView(view);
         return view;
     }
 
-    private void setupListView(View view){
+    private void setupListView(View view) {
         listView = view.findViewById(R.id.listViewAnnouncement);
         announcements = new ArrayList<>();
 
-        adapter = new ArrayAdapter<Announcement>(getContext(), R.layout.announcement_item, announcements){
+        adapter = new ArrayAdapter<Announcement>(getContext(), R.layout.announcement_item, announcements) {
             @NonNull
             @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent){
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 View itemView = convertView;
-                if (itemView == null){
+                if (itemView == null) {
                     itemView = LayoutInflater.from(getContext()).inflate(R.layout.announcement_item, parent, false);
                 }
 
                 Announcement announcement = getItem(position);
-                if(announcement != null){
+                if (announcement != null) {
                     TextView titleTextView = itemView.findViewById(R.id.textViewTitleAnnouncement);
                     TextView dateTimeTextView = itemView.findViewById(R.id.textViewDateAnnouncement);
-                    TextView describtionTimeTextView = itemView.findViewById(R.id.textViewAnnouncementId);
+                    TextView descriptionTimeTextView = itemView.findViewById(R.id.textViewAnnouncementId);
 
                     titleTextView.setText(announcement.getTitle());
                     dateTimeTextView.setText(announcement.getDate());
-                    describtionTimeTextView.setText(announcement.getDescription());
+                    descriptionTimeTextView.setText(announcement.getDescription());
                 }
 
                 return itemView;
@@ -98,9 +94,51 @@ public class All_Announcement_Fragment extends Fragment {
                     Announcement announcement = announcementsSnapshot.getValue(Announcement.class);
 
                     if (announcement != null) {
-                        // Check if the eventID is null or if the user has RSVP'd
-                        if (announcement.getEventID() == null || userHasRSVP(announcement.getEventID())) {
+                        String eventID = announcement.getEventID();
+                        if (eventID != null && eventID.equals("blank")) {
                             announcements.add(announcement);
+                        } else {
+                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                            if (currentUser != null) {
+                                String currentUserEmail = currentUser.getEmail();
+
+                                if (currentUserEmail != null && !currentUserEmail.isEmpty()) {
+                                    DatabaseReference rsvpsRef = FirebaseDatabase.getInstance().getReference()
+                                            .child("Events").child(eventID).child("rsvps");
+
+                                    rsvpsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                                String email = childSnapshot.getValue(String.class);
+
+                                                // Check if the retrieved email matches the current user's email
+                                                if (email != null && email.equals(currentUserEmail)) {
+                                                    announcements.add(announcement);
+                                                    Log.d("RSVP", "User has RSVP'd" + announcement.getAnnouncementID());
+
+                                                    // Move this line inside the onDataChange to ensure it's executed when a match is found
+                                                    adapter.notifyDataSetChanged();
+
+                                                    // Exit the loop early since you found a match
+                                                    return;
+                                                }
+                                            }
+
+                                            // If the loop completes without finding a match, the user hasn't RSVP'd
+                                            Log.d("RSVP", "User has not RSVP'd");
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            // Handle any errors that may occur
+                                            databaseError.toException().printStackTrace();
+                                        }
+                                    });
+
+                                }
+                            }
                         }
                     }
                 }
@@ -115,39 +153,7 @@ public class All_Announcement_Fragment extends Fragment {
         });
     }
 
-    private boolean userHasRSVP(String eventID) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (currentUser != null) {
-            String currentUserEmail = currentUser.getEmail();
-
-            if (currentUserEmail != null && !currentUserEmail.isEmpty()) {
-                DatabaseReference rsvpsRef = FirebaseDatabase.getInstance().getReference()
-                        .child("Events").child(eventID).child("rsvps");
-
-                rsvpsRef.orderByValue().equalTo(currentUserEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            System.out.println("Email exists in rsvps");
-                        } else {
-                            System.out.println("Email does not exist in rsvps");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        // Handle any errors that may occur
-                        System.err.println("Error: " + databaseError.getMessage());
-                    }
-                });
-            }
-        }
-
-        return false;
-    }
-
-    private void openDetailFragment(Announcement announcement){
+    private void openDetailFragment(Announcement announcement) {
         Toast.makeText(getContext(), announcement.getAnnouncementID(), Toast.LENGTH_SHORT).show();
         Announcement_DetailFragment announcementDetailFragment = new Announcement_DetailFragment();
         Bundle args = new Bundle();
@@ -160,3 +166,4 @@ public class All_Announcement_Fragment extends Fragment {
         transaction.commit();
     }
 }
+
