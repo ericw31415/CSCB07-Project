@@ -75,7 +75,10 @@ public class AdminEventsList extends Fragment{
                     countReviewsForEvent(event.getId(), new CountReviewsCallback() {
                         @Override
                         public void onCountReceived(long reviewsCount) {
-                            revCountTextView.setText("Number of Reviews: " + reviewsCount);
+                            //revCountTextView.setText("Number of Reviews: " + reviewsCount);
+                            if (revCountTextView != null && revCountTextView.getParent() != null) {
+                                revCountTextView.setText("Number of Reviews: " + reviewsCount);
+                            }
                         }
 
                         @Override
@@ -147,14 +150,14 @@ public class AdminEventsList extends Fragment{
 
 
     private void countReviewsForEvent(String eventId, final CountReviewsCallback callback) {
-        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("Reviews").child(eventId);
-        reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("Reviews");
+
+        reviewsRef.orderByChild("eventId").equalTo(eventId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long reviewsCount = dataSnapshot.getChildrenCount();
                 callback.onCountReceived(reviewsCount);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 databaseError.toException().printStackTrace();
