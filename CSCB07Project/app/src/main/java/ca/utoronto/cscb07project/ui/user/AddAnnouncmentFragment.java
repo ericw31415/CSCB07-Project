@@ -100,7 +100,7 @@ public class AddAnnouncmentFragment extends Fragment {
                 EventID = event.getId();
             } else {
                 Toast.makeText(requireContext(), "Checkbox is unchecked", Toast.LENGTH_SHORT).show();
-                EventID = "";
+                EventID = "blank";
             }
         });
 
@@ -160,7 +160,7 @@ public class AddAnnouncmentFragment extends Fragment {
             if (sendToAllCheckBox.isChecked()) {
                 announcement.setEventID(EventID);
             }else{
-                announcement.setEventID("");
+                announcement.setEventID("blank");
             }
 
             announcementsRef.child(AnnouncementId).setValue(announcement)
