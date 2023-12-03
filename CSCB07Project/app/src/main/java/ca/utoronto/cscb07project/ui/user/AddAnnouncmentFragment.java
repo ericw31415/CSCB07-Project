@@ -86,12 +86,14 @@ public class AddAnnouncmentFragment extends Fragment {
         });
 
         eventAdapter.setOnItemClickListener(event -> {
-            // Handle item click here
-            if (!sendToAllCheckBox.isChecked()) {
-                // If checkbox is unchecked, set the event ID in the announcement
-                setEventIdInAnnouncement(event);
+            if (sendToAllCheckBox.isChecked()) {
+                Toast.makeText(requireContext(), "EventId: " + event.getId(), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireContext(), "Checkbox is unchecked", Toast.LENGTH_SHORT).show();
             }
         });
+
+
 
         return view;
     }
