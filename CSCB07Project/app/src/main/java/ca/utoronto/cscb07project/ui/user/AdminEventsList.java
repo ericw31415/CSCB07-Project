@@ -65,9 +65,9 @@ public class AdminEventsList extends Fragment{
                     TextView revCountTextView = itemView.findViewById(R.id.revCount);
                     TextView avgRatingTextView = itemView.findViewById(R.id.avgRating);
 
-                    titleTextView.setText(event.getTitle());
-                    locationTextView.setText(event.getLocation());
-                    dateTimeTextView.setText(event.getDateTime());
+                    titleTextView.setText("Event: " + event.getTitle());
+                    locationTextView.setText("Location: " + event.getLocation());
+                    dateTimeTextView.setText("Date and Time: " + event.getDateTime());
                     //revCountTextView.setText();
                     //avgRatingTextView.setText();
 
