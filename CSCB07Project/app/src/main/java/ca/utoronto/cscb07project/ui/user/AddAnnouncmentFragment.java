@@ -92,8 +92,8 @@ public class AddAnnouncmentFragment extends Fragment {
     }
 
     private void sendPushNotification(String title, String details) {
+        // Create a notification channel for Android Oreo and higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create the notification channel
             NotificationChannel channel = new NotificationChannel(
                     "default_channel_id",
                     "Default Channel",
@@ -103,18 +103,14 @@ public class AddAnnouncmentFragment extends Fragment {
             manager.createNotificationChannel(channel);
         }
 
-        // Delayed notification sending for demonstration purposes
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(() -> sendNotification(), 3000); // Send notification after 3 seconds
-    }
-
-    private void sendNotification() {
+        // Construct the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), "default_channel_id")
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                .setContentTitle("Sample Notification")
-                .setContentText("This is a sample notification.")
+                .setContentTitle(title) // Use the announcement title as notification title
+                .setContentText(details) // Use the announcement details as notification content
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+        // Display the notification
         NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
     }
