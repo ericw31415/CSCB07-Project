@@ -74,10 +74,11 @@ public class AdminEventsList extends Fragment{
                     // Now, fetch and display the reviews count for each event
                     countReviewsForEvent(event.getId(), new CountReviewsCallback() {
                         @Override
-                        public void onCountReceived(long reviewsCount) {
+                        public void onCountReceived(long reviewsCount, double averageRating) {
                             //revCountTextView.setText("Number of Reviews: " + reviewsCount);
                             if (revCountTextView != null && revCountTextView.getParent() != null) {
                                 revCountTextView.setText("Number of Reviews: " + reviewsCount);
+                                avgRatingTextView.setText("Average Review Rating: " + averageRating);
                             }
                         }
 
@@ -156,7 +157,18 @@ public class AdminEventsList extends Fragment{
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long reviewsCount = dataSnapshot.getChildrenCount();
-                callback.onCountReceived(reviewsCount);
+
+                double totalRating = 0;
+
+                for (DataSnapshot reviewSnapshot : dataSnapshot.getChildren()) {
+                    // Assuming there's a child named "rating" under each review
+                    double rating = reviewSnapshot.child("rating").getValue(Double.class);
+                    totalRating += rating;
+                }
+
+                double averageRating = (reviewsCount > 0) ? totalRating / reviewsCount : 0;
+
+                callback.onCountReceived(reviewsCount, averageRating);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
