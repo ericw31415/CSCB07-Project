@@ -10,6 +10,7 @@ public class Announcement implements Serializable {
     private String announcementID;
     private String date;
     private String description;
+    private String EventID;
 
 
     public Announcement() {
@@ -59,4 +60,7 @@ public class Announcement implements Serializable {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Announcements");
         return databaseReference.push().getKey();
     }
+
+    public String getEventID(){return EventID;};
+    public void setEventID(String EventID){this.EventID = EventID;};
 }

@@ -14,12 +14,19 @@
         android:inputType="text"
         android:maxLines="1" />
 
+    <CheckBox
+        android:id="@+id/sendToAllCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose related Event (Default visible for all)" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewEvent"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:padding="5dp"
-        android:background="@android:color/white" />
+        android:background="@android:color/white"
+        android:visibility="gone" /> <!-- Initially hidden -->
 
     <EditText
         android:id="@+id/AnnouncementDescriptionEditText"

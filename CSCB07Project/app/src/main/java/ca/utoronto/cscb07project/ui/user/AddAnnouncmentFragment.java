@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -46,16 +47,19 @@ public class AddAnnouncmentFragment extends Fragment {
 
     private DatabaseReference eventsRef;
 
+    private CheckBox sendToAllCheckBox;
+    private Announcement announcement;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_announcment, container, false);
 
-        // Initialize UI elements
         titleEditText = view.findViewById(R.id.AnnouncementTitleEditText);
         descriptionEditText = view.findViewById(R.id.AnnouncementDescriptionEditText);
         Button submitButton = view.findViewById(R.id.postAnnouncementButton);
+        sendToAllCheckBox = view.findViewById(R.id.sendToAllCheckBox);
 
         eventsRecyclerView = view.findViewById(R.id.recyclerViewEvent);
         eventsList = new ArrayList<>();
@@ -67,14 +71,25 @@ public class AddAnnouncmentFragment extends Fragment {
         eventsRef = database.getReference("Events");
         fetchEventsFromFirebase();
 
-        // Set up the submit button click listener
         submitButton.setOnClickListener(v -> postAnnouncement());
 
-        eventAdapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Event event) {
-                // Handle item click here if needed
-                // For example, navigate to detail fragment
+        sendToAllCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                eventsRecyclerView.setVisibility(View.VISIBLE);
+                // Clear Event ID when checkbox is checked
+                if (announcement != null) {
+                    announcement.setEventID("");
+                }
+            } else {
+                eventsRecyclerView.setVisibility(View.GONE);
+            }
+        });
+
+        eventAdapter.setOnItemClickListener(event -> {
+            // Handle item click here
+            if (!sendToAllCheckBox.isChecked()) {
+                // If checkbox is unchecked, set the event ID in the announcement
+                setEventIdInAnnouncement(event);
             }
         });
 
@@ -102,12 +117,17 @@ public class AddAnnouncmentFragment extends Fragment {
         });
     }
 
+    private void setEventIdInAnnouncement(Event event) {
+        if (event != null) {
+            // Set the event ID in the announcement
+            announcement.setEventID(event.getId());
+        }
+    }
+
     private void postAnnouncement() {
-        // Collect input data
         String title = titleEditText.getText().toString().trim();
         String details = descriptionEditText.getText().toString().trim();
 
-        // Validate input
         if (title.isEmpty()) {
             Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
@@ -117,13 +137,18 @@ public class AddAnnouncmentFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String formattedDate = dateFormat.format(currentDate);
 
-        // Submit the complaint to Firebase
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference announcementsRef = database.getReference("Announcements");
         String AnnouncementId = announcementsRef.push().getKey();
 
         if (AnnouncementId != null) {
-            Announcement announcement = new Announcement(title, formattedDate, details, AnnouncementId);
+            announcement = new Announcement(title, formattedDate, details, AnnouncementId);
+
+            if (sendToAllCheckBox.isChecked()) {
+                // If checkbox is checked, set event ID to blank
+                announcement.setEventID("");
+            }
+
             announcementsRef.child(AnnouncementId).setValue(announcement)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -138,7 +163,6 @@ public class AddAnnouncmentFragment extends Fragment {
     }
 
     private void sendPushNotification(String title, String details) {
-        // Create a notification channel for Android Oreo and higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     "default_channel_id",
@@ -149,14 +173,12 @@ public class AddAnnouncmentFragment extends Fragment {
             manager.createNotificationChannel(channel);
         }
 
-        // Construct the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), "default_channel_id")
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                .setContentTitle(title) // Use the announcement title as notification title
-                .setContentText(details) // Use the announcement details as notification content
+                .setContentTitle(title)
+                .setContentText(details)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        // Display the notification
         NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
     }
