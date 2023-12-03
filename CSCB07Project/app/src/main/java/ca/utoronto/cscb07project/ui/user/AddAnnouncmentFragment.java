@@ -50,6 +50,8 @@ public class AddAnnouncmentFragment extends Fragment {
     private CheckBox sendToAllCheckBox;
     private Announcement announcement;
 
+    private String EventID;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,8 +90,10 @@ public class AddAnnouncmentFragment extends Fragment {
         eventAdapter.setOnItemClickListener(event -> {
             if (sendToAllCheckBox.isChecked()) {
                 Toast.makeText(requireContext(), "EventId: " + event.getId(), Toast.LENGTH_SHORT).show();
+                EventID = event.getId();
             } else {
                 Toast.makeText(requireContext(), "Checkbox is unchecked", Toast.LENGTH_SHORT).show();
+                EventID = "";
             }
         });
 
@@ -144,10 +148,12 @@ public class AddAnnouncmentFragment extends Fragment {
         String AnnouncementId = announcementsRef.push().getKey();
 
         if (AnnouncementId != null) {
-            announcement = new Announcement(title, formattedDate, details, AnnouncementId);
+            announcement = new Announcement(title, formattedDate, details, AnnouncementId, EventID);
 
             if (sendToAllCheckBox.isChecked()) {
                 // If checkbox is checked, set event ID to blank
+                announcement.setEventID(EventID);
+            }else{
                 announcement.setEventID("");
             }
 
