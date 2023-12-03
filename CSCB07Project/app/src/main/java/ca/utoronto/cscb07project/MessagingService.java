@@ -40,13 +40,13 @@ public class MessagingService extends FirebaseMessagingService {
 
         // Extract announcement title and details
         String title = "NEW ANNOUNCEMENT: " + remoteMessage.getData().get("title");
-        String details = remoteMessage.getData().get("details");
+        String details = "DETAILS: " + remoteMessage.getData().get("details");
 
         // Display a toast on the main thread (UI thread)
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             public void run() {
-                Toast.makeText(getApplicationContext(), "FCM!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),title, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -65,7 +65,7 @@ public class MessagingService extends FirebaseMessagingService {
         // Build the notification
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "default_channel_id")
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle("App Name")
+                .setContentTitle(title)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_dialog_info))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
@@ -84,7 +84,6 @@ public class MessagingService extends FirebaseMessagingService {
             return;
         }
         notificationManager.notify(141, notificationBuilder.build());
-
     }
 
     private void createNotificationChannel() {
@@ -101,3 +100,4 @@ public class MessagingService extends FirebaseMessagingService {
         }
     }
 }
+
