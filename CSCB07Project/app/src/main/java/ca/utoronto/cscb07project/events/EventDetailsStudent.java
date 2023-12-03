@@ -24,7 +24,7 @@ import ca.utoronto.cscb07project.R;
 
 public class EventDetailsStudent extends Fragment {
 
-    private static final String ARG_EVENT_ID = "event_id";
+    private static final String ARG_EVENT_ID = "eventId";
 
     private String eventId;
     private TextView eventTitle;
@@ -61,7 +61,7 @@ public class EventDetailsStudent extends Fragment {
         eventDateTime = view.findViewById(R.id.eventDateUser);
         eventLocation = view.findViewById(R.id.eventLocationUser);
         eventDescription = view.findViewById(R.id.eventDescUser);
-        this.eventId = getArguments().getString("eventID");
+        this.eventId = getArguments().getString(ARG_EVENT_ID);
 
         Button rsvpButton = view.findViewById(R.id.toRSVP); // Assuming the button ID is "rsvpButton"
 
@@ -74,7 +74,6 @@ public class EventDetailsStudent extends Fragment {
         });
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String eventId = getArguments().getString("eventId");
         DatabaseReference eventsRef = database.getReference("Events").child(eventId);
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -112,34 +111,33 @@ public class EventDetailsStudent extends Fragment {
             String userEmail = currentUser.getEmail();
 
             if (userEmail != null) {
-                // Rest of the code remains unchanged
-                String eventId = getArguments().getString("eventId");
+                String userId = userEmail.replace(".", "_");
+                String eventId = getArguments().getString(ARG_EVENT_ID);
 
                 if (eventId != null) {
-                    // Check if the RSVP entry already exists
-                    DatabaseReference rsvpsRef = FirebaseDatabase.getInstance().getReference("RSVPS");
-                    Query query = rsvpsRef.orderByChild("eventID").equalTo(eventId);
+                    // Reference to UserEvents node for the current user
+                    DatabaseReference userEventsRef = FirebaseDatabase.getInstance().getReference("UserEvents").child(userId);
 
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    // Reference to the RSVPs node under the event
+                    DatabaseReference eventRsvpsRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId).child("rsvps");
+
+                    // Check if the RSVP entry already exists
+                    userEventsRef.child(eventId).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            boolean hasExistingRSVP = false;
+                            if (dataSnapshot.exists()) {
+                                // Entry already exists, handle accordingly
+                                Log.d("RSVP", "RSVP already exists for Event ID: " + eventId);
+                                // Add your logic to handle existing RSVP (e.g., show a message)
+                            } else {
+                                // Entry does not exist, add a new RSVP under UserEvents
+                                userEventsRef.child(eventId).setValue(true);
 
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                RSVP rsvp = snapshot.getValue(RSVP.class);
+                                // Add a new RSVP under the event's rsvps folder
+                                eventRsvpsRef.child(userId).setValue(userEmail);
 
-                                if (rsvp != null && rsvp.getEmail().equalsIgnoreCase(userEmail)) {
-                                    // Entry already exists, handle accordingly
-                                    Log.d("RSVP", "RSVP already exists for Event ID: " + eventId);
-                                    // Add your logic to handle existing RSVP (e.g., show a message)
-                                    hasExistingRSVP = true;
-                                    break;
-                                }
-                            }
-
-                            if (!hasExistingRSVP) {
-                                // Entry does not exist, add a new RSVP
-                                addRSVPToDatabase(eventId, userEmail);
+                                // Add your logic to handle successful RSVP
+                                Log.d("RSVP", "RSVP added for Event ID: " + eventId);
                             }
                         }
 
@@ -158,36 +156,4 @@ public class EventDetailsStudent extends Fragment {
             Log.e("RSVP", "No user logged in");
         }
     }
-
-    private void addRSVPToDatabase(String eventId, String userEmail) {
-        DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId);
-        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Event event = dataSnapshot.getValue(Event.class);
-                    if (event != null) {
-                        // Add the RSVP to the event
-                        event.addRSVP(userEmail);
-                        // Update the event in the database
-                        eventRef.setValue(event);
-                        // Add your logic to handle successful RSVP
-                        Log.d("RSVP", "RSVP added for Event ID: " + eventId);
-                    } else {
-                        Log.e("RSVP", "Event is null");
-                    }
-                } else {
-                    Log.e("RSVP", "Event does not exist");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
-            }
-        });
-    }
-
-
-
 }
