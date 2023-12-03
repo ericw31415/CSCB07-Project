@@ -1,6 +1,7 @@
 package ca.utoronto.cscb07project.announcements;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.announcements.Announcement;
+import ca.utoronto.cscb07project.announcements.AnnouncementAdapter;
+import ca.utoronto.cscb07project.announcements.Announcement_DetailFragment;
 
 public class All_Announcement_Fragment extends Fragment {
 
@@ -35,46 +40,48 @@ public class All_Announcement_Fragment extends Fragment {
     private DatabaseReference announcementsRef;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_all__announcement_, container, false);
         setupListView(view);
         return view;
     }
 
-    private void setupListView(View view) {
+    private void setupListView(View view){
         listView = view.findViewById(R.id.listViewAnnouncement);
         announcements = new ArrayList<>();
-        adapter = new ArrayAdapter<>(getContext(), R.layout.announcement_item, announcements) {
+
+        adapter = new ArrayAdapter<Announcement>(getContext(), R.layout.announcement_item, announcements){
             @NonNull
             @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent){
                 View itemView = convertView;
-                if (itemView == null) {
+                if (itemView == null){
                     itemView = LayoutInflater.from(getContext()).inflate(R.layout.announcement_item, parent, false);
                 }
 
                 Announcement announcement = getItem(position);
-                if (announcement != null) {
+                if(announcement != null){
                     TextView titleTextView = itemView.findViewById(R.id.textViewTitleAnnouncement);
                     TextView dateTimeTextView = itemView.findViewById(R.id.textViewDateAnnouncement);
-                    TextView descriptionTextView = itemView.findViewById(R.id.textViewAnnouncementId);
+                    TextView describtionTimeTextView = itemView.findViewById(R.id.textViewAnnouncementId);
 
                     titleTextView.setText(announcement.getTitle());
                     dateTimeTextView.setText(announcement.getDate());
-                    descriptionTextView.setText(announcement.getDescription());
+                    describtionTimeTextView.setText(announcement.getDescription());
                 }
 
                 return itemView;
             }
         };
-
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
-            Announcement announcement = announcements.get(position);
-            openDetailFragment(announcement);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Announcement announcement = announcements.get(position);
+                openDetailFragment(announcement);
+            }
         });
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         announcementsRef = database.getReference("Announcements");
 
@@ -87,13 +94,14 @@ public class All_Announcement_Fragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 announcements.clear();
 
-                for (DataSnapshot announcementSnapshot : dataSnapshot.getChildren()) {
-                    Announcement announcement = announcementSnapshot.getValue(Announcement.class);
+                for (DataSnapshot announcementsSnapshot : dataSnapshot.getChildren()) {
+                    Announcement announcement = announcementsSnapshot.getValue(Announcement.class);
 
-                    if (announcement != null && (announcement.getEventID() == null || announcement.getEventID().isEmpty())) {
-                        announcements.add(announcement);
-                    } else if (announcement != null && userHasRSVP(announcement.getEventID())) {
-                        announcements.add(announcement);
+                    if (announcement != null) {
+                        // Check if the eventID is null or if the user has RSVP'd
+                        if (announcement.getEventID() == null || userHasRSVP(announcement.getEventID())) {
+                            announcements.add(announcement);
+                        }
                     }
                 }
 
@@ -112,18 +120,34 @@ public class All_Announcement_Fragment extends Fragment {
 
         if (currentUser != null) {
             String currentUserEmail = currentUser.getEmail();
+
             if (currentUserEmail != null && !currentUserEmail.isEmpty()) {
                 DatabaseReference rsvpsRef = FirebaseDatabase.getInstance().getReference()
                         .child("Events").child(eventID).child("rsvps");
 
-                return rsvpsRef.child(currentUserEmail).getValue() != null;
+                rsvpsRef.orderByValue().equalTo(currentUserEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            System.out.println("Email exists in rsvps");
+                        } else {
+                            System.out.println("Email does not exist in rsvps");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Handle any errors that may occur
+                        System.err.println("Error: " + databaseError.getMessage());
+                    }
+                });
             }
         }
 
         return false;
     }
 
-    private void openDetailFragment(Announcement announcement) {
+    private void openDetailFragment(Announcement announcement){
         Toast.makeText(getContext(), announcement.getAnnouncementID(), Toast.LENGTH_SHORT).show();
         Announcement_DetailFragment announcementDetailFragment = new Announcement_DetailFragment();
         Bundle args = new Bundle();
