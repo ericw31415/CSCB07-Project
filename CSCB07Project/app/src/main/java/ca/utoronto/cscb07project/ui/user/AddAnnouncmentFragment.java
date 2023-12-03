@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +88,7 @@ public class AddAnnouncmentFragment extends Fragment {
                 eventsRecyclerView.setVisibility(View.VISIBLE);
                 // Clear Event ID when checkbox is checked
                 if (announcement != null) {
-                    announcement.setEventID("");
+                    announcement.setEventID("blank");
                 }
             } else {
                 eventsRecyclerView.setVisibility(View.GONE);
@@ -167,9 +168,7 @@ public class AddAnnouncmentFragment extends Fragment {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Announcement posted", Toast.LENGTH_SHORT).show();
-                            if(announcement.getEventID().equals("blank")){
-                                sendFCMNotification("Announcements", title, details);
-                            }
+                            sendFCMNotification("Announcements", title, details);
                             sendPushNotification(title, details);
                             getParentFragmentManager().popBackStack();
                         } else {
@@ -231,7 +230,7 @@ public class AddAnnouncmentFragment extends Fragment {
                 outputStream.close();
 
                 int responseCode = conn.getResponseCode();
-                // Handle the response code if needed
+                Log.d("FCM Response", "Response Code: " + responseCode);
 
             } catch (IOException e) {
                 e.printStackTrace();

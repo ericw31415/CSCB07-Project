@@ -95,6 +95,7 @@ public class All_Announcement_Fragment extends Fragment {
 
                     if (announcement != null) {
                         String eventID = announcement.getEventID();
+                        Log.d("EventID", eventID);
                         if (eventID != null && eventID.equals("blank")) {
                             announcements.add(announcement);
                         } else {
@@ -166,4 +167,3 @@ public class All_Announcement_Fragment extends Fragment {
         transaction.commit();
     }
 }
-
