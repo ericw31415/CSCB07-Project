@@ -1,9 +1,12 @@
 package ca.utoronto.cscb07project.ui.user;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +37,7 @@ public class EventFeedback extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_feedback, container, false);
         setupRecyclerView(view);
+        countReviewsForEvent();
         return view;
     }
 
@@ -69,7 +73,6 @@ public class EventFeedback extends Fragment {
             }
         }
     }
-
 
     private void fetchFeedbackFromFirebase(DatabaseReference reviewsRef, String eventId) {
         // Assume eventId is not null, make sure you handle cases where it might be null in your actual code

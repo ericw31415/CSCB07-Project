@@ -1,12 +1,12 @@
 package ca.utoronto.cscb07project.ui.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +26,8 @@ import java.util.List;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.events.Event;
-import ca.utoronto.cscb07project.events.EventDetailsStudent;
 
-public class AdminEventsList extends Fragment {
+public class AdminEventsList extends Fragment{
 
     private ListView listView;
     private ArrayAdapter<Event> adapter;
@@ -69,6 +68,19 @@ public class AdminEventsList extends Fragment {
                     dateTimeTextView.setText(event.getDateTime());
                     //revCountTextView.setText();
                     //avgRatingTextView.setText();
+
+                    // Now, fetch and display the reviews count for each event
+                    countReviewsForEvent(event.getId(), new CountReviewsCallback() {
+                        @Override
+                        public void onCountReceived(long reviewsCount) {
+                            revCountTextView.setText("Number of Reviews: " + reviewsCount);
+                        }
+
+                        @Override
+                        public void onCountError(String error) {
+                            Log.e("AdminEventsList", "Error counting reviews: " + error);
+                        }
+                    });
                 }
 
                 return itemView;
@@ -127,5 +139,25 @@ public class AdminEventsList extends Fragment {
         transaction.replace(R.id.userFrame, feedback);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+
+
+
+    private void countReviewsForEvent(String eventId, final CountReviewsCallback callback) {
+        DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("Reviews").child(eventId);
+        reviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long reviewsCount = dataSnapshot.getChildrenCount();
+                callback.onCountReceived(reviewsCount);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                databaseError.toException().printStackTrace();
+                callback.onCountError(databaseError.getMessage());
+            }
+        });
     }
 }
