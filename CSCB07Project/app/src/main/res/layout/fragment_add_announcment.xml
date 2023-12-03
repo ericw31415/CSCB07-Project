@@ -16,8 +16,8 @@
 
     <EditText
         android:id="@+id/AnnouncementDescriptionEditText"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="380dp"
+        android:layout_height="431dp"
         android:layout_weight="1"
         android:gravity="top"
         android:hint="Enter Announcement Description"
