@@ -25,6 +25,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -151,7 +158,6 @@ public class AddAnnouncmentFragment extends Fragment {
             announcement = new Announcement(title, formattedDate, details, AnnouncementId, EventID);
 
             if (sendToAllCheckBox.isChecked()) {
-                // If checkbox is checked, set event ID to blank
                 announcement.setEventID(EventID);
             }else{
                 announcement.setEventID("");
@@ -161,6 +167,9 @@ public class AddAnnouncmentFragment extends Fragment {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Announcement posted", Toast.LENGTH_SHORT).show();
+                            if(announcement.getEventID().equals("blank")){
+                                sendFCMNotification("Announcements", title, details);
+                            }
                             sendPushNotification(title, details);
                             getParentFragmentManager().popBackStack();
                         } else {
@@ -189,5 +198,44 @@ public class AddAnnouncmentFragment extends Fragment {
 
         NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
+    }
+
+    private void sendFCMNotification(String topic, String title, String details) {
+        // Use the Server Key obtained from Firebase Console
+        String serverKey = "AAAAhExjLj8:APA91bFuA8VZGbZ8OZlgKxu9DOGIdBTmJbU9L36sfyQmV0mDAv6apgh0O-tWbnsRCyFi_Xq6lPZYzP16JaL2-tFCcJsu2wJTt808m2GjCgvbvBCDLYsLGRmRDmWBKiyuvT2ZDQLhUk0n";
+
+        // Set up FCM message
+        JSONObject message = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            data.put("title", title);
+            data.put("details", details);
+            message.put("data", data);
+            message.put("to", "/topics/" + topic);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Send FCM message using HTTP POST request
+        new Thread(() -> {
+            try {
+                URL url = new URL("https://fcm.googleapis.com/fcm/send");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Authorization", "key=" + serverKey);
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setDoOutput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+                outputStream.write(message.toString().getBytes("UTF-8"));
+                outputStream.close();
+
+                int responseCode = conn.getResponseCode();
+                // Handle the response code if needed
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

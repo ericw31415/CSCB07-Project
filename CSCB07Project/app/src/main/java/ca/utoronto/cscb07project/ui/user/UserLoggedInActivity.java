@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.announcements.All_Announcement_Fragment;
@@ -65,11 +66,26 @@ public class UserLoggedInActivity extends AppCompatActivity {
                         loadFragment(new AdminHome());
                     } else {
                         loadFragment(new UserHome());
+
+                        // Subscribe the user to the "announcements" topic
+                        subscribeToAnnouncementsTopic();
                     }
                 } else {
                     Log.d("User Data", "DataSnapshot does not exist");
                 }
             }
+
+            private void subscribeToAnnouncementsTopic() {
+                FirebaseMessaging.getInstance().subscribeToTopic("Announcements")
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Log.d("FCM", "Subscribed to announcements topic");
+                            } else {
+                                Log.e("FCM", "Subscription to announcements topic failed");
+                            }
+                        });
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("Error", "Database Error: " + error.getMessage());
