@@ -21,6 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.announcements.All_Announcement_Fragment;
 import ca.utoronto.cscb07project.events.EventListFragment;
@@ -30,6 +33,9 @@ import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
 public class UserLoggedInActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+
+    // Keep track of subscribed topics to simulate unsubscription
+    private Set<String> subscribedTopics = new HashSet<>();
 
     private void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -68,11 +74,14 @@ public class UserLoggedInActivity extends AppCompatActivity {
                     } else {
                         loadFragment(new UserHome());
 
+                        // Unsubscribe from all topics before subscribing again
+                        unsubscribeFromAllTopics();
+
                         // Subscribe the user to the "announcements" topic
                         subscribeToAnnouncementsTopic();
 
-                        // Subscribe the user to event channels based on RSVP
-                        subscribeToEventChannels(currentUser.getUid());
+                        // Subscribe the user to event topics based on RSVP
+                        subscribeToEventTopics(currentUser.getUid());
                     }
                 } else {
                     Log.d("User Data", "DataSnapshot does not exist");
@@ -80,9 +89,11 @@ public class UserLoggedInActivity extends AppCompatActivity {
             }
 
             private void subscribeToAnnouncementsTopic() {
-                FirebaseMessaging.getInstance().subscribeToTopic("Announcements")
+                String announcementsTopic = "Announcements";
+                FirebaseMessaging.getInstance().subscribeToTopic(announcementsTopic)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
+                                subscribedTopics.add(announcementsTopic);
                                 Log.d("FCM", "Subscribed to announcements topic");
                             } else {
                                 Log.e("FCM", "Subscription to announcements topic failed");
@@ -90,7 +101,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
                         });
             }
 
-            private void subscribeToEventChannels(String userId) {
+            private void subscribeToEventTopics(String userId) {
                 DatabaseReference userEventsRef = database.getReference("UserEvents").child(userId);
                 userEventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -98,7 +109,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
                         for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                             String eventId = eventSnapshot.getKey();
                             if (eventId != null) {
-                                checkRSVPAndSubscribeToChannel(eventId, userId);
+                                checkRSVPAndSubscribeToTopic(eventId, userId);
                             }
                         }
                     }
@@ -110,7 +121,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
                 });
             }
 
-            private void checkRSVPAndSubscribeToChannel(String eventId, String userId) {
+            private void checkRSVPAndSubscribeToTopic(String eventId, String userId) {
                 DatabaseReference rsvpsRef = database.getReference("Events").child(eventId).child("rsvps");
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -126,8 +137,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
                                     // Check if the retrieved email matches the current user's email
                                     if (email != null && email.equals(currentUserEmail)) {
-                                        createNotificationChannel(eventId);
-                                        subscribeToNotificationChannel(eventId);
+                                        subscribeToTopic(eventId);
                                         Log.d("RSVP", "User has RSVP'd to event: " + eventId);
                                         return;  // Exit the loop early since you found a match
                                     }
@@ -142,9 +152,28 @@ public class UserLoggedInActivity extends AppCompatActivity {
                                 Log.d("Error", "Database Error: " + error.getMessage());
                             }
                         });
-
                     }
                 }
+            }
+
+            private void subscribeToTopic(String topic) {
+                FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                subscribedTopics.add(topic);
+                                Log.d("FCM", "Subscribed to topic: " + topic);
+                            } else {
+                                Log.e("FCM", "Subscription to topic " + topic + " failed");
+                            }
+                        });
+            }
+
+            private void unsubscribeFromAllTopics() {
+                for (String topic : subscribedTopics) {
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(topic);
+                    Log.d("FCM", "Unsubscribed from topic: " + topic);
+                }
+                subscribedTopics.clear();
             }
 
             @Override
@@ -167,22 +196,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void toAdminComplaints(View view) {
-        loadFragment(new AdminComplaintsFragment());
-    }
-
-    public void toAdminEventFeedback(View view) {
-        loadFragment(new AdminEventsFeedback());
-    }
-
-    public void logOut(View view) {
-        /*
-        mAuth.signOut();
-        Toast.makeText(this,"You are now logged out!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-         */
-    }
+    // Other methods...
 
     public void goToAddEvents(View view) {
         loadFragment(new AddEventFragment());
@@ -202,31 +216,6 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
     public void toUserAnnouncements(View view) {
         loadFragment(new All_Announcement_Fragment());
-    }
-
-    private void createNotificationChannel(String channelId) {
-        // Implement your logic for creating a notification channel
-        // This could involve using NotificationManager and NotificationChannel classes
-
-        // For example:
-        // NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        // NotificationChannel channel = new NotificationChannel(channelId, "Channel Name", NotificationManager.IMPORTANCE_DEFAULT);
-        // notificationManager.createNotificationChannel(channel);
-    }
-
-    private void subscribeToNotificationChannel(String channelId) {
-        // Implement your logic for subscribing to a notification channel
-        // This could involve using Firebase Cloud Messaging (FCM) to handle notifications
-
-        // For example:
-        // FirebaseMessaging.getInstance().subscribeToTopic(channelId)
-        //     .addOnCompleteListener(task -> {
-        //         if (task.isSuccessful()) {
-        //             Log.d("FCM", "Subscribed to channel: " + channelId);
-        //         } else {
-        //             Log.e("FCM", "Subscription to channel failed: " + channelId);
-        //         }
-        //     });
     }
 
 }

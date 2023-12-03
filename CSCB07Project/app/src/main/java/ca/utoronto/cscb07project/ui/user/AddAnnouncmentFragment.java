@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,7 +59,7 @@ public class AddAnnouncmentFragment extends Fragment {
     private CheckBox sendToAllCheckBox;
     private Announcement announcement;
 
-    private String EventID;
+    private String eventTopic; // Variable to store the current event topic
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -86,10 +87,8 @@ public class AddAnnouncmentFragment extends Fragment {
         sendToAllCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 eventsRecyclerView.setVisibility(View.VISIBLE);
-                // Clear Event ID when checkbox is checked
-                if (announcement != null) {
-                    announcement.setEventID("blank");
-                }
+                // Clear Event Topic when checkbox is checked
+                eventTopic = null;
             } else {
                 eventsRecyclerView.setVisibility(View.GONE);
             }
@@ -98,14 +97,12 @@ public class AddAnnouncmentFragment extends Fragment {
         eventAdapter.setOnItemClickListener(event -> {
             if (sendToAllCheckBox.isChecked()) {
                 Toast.makeText(requireContext(), "EventId: " + event.getId(), Toast.LENGTH_SHORT).show();
-                EventID = event.getId();
+                eventTopic = event.getId();
             } else {
                 Toast.makeText(requireContext(), "Checkbox is unchecked", Toast.LENGTH_SHORT).show();
-                EventID = "blank";
+                eventTopic = null;
             }
         });
-
-
 
         return view;
     }
@@ -131,13 +128,6 @@ public class AddAnnouncmentFragment extends Fragment {
         });
     }
 
-    private void setEventIdInAnnouncement(Event event) {
-        if (event != null) {
-            // Set the event ID in the announcement
-            announcement.setEventID(event.getId());
-        }
-    }
-
     private void postAnnouncement() {
         String title = titleEditText.getText().toString().trim();
         String details = descriptionEditText.getText().toString().trim();
@@ -156,11 +146,12 @@ public class AddAnnouncmentFragment extends Fragment {
         String AnnouncementId = announcementsRef.push().getKey();
 
         if (AnnouncementId != null) {
-            announcement = new Announcement(title, formattedDate, details, AnnouncementId, EventID);
+            announcement = new Announcement(title, formattedDate, details, AnnouncementId, eventTopic);
 
             if (sendToAllCheckBox.isChecked()) {
-                announcement.setEventID(EventID);
-            }else{
+                announcement.setEventID(eventTopic);
+                subscribeToEventTopic(eventTopic);
+            } else {
                 announcement.setEventID("blank");
             }
 
@@ -176,6 +167,17 @@ public class AddAnnouncmentFragment extends Fragment {
                         }
                     });
         }
+    }
+
+    private void subscribeToEventTopic(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("FCM", "Subscribed to event topic: " + topic);
+                    } else {
+                        Log.e("FCM", "Subscription to event topic " + topic + " failed");
+                    }
+                });
     }
 
     private void sendPushNotification(String title, String details) {
