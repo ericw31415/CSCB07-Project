@@ -22,6 +22,7 @@ public class Announcement implements Serializable {
         this.date = date;
         this.description = description;
         this.announcementID = announcementID;
+        this.EventID = EventID;
     }
 
     public String getTitle() {

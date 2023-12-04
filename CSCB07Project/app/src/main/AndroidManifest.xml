@@ -52,6 +52,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <activity
+            android:name="ca.utoronto.cscb07project.events.AttendeesListActivity"
+            android:label="Attendees List Activity">
+        </activity>
+
     </application>
 
 </manifest>

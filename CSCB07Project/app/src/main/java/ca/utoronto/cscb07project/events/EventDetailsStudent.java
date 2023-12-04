@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,7 +25,7 @@ import ca.utoronto.cscb07project.R;
 
 public class EventDetailsStudent extends Fragment {
 
-    private static final String ARG_EVENT_ID = "event_id";
+    private static final String ARG_EVENT_ID = "eventId";
 
     private String eventId;
     private TextView eventTitle;
@@ -86,19 +87,23 @@ public class EventDetailsStudent extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        String title = dataSnapshot.child("title").getValue(String.class);
-                        String dateTime = dataSnapshot.child("dateTime").getValue(String.class);
-                        String location = dataSnapshot.child("location").getValue(String.class);
-                        String description = dataSnapshot.child("description").getValue(String.class);
+                        Event event = dataSnapshot.getValue(Event.class);
 
-                        if (title != null && dateTime != null && location != null && description != null) {
+                        if (event != null) {
                             // Set text only if all values are non-null
-                            eventTitle.setText(title);
-                            eventDateTime.setText(dateTime);
-                            eventLocation.setText(location);
-                            eventDescription.setText(description);
+                            eventTitle.setText(event.getTitle());
+                            eventDateTime.setText(event.getDateTime());
+                            eventLocation.setText(event.getLocation());
+                            eventDescription.setText(event.getDescription());
+
+                            // Check if the event is full and disable RSVP button
+                            if (event.getParticipantCount() >= event.getParticipantLimit()) {
+                                rsvpButton.setEnabled(false);
+                                rsvpButton.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+                                Toast.makeText(getActivity(), "Sorry, the event is full", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
-                            Log.e("EventDetailsStudent", "One or more properties are null");
+                            Log.e("EventDetailsStudent", "Event is null");
                         }
                     } else {
                         Log.d("EventDetailsStudent", "Event not found");
@@ -118,6 +123,8 @@ public class EventDetailsStudent extends Fragment {
         return view;
     }
 
+
+
     private void performRSVP() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -125,30 +132,42 @@ public class EventDetailsStudent extends Fragment {
             String userEmail = currentUser.getEmail();
 
             if (userEmail != null) {
-                // Use ARG_EVENT_ID consistently
                 String eventId = getArguments().getString(ARG_EVENT_ID);
 
                 if (eventId != null) {
-                    DatabaseReference rsvpsRef = FirebaseDatabase.getInstance().getReference("RSVPS");
-                    Query query = rsvpsRef.orderByChild("eventID").equalTo(eventId);
+                    DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId);
 
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            boolean hasExistingRSVP = false;
+                            if (dataSnapshot.exists()) {
+                                Event event = dataSnapshot.getValue(Event.class);
 
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                RSVP rsvp = snapshot.getValue(RSVP.class);
+                                if (event != null) {
+                                    // Check if the event is full
+                                    if (event.getParticipantCount() >= event.getParticipantLimit()) {
+                                        Log.d("RSVP", "The event is full and cannot accept more RSVPs");
+                                        return;
+                                    }
 
-                                if (rsvp != null && rsvp.getEmail().equalsIgnoreCase(userEmail)) {
-                                    Log.d("RSVP", "RSVP already exists for Event ID: " + eventId);
-                                    hasExistingRSVP = true;
-                                    break;
+                                    // Add RSVP to the event
+                                    boolean rsvpAdded = event.addRSVP(userEmail);
+
+                                    if (rsvpAdded) {
+                                        // Update the event in the database
+                                        eventsRef.setValue(event);
+                                        Log.d("RSVP", "RSVP added for Event ID: " + eventId);
+
+                                        // Update UserEvents collection
+                                        updateUserEventsCollection(eventId, userEmail);
+                                    } else {
+                                        Log.d("RSVP", "User has already RSVP'd for Event ID: " + eventId);
+                                    }
+                                } else {
+                                    Log.e("RSVP", "Event is null");
                                 }
-                            }
-
-                            if (!hasExistingRSVP) {
-                                addRSVPToDatabase(eventId, userEmail);
+                            } else {
+                                Log.e("RSVP", "Event not found");
                             }
                         }
 
@@ -167,10 +186,30 @@ public class EventDetailsStudent extends Fragment {
             Log.e("RSVP", "No user logged in");
         }
     }
+    private void updateUserEventsCollection(String eventId, String userEmail) {
+        // Encode the email address to create a valid Firebase Database path
+        String encodedEmail = encodeEmail(userEmail);
+
+        DatabaseReference userEventsRef = FirebaseDatabase.getInstance().getReference("UserEvents").child(encodedEmail);
+
+        userEventsRef.child(eventId).setValue(true)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("UserEvents", "Event ID added to UserEvents collection");
+                    } else {
+                        Log.e("UserEvents", "Failed to add Event ID to UserEvents collection");
+                    }
+                });
+    }
+    private String encodeEmail(String email) {
+        // Replace forbidden characters with valid ones for Firebase Database paths
+        return email.replace(".", ",");
+    }
+
 
     // ...
 
-    private void addRSVPToDatabase(String eventId, String userEmail) {
+    /*private void addRSVPToDatabase(String eventId, String userEmail) {
         DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId);
         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -199,6 +238,7 @@ public class EventDetailsStudent extends Fragment {
             }
         });
     }
+    */
 
 
 // ...

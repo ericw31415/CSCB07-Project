@@ -31,22 +31,7 @@ public class Event {
         this.rsvps = new ArrayList<>(); // initialize rsvps list
     }
 
-    public boolean addRSVP(String userEmail) {
-        if (rsvps == null) {
-            rsvps = new ArrayList<>();
-        }
-        if(rsvps.size() < participantLimit){
-            rsvps.add(userEmail);
-            participantCount = rsvps.size() ;
-            // Here update the event on Firebase as well
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Events").child(id);
-            databaseReference.setValue(this);
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
+
 
     public String getId() {
         return id;
@@ -120,10 +105,51 @@ public class Event {
     public void setParticipantCount(int participantCount) {
         this.participantCount = participantCount;
     }
+    public boolean addRSVP(String userEmail) {
+        if (rsvps == null) {
+            rsvps = new ArrayList<>();
+        }
+
+        if (rsvps.size() < participantLimit) {
+            rsvps.add(userEmail);
+            participantCount = rsvps.size();
+
+            // Update both participantCount and rsvps on Firebase
+            updateEventOnFirebase();
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public static String generateUniqueId() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Events");
         return databaseReference.push().getKey();
+    }
+    public boolean removeRSVP(String userEmail) {
+        if (rsvps != null && rsvps.contains(userEmail)) {
+            rsvps.remove(userEmail);
+            participantCount = rsvps.size();
+
+            // Update both participantCount and rsvps on Firebase
+            updateEventOnFirebase();
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void updateEventOnFirebase() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Events").child(id);
+        databaseReference.setValue(this);
+    }
+
+    private void updateParticipantCountOnFirebase() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Events").child(id).child("participantCount");
+        databaseReference.setValue(participantCount);
     }
 }
 

@@ -133,7 +133,7 @@ public class AddAnnouncmentFragment extends Fragment {
         String title = titleEditText.getText().toString().trim();
         String details = descriptionEditText.getText().toString().trim();
 
-        if (title.isEmpty()) {
+        if (title.isEmpty() || details.isEmpty()) {
             Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }

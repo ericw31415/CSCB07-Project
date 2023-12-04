@@ -95,7 +95,7 @@ public class All_Announcement_Fragment extends Fragment {
 
                     if (announcement != null) {
                         String eventID = announcement.getEventID();
-                        Log.d("EventID", eventID);
+
                         if (eventID != null && eventID.equals("blank")) {
                             announcements.add(announcement);
                         } else {
@@ -105,45 +105,53 @@ public class All_Announcement_Fragment extends Fragment {
                                 String currentUserEmail = currentUser.getEmail();
 
                                 if (currentUserEmail != null && !currentUserEmail.isEmpty()) {
-                                    DatabaseReference rsvpsRef = FirebaseDatabase.getInstance().getReference()
-                                            .child("Events").child(eventID).child("rsvps");
+                                    DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference().child("Events");
 
-                                    rsvpsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                                                String email = childSnapshot.getValue(String.class);
+                                    // Add a null check for eventID
+                                    if (eventID != null) {
+                                        DatabaseReference rsvpsRef = eventsRef.child(eventID).child("rsvps");
 
-                                                // Check if the retrieved email matches the current user's email
-                                                if (email != null && email.equals(currentUserEmail)) {
-                                                    announcements.add(announcement);
-                                                    Log.d("RSVP", "User has RSVP'd" + announcement.getAnnouncementID());
+                                        rsvpsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                boolean userRSVPd = false;
 
-                                                    // Move this line inside the onDataChange to ensure it's executed when a match is found
-                                                    adapter.notifyDataSetChanged();
+                                                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                                    String email = childSnapshot.getValue(String.class);
 
-                                                    // Exit the loop early since you found a match
-                                                    return;
+                                                    // Check if the retrieved email matches the current user's email
+                                                    if (email != null && email.equals(currentUserEmail)) {
+                                                        userRSVPd = true;
+                                                        Log.d("RSVP", "User has RSVP'd" + announcement.getAnnouncementID());
+                                                        // No need to add to announcements here; we'll do that outside the loop
+                                                        // Exit the loop early since you found a match
+                                                        break;
+                                                    }
                                                 }
+
+                                                // If the user has RSVP'd, add the announcement
+                                                if (userRSVPd) {
+                                                    announcements.add(announcement);
+                                                }
+
+                                                // Notify the adapter here after determining RSVP status
+                                                adapter.notifyDataSetChanged();
                                             }
 
-                                            // If the loop completes without finding a match, the user hasn't RSVP'd
-                                            Log.d("RSVP", "User has not RSVP'd");
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            // Handle any errors that may occur
-                                            databaseError.toException().printStackTrace();
-                                        }
-                                    });
-
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                // Handle any errors that may occur
+                                                databaseError.toException().printStackTrace();
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         }
                     }
                 }
 
+                // Notify the adapter here after checking all announcements
                 adapter.notifyDataSetChanged();
             }
 
