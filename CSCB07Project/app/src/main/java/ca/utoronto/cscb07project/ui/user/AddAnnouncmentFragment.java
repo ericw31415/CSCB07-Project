@@ -25,7 +25,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,14 +58,25 @@ public class AddAnnouncmentFragment extends Fragment {
     private CheckBox sendToAllCheckBox;
     private Announcement announcement;
 
-    private String eventTopic; // Variable to store the current event topic
+    private String eventTopic;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_announcment, container, false);
 
+        // Initialize UI elements
+        initUIElements(view);
+
+        // Fetch events from Firebase
+        fetchEventsFromFirebase();
+
+        // Handle checkbox changes
+        handleCheckboxChanges();
+
+        return view;
+    }
+
+    private void initUIElements(View view) {
         titleEditText = view.findViewById(R.id.AnnouncementTitleEditText);
         descriptionEditText = view.findViewById(R.id.AnnouncementDescriptionEditText);
         Button submitButton = view.findViewById(R.id.postAnnouncementButton);
@@ -78,12 +88,34 @@ public class AddAnnouncmentFragment extends Fragment {
         eventsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         eventsRecyclerView.setAdapter(eventAdapter);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        eventsRef = database.getReference("Events");
-        fetchEventsFromFirebase();
-
         submitButton.setOnClickListener(v -> postAnnouncement());
+    }
 
+    private void fetchEventsFromFirebase() {
+        eventsRef = FirebaseDatabase.getInstance().getReference("Events");
+        eventsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                eventsList.clear();
+
+                for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                    Event event = eventSnapshot.getValue(Event.class);
+                    if (event != null) {
+                        eventsList.add(event);
+                    }
+                }
+
+                eventAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    private void handleCheckboxChanges() {
         sendToAllCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 eventsRecyclerView.setVisibility(View.VISIBLE);
@@ -103,29 +135,6 @@ public class AddAnnouncmentFragment extends Fragment {
                 eventTopic = null;
             }
         });
-
-        return view;
-    }
-
-    private void fetchEventsFromFirebase() {
-        eventsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                eventsList.clear();
-
-                for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                    Event event = eventSnapshot.getValue(Event.class);
-                    eventsList.add(event);
-                }
-
-                eventAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                databaseError.toException().printStackTrace();
-            }
-        });
     }
 
     private void postAnnouncement() {
@@ -141,8 +150,7 @@ public class AddAnnouncmentFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String formattedDate = dateFormat.format(currentDate);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference announcementsRef = database.getReference("Announcements");
+        DatabaseReference announcementsRef = FirebaseDatabase.getInstance().getReference("Announcements");
         String announcementId = announcementsRef.push().getKey();
 
         if (announcementId != null) {
@@ -158,70 +166,7 @@ public class AddAnnouncmentFragment extends Fragment {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Announcement posted", Toast.LENGTH_SHORT).show();
-
-                            if (!("blank".equals(eventTopic))) {
-                                // Step 1: Retrieve the list of users who RSVP'd to the event
-                                DatabaseReference eventParticipantsRef = database.getReference("rsvps").child(eventTopic);
-                                eventParticipantsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.exists()) {
-                                            for (DataSnapshot participantSnapshot : dataSnapshot.getChildren()) {
-                                                String userId = participantSnapshot.getKey();
-
-                                                // Step 2: Retrieve the user's FCM token from the database
-                                                DatabaseReference userFCMTokenRef = database.getReference("UserFCMTokens").child(userId);
-                                                userFCMTokenRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                        if (dataSnapshot.exists()) {
-                                                            String userFCMToken = dataSnapshot.getValue(String.class);
-
-                                                            // Step 3: Send FCM notification to the user
-                                                            Log.d("You good", "good");
-                                                            sendFCMNotification(userFCMToken, title, details);
-                                                        }
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                        Log.e("Database", "Error retrieving user FCM token: " + databaseError.getMessage());
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                        Log.e("Database", "Error retrieving event participants: " + databaseError.getMessage());
-                                    }
-                                });
-                            } else {
-                                // Step 1: Retrieve the list of all user tokens
-                                DatabaseReference allUserTokensRef = database.getReference("UserFCMTokens");
-                                allUserTokensRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.exists()) {
-                                            for (DataSnapshot userTokenSnapshot : dataSnapshot.getChildren()) {
-                                                String userFCMToken = userTokenSnapshot.getValue(String.class);
-
-                                                // Step 2: Send FCM notification to each user
-                                                sendFCMNotification(userFCMToken, title, details);
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                        Log.e("Database", "Error retrieving all user tokens: " + databaseError.getMessage());
-                                    }
-                                });
-                            }
-
-                            sendPushNotification(title, details);
-                            getParentFragmentManager().popBackStack();
+                            handleAnnouncementPostSuccess();
                         } else {
                             Toast.makeText(getContext(), "Post failed", Toast.LENGTH_SHORT).show();
                         }
@@ -229,6 +174,66 @@ public class AddAnnouncmentFragment extends Fragment {
         }
     }
 
+    private void handleAnnouncementPostSuccess() {
+        if (!("blank".equals(eventTopic))) {
+            // Specific event case
+            Log.d("Test", "Specific");
+            retrieveAndSendNotificationsForEvent();
+        } else {
+            // Default case
+            Log.d("Default", "Announcement");
+            retrieveAndSendNotificationsForAllUsers();
+        }
+
+        // Common actions after posting announcement
+        sendPushNotification(announcement.getTitle(), announcement.getDescription());
+        getParentFragmentManager().popBackStack();
+    }
+
+    private void retrieveAndSendNotificationsForEvent() {
+        if (eventTopic != null) {
+            DatabaseReference eventParticipantsRef = FirebaseDatabase.getInstance().getReference(eventTopic).child("rsvps");
+            eventParticipantsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot participantSnapshot : dataSnapshot.getChildren()) {
+                            String userId = participantSnapshot.getKey();
+                            retrieveUserFCMTokenAndSendNotification(userId);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("Database", "Error retrieving event participants: " + databaseError.getMessage());
+                }
+            });
+        } else {
+            Log.e("Database", "Event topic is null");
+        }
+    }
+
+
+    private void retrieveAndSendNotificationsForAllUsers() {
+        DatabaseReference allUserTokensRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens");
+        allUserTokensRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userTokenSnapshot : dataSnapshot.getChildren()) {
+                        String userFCMToken = userTokenSnapshot.getValue(String.class);
+                        sendFCMNotification(userFCMToken, announcement.getTitle(), announcement.getDescription());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Database", "Error retrieving all user tokens: " + databaseError.getMessage());
+            }
+        });
+    }
 
     private void sendPushNotification(String title, String details) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -238,7 +243,9 @@ public class AddAnnouncmentFragment extends Fragment {
                     NotificationManager.IMPORTANCE_DEFAULT
             );
             NotificationManager manager = requireContext().getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), "default_channel_id")
@@ -248,16 +255,35 @@ public class AddAnnouncmentFragment extends Fragment {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, builder.build());
+        if (notificationManager != null) {
+            notificationManager.notify(1, builder.build());
+        }
+    }
+
+    private void retrieveUserFCMTokenAndSendNotification(String userId) {
+        DatabaseReference userFCMTokenRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens").child(userId);
+        userFCMTokenRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String userFCMToken = dataSnapshot.getValue(String.class);
+                    sendFCMNotification(userFCMToken, announcement.getTitle(), announcement.getDescription());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Database", "Error retrieving user FCM token: " + databaseError.getMessage());
+            }
+        });
     }
 
     private void sendFCMNotification(String userFCMToken, String title, String details) {
-        // Use the Server Key obtained from Firebase Console
         String serverKey = "AAAAhExjLj8:APA91bFuA8VZGbZ8OZlgKxu9DOGIdBTmJbU9L36sfyQmV0mDAv6apgh0O-tWbnsRCyFi_Xq6lPZYzP16JaL2-tFCcJsu2wJTt808m2GjCgvbvBCDLYsLGRmRDmWBKiyuvT2ZDQLhUk0n";
 
-        // Set up FCM message
         JSONObject message = new JSONObject();
         JSONObject data = new JSONObject();
+
         try {
             data.put("title", title);
             data.put("details", details);
@@ -267,7 +293,6 @@ public class AddAnnouncmentFragment extends Fragment {
             e.printStackTrace();
         }
 
-        // Send FCM message using HTTP POST request
         new Thread(() -> {
             try {
                 URL url = new URL("https://fcm.googleapis.com/fcm/send");
