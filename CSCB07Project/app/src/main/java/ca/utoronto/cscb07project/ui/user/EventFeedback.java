@@ -50,7 +50,7 @@ public class EventFeedback extends Fragment {
 
         // Check if recyclerView is not null before proceeding
         if (recyclerView != null) {
-            Toast.makeText(getContext(), "Test RecyclerView", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "Test RecyclerView", Toast.LENGTH_SHORT).show();
             // Create FeedbackAdapter and set it to the RecyclerView
             adapter = new FeedbackAdapter(getContext(), R.layout.review_item, reviews);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -68,7 +68,7 @@ public class EventFeedback extends Fragment {
 
             // Check if eventId is not null before fetching reviews
             if (eventId != null) {
-                Toast.makeText(getContext(), "EventId good", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "EventId good", Toast.LENGTH_SHORT).show();
                 fetchFeedbackFromFirebase(reviewsRef, eventId);
             }
         }
