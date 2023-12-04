@@ -1,9 +1,9 @@
 package ca.utoronto.cscb07project.ui.login;
 
 public interface LoginResponse {
-    public void loginSuccess();
+    void loginSuccess();
 
-    public void loginFailure(String error);
+    void loginFailure();
 
-    public void inputError();
+    void inputError();
 }

@@ -1,30 +1,20 @@
 package ca.utoronto.cscb07project.ui.login;
 
 public class LoginFragmentPresenter {
-    private LoginFragmentView view;
-    private LoginFragmentModel loginModel;
+    private final LoginView view;
+    private final LoginModel model;
 
-    public LoginFragmentPresenter(LoginFragmentView view) {
+    public LoginFragmentPresenter(LoginView view, LoginModel model) {
         this.view = view;
-        this.loginModel = new LoginFragmentModel();
+        this.model = model;
     }
 
     public void tryLogin(String email, String password) {
-        loginModel.tryLogin(email, password, new LoginResponse() {
-            @Override
-            public void loginSuccess() {
-                view.successfulLogin();
-            }
-
-            @Override
-            public void loginFailure(String error) {
-                view.unsuccessfulLogin();
-            }
-
-            @Override
-            public void inputError() {
-                view.invalidInput();
-            }
-        });
+        LoginResponse response = view.getLoginResponse();
+        if (email.isEmpty() || password.isEmpty()) {
+            response.inputError();
+            return;
+        }
+        model.tryLogin(email, password, response);
     }
 }
