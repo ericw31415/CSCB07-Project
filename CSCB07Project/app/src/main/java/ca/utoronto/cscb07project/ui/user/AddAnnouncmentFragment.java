@@ -159,7 +159,7 @@ public class AddAnnouncmentFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Announcement posted", Toast.LENGTH_SHORT).show();
 
-                            if ("blank".equals(eventTopic)) {
+                            if (!("blank".equals(eventTopic))) {
                                 // Step 1: Retrieve the list of users who RSVP'd to the event
                                 DatabaseReference eventParticipantsRef = database.getReference("rsvps").child(eventTopic);
                                 eventParticipantsRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -178,6 +178,7 @@ public class AddAnnouncmentFragment extends Fragment {
                                                             String userFCMToken = dataSnapshot.getValue(String.class);
 
                                                             // Step 3: Send FCM notification to the user
+                                                            Log.d("You good", "good");
                                                             sendFCMNotification(userFCMToken, title, details);
                                                         }
                                                     }
