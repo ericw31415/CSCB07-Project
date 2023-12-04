@@ -159,26 +159,65 @@ public class AddAnnouncmentFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Announcement posted", Toast.LENGTH_SHORT).show();
 
-                            // Step 1: Retrieve the list of all user tokens
-                            DatabaseReference allUserTokensRef = database.getReference("UserFCMTokens");
-                            allUserTokensRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.exists()) {
-                                        for (DataSnapshot userTokenSnapshot : dataSnapshot.getChildren()) {
-                                            String userFCMToken = userTokenSnapshot.getValue(String.class);
+                            if ("blank".equals(eventTopic)) {
+                                // Step 1: Retrieve the list of users who RSVP'd to the event
+                                DatabaseReference eventParticipantsRef = database.getReference("rsvps").child(eventTopic);
+                                eventParticipantsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            for (DataSnapshot participantSnapshot : dataSnapshot.getChildren()) {
+                                                String userId = participantSnapshot.getKey();
 
-                                            // Step 2: Send FCM notification to each user
-                                            sendFCMNotification(userFCMToken, title, details);
+                                                // Step 2: Retrieve the user's FCM token from the database
+                                                DatabaseReference userFCMTokenRef = database.getReference("UserFCMTokens").child(userId);
+                                                userFCMTokenRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()) {
+                                                            String userFCMToken = dataSnapshot.getValue(String.class);
+
+                                                            // Step 3: Send FCM notification to the user
+                                                            sendFCMNotification(userFCMToken, title, details);
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                        Log.e("Database", "Error retrieving user FCM token: " + databaseError.getMessage());
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
-                                }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Log.e("Database", "Error retrieving all user tokens: " + databaseError.getMessage());
-                                }
-                            });
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Log.e("Database", "Error retrieving event participants: " + databaseError.getMessage());
+                                    }
+                                });
+                            } else {
+                                // Step 1: Retrieve the list of all user tokens
+                                DatabaseReference allUserTokensRef = database.getReference("UserFCMTokens");
+                                allUserTokensRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            for (DataSnapshot userTokenSnapshot : dataSnapshot.getChildren()) {
+                                                String userFCMToken = userTokenSnapshot.getValue(String.class);
+
+                                                // Step 2: Send FCM notification to each user
+                                                sendFCMNotification(userFCMToken, title, details);
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Log.e("Database", "Error retrieving all user tokens: " + databaseError.getMessage());
+                                    }
+                                });
+                            }
 
                             sendPushNotification(title, details);
                             getParentFragmentManager().popBackStack();
@@ -188,6 +227,7 @@ public class AddAnnouncmentFragment extends Fragment {
                     });
         }
     }
+
 
     private void sendPushNotification(String title, String details) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
