@@ -191,7 +191,7 @@ public class AddEventFragment extends Fragment {
 
     }
 
-    private void sendPushNotificationToAllUsers(String title, String details) {
+    private void sendPushNotificationToAllUsers(String title1, String details1) {
         // Fetch all user FCM tokens from the database
         DatabaseReference allUserTokensRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens");
         allUserTokensRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -200,7 +200,7 @@ public class AddEventFragment extends Fragment {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot userTokenSnapshot : dataSnapshot.getChildren()) {
                         String userFCMToken = userTokenSnapshot.child("token").getValue(String.class);
-                        sendFCMNotification(userFCMToken, title, details);
+                        sendFCMNotification(userFCMToken, title1, details1);
                     }
                 }
             }
