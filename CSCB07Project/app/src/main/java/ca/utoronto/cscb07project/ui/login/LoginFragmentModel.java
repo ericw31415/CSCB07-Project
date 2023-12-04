@@ -4,26 +4,25 @@ import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginFragmentModel {
-    private FirebaseAuth firebaseAuth;
+public class LoginFragmentModel implements LoginModel {
+    private static final String TAG = "LoginFragmentModel";
+    private final FirebaseAuth auth;
 
     public LoginFragmentModel() {
-        firebaseAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
     }
 
+    @Override
     public void tryLogin(String email, String password, LoginResponse response) {
-        if (email.isEmpty() || password.isEmpty()) {
-            response.inputError();
-        } else {
-            firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("Test", "Success");
-                        response.loginSuccess();
-                    } else {
-                        response.loginFailure(task.getException().getMessage());
-                    }
-                });
-        }
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Log.i(TAG, "Successful login");
+                    response.loginSuccess();
+                } else {
+                    Log.w(TAG, "Login failure", task.getException());
+                    response.loginFailure();
+                }
+            });
     }
 }
