@@ -186,7 +186,7 @@ public class AddEventFragment extends Fragment {
             Announcement announcement = new Announcement(announcementTitle, announcementDate, announcmentDescrption, announcementID, eventId);
             DatabaseReference announcementsRef = FirebaseDatabase.getInstance().getReference("Announcements");
             announcementsRef.child(announcementID).setValue(announcement);
-            sendPushNotificationToAllUsers(title, description);
+            sendPushNotificationToAllUsers(announcementTitle, announcmentDescrption);
         }
 
     }
