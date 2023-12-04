@@ -37,7 +37,6 @@ public class MessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "Message received: " + remoteMessage.getData());
-
         // Extract announcement title and details
         String title = remoteMessage.getData().get("title");
         String details = "DETAILS: " + remoteMessage.getData().get("details");
