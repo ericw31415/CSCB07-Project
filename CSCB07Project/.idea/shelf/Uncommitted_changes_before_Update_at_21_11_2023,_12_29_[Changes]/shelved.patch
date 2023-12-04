@@ -1,0 +1,294 @@
+Index: app/src/main/res/layout/fragment_notifications.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".ui.notifications.NotificationsFragment\">\n\n    <TextView\n        android:id=\"@+id/text_notifications\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginStart=\"8dp\"\n        android:layout_marginTop=\"8dp\"\n        android:layout_marginEnd=\"8dp\"\n        android:textAlignment=\"center\"\n        android:textSize=\"20sp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_notifications.xml b/app/src/main/res/layout/fragment_notifications.xml
+--- a/app/src/main/res/layout/fragment_notifications.xml	(revision feec9d83ee681d9ca520b4b27cfb4f50a3bfd472)
++++ b/app/src/main/res/layout/fragment_notifications.xml	(date 1700553133147)
+@@ -19,4 +19,5 @@
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
++</androidx.constraintlayout.widget.ConstraintLayout>
++
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    android:id=\"@+id/container\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:paddingTop=\"?attr/actionBarSize\">\n\n    <com.google.android.material.bottomnavigation.BottomNavigationView\n        android:id=\"@+id/nav_view\"\n        android:layout_width=\"0dp\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginStart=\"0dp\"\n        android:layout_marginEnd=\"0dp\"\n        android:background=\"?android:attr/windowBackground\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintLeft_toLeftOf=\"parent\"\n        app:layout_constraintRight_toRightOf=\"parent\"\n        app:menu=\"@menu/bottom_nav_menu\" />\n\n    <fragment\n        android:id=\"@+id/nav_host_fragment_activity_main\"\n        android:name=\"androidx.navigation.fragment.NavHostFragment\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        app:defaultNavHost=\"true\"\n        app:layout_constraintBottom_toTopOf=\"@id/nav_view\"\n        app:layout_constraintLeft_toLeftOf=\"parent\"\n        app:layout_constraintRight_toRightOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\"\n        app:navGraph=\"@navigation/mobile_navigation\" />\n\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
+--- a/app/src/main/res/layout/activity_main.xml	(revision feec9d83ee681d9ca520b4b27cfb4f50a3bfd472)
++++ b/app/src/main/res/layout/activity_main.xml	(date 1700560972759)
+@@ -1,6 +1,7 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/container"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+@@ -25,9 +26,23 @@
+         android:layout_height="match_parent"
+         app:defaultNavHost="true"
+         app:layout_constraintBottom_toTopOf="@id/nav_view"
++        app:layout_constraintHorizontal_bias="0.0"
+         app:layout_constraintLeft_toLeftOf="parent"
+         app:layout_constraintRight_toRightOf="parent"
+         app:layout_constraintTop_toTopOf="parent"
++        app:layout_constraintVertical_bias="1.0"
+         app:navGraph="@navigation/mobile_navigation" />
+ 
++    <Button
++        android:id="@+id/buttonNotify"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_centerInParent="true"
++        android:text="Show Notification"
++        android:textAllCaps="false"
++        app:layout_constraintBottom_toTopOf="@+id/nav_view"
++        app:layout_constraintEnd_toEndOf="@+id/nav_host_fragment_activity_main"
++        app:layout_constraintStart_toStartOf="@+id/nav_host_fragment_activity_main"
++        app:layout_constraintTop_toTopOf="@+id/nav_host_fragment_activity_main" />
++
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\">\n\n    <application\n        android:allowBackup=\"true\"\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\n        android:fullBackupContent=\"@xml/backup_rules\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:label=\"@string/app_name\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\n        android:supportsRtl=\"true\"\n        android:theme=\"@style/Theme.CSCB07Project\"\n        tools:targetApi=\"31\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\"\n            android:label=\"@string/app_name\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n    </application>\n\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision feec9d83ee681d9ca520b4b27cfb4f50a3bfd472)
++++ b/app/src/main/AndroidManifest.xml	(date 1700587760038)
+@@ -12,6 +12,7 @@
+         android:supportsRtl="true"
+         android:theme="@style/Theme.CSCB07Project"
+         tools:targetApi="31">
++
+         <activity
+             android:name=".MainActivity"
+             android:exported="true"
+@@ -23,5 +24,5 @@
+             </intent-filter>
+         </activity>
+     </application>
+-
++    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+ </manifest>
+\ No newline at end of file
+Index: app/src/main/java/ca/utoronto/cscb07project/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ca.utoronto.cscb07project;\n\nimport android.os.Bundle;\n\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\n\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.navigation.NavController;\nimport androidx.navigation.Navigation;\nimport androidx.navigation.ui.AppBarConfiguration;\nimport androidx.navigation.ui.NavigationUI;\n\nimport ca.utoronto.cscb07project.databinding.ActivityMainBinding;\n\npublic class MainActivity extends AppCompatActivity {\n\n    private ActivityMainBinding binding;\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n\n        binding = ActivityMainBinding.inflate(getLayoutInflater());\n        setContentView(binding.getRoot());\n\n        BottomNavigationView navView = findViewById(R.id.nav_view);\n        // Passing each menu ID as a set of Ids because each\n        // menu should be considered as top level destinations.\n        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(\n                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_post,\n                R.id.navigation_notifications).build();\n        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);\n        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);\n        NavigationUI.setupWithNavController(binding.navView, navController);\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/ca/utoronto/cscb07project/MainActivity.java b/app/src/main/java/ca/utoronto/cscb07project/MainActivity.java
+--- a/app/src/main/java/ca/utoronto/cscb07project/MainActivity.java	(revision feec9d83ee681d9ca520b4b27cfb4f50a3bfd472)
++++ b/app/src/main/java/ca/utoronto/cscb07project/MainActivity.java	(date 1700587760013)
+@@ -1,10 +1,24 @@
+ package ca.utoronto.cscb07project;
+ 
++import android.annotation.SuppressLint;
++import android.app.NotificationChannel;
++import android.app.NotificationManager;
++import android.content.pm.PackageManager;
++import android.os.Build;
+ import android.os.Bundle;
++import android.view.View;
++import android.view.View.OnClickListener;
++import android.widget.Toast;
++import android.Manifest;
+ 
+ import com.google.android.material.bottomnavigation.BottomNavigationView;
+ 
++import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
++import androidx.core.app.ActivityCompat;
++import androidx.core.app.NotificationCompat;
++import androidx.core.app.NotificationManagerCompat;
++import androidx.core.content.ContextCompat;
+ import androidx.navigation.NavController;
+ import androidx.navigation.Navigation;
+ import androidx.navigation.ui.AppBarConfiguration;
+@@ -14,6 +28,9 @@
+ 
+ public class MainActivity extends AppCompatActivity {
+ 
++    private static final String CHANNEL_ID = "notification_1";
++    private static final String CHANNEL_NAME = "notification 1";
++    private static final String CHANNEL_DESC = "notification notification";
+     private ActivityMainBinding binding;
+ 
+     @Override
+@@ -24,14 +41,80 @@
+         setContentView(binding.getRoot());
+ 
+         BottomNavigationView navView = findViewById(R.id.nav_view);
+-        // Passing each menu ID as a set of Ids because each
+-        // menu should be considered as top level destinations.
+         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_post,
+                 R.id.navigation_notifications).build();
+         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+         NavigationUI.setupWithNavController(binding.navView, navController);
+-    }
++
++
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME,
++                    NotificationManager.IMPORTANCE_DEFAULT);
++            channel.setDescription(CHANNEL_DESC);
++            NotificationManager manager = getSystemService(NotificationManager.class);
++            manager.createNotificationChannel(channel);
++        }
++        findViewById((R.id.buttonNotify)).setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                displayNotification();
++            }
++        });
++    }
++
++    private static final int NOTIFICATION_ID = 1;
++    private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 1001;
++
++
++    private void displayNotification() {
++        if (ContextCompat.checkSelfPermission(this, Manifest.permission.VIBRATE)
++                != PackageManager.PERMISSION_GRANTED) {
++            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.VIBRATE},
++                    NOTIFICATION_PERMISSION_REQUEST_CODE);
++        } else {
++            createNotificationChannel();
++
++            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
++                    .setSmallIcon(R.drawable.baseline_school_24)
++                    .setContentTitle("New Event!")
++                    .setContentText("You are invited to the...")
++                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
++
++            NotificationManagerCompat mNotificationMgr = NotificationManagerCompat.from(this);
++            mNotificationMgr.notify(NOTIFICATION_ID, mBuilder.build());
++        }
++        private void showPermissionNeededMessage{
++            Toast.makeText(this, "Notification permission is required to show notifications.", Toast.LENGTH_SHORT).show();
++        }
++    }
++
++    private void createNotificationChannel() {
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++            CharSequence name = "My Channel";
++            String description = "My Channel Description";
++            int importance = NotificationManager.IMPORTANCE_DEFAULT;
++            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
++            channel.setDescription(description);
++
++            NotificationManager notificationManager = getSystemService(NotificationManager.class);
++            notificationManager.createNotificationChannel(channel);
++        }
++    }
++
++    @Override
++    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
++        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
++        if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
++            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
++                // Permission granted, proceed to create and display notification
++                displayNotification();
++            } else {
++                // Permission denied, handle accordingly (e.g., show a message to the user)
++                Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show();
++            }
++        }
++    }
++}
+ 
+-}
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"GradleSettings\">\n    <option name=\"linkedExternalProjectsSettings\">\n      <GradleProjectSettings>\n        <option name=\"testRunner\" value=\"GRADLE\" />\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\n        <option name=\"gradleJvm\" value=\"jbr-17\" />\n        <option name=\"modules\">\n          <set>\n            <option value=\"$PROJECT_DIR$\" />\n            <option value=\"$PROJECT_DIR$/app\" />\n          </set>\n        </option>\n      </GradleProjectSettings>\n    </option>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision feec9d83ee681d9ca520b4b27cfb4f50a3bfd472)
++++ b/.idea/gradle.xml	(date 1699984684387)
+@@ -1,5 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_17\" default=\"true\" project-jdk-name=\"jbr-17\" project-jdk-type=\"JavaSDK\">\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\n  </component>\n  <component name=\"ProjectType\">\n    <option name=\"id\" value=\"Android\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision feec9d83ee681d9ca520b4b27cfb4f50a3bfd472)
++++ b/.idea/misc.xml	(date 1700538844608)
+@@ -1,4 +1,3 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\n    id(\"com.android.application\")\n}\n\nandroid {\n    namespace = \"ca.utoronto.cscb07project\"\n    compileSdk = 34\n\n    defaultConfig {\n        applicationId = \"ca.utoronto.cscb07project\"\n        minSdk = 24\n        targetSdk = 33\n        versionCode = 1\n        versionName = \"1.0\"\n\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\n    }\n\n    buildTypes {\n        release {\n            isMinifyEnabled = false\n            proguardFiles(\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\n                \"proguard-rules.pro\"\n            )\n        }\n    }\n    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_1_8\n        targetCompatibility = JavaVersion.VERSION_1_8\n    }\n    buildFeatures {\n        viewBinding = true\n    }\n}\n\ndependencies {\n\n    implementation(\"androidx.appcompat:appcompat:1.6.1\")\n    implementation(\"com.google.android.material:material:1.10.0\")\n    implementation(\"androidx.constraintlayout:constraintlayout:2.1.4\")\n    implementation(\"androidx.lifecycle:lifecycle-livedata-ktx:2.6.2\")\n    implementation(\"androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2\")\n    implementation(\"androidx.navigation:navigation-fragment:2.7.5\")\n    implementation(\"androidx.navigation:navigation-ui:2.7.5\")\n    testImplementation(\"junit:junit:4.13.2\")\n    androidTestImplementation(\"androidx.test.ext:junit:1.1.5\")\n    androidTestImplementation(\"androidx.test.espresso:espresso-core:3.5.1\")\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision feec9d83ee681d9ca520b4b27cfb4f50a3bfd472)
++++ b/app/build.gradle.kts	(date 1700550743451)
+@@ -1,5 +1,6 @@
+ plugins {
+     id("com.android.application")
++    id("com.google.gms.google-services")
+ }
+ 
+ android {
+@@ -43,6 +44,7 @@
+     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+     implementation("androidx.navigation:navigation-fragment:2.7.5")
+     implementation("androidx.navigation:navigation-ui:2.7.5")
++    implementation("com.google.firebase:firebase-messaging:23.3.1")
+     testImplementation("junit:junit:4.13.2")
+     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+Index: build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\nplugins {\n    id(\"com.android.application\") version \"8.1.3\" apply false\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle.kts b/build.gradle.kts
+--- a/build.gradle.kts	(revision feec9d83ee681d9ca520b4b27cfb4f50a3bfd472)
++++ b/build.gradle.kts	(date 1700550743289)
+@@ -1,3 +1,8 @@
++buildscript {
++    dependencies {
++        classpath("com.google.gms:google-services:4.4.0")
++    }
++}
+ // Top-level build file where you can add configuration options common to all sub-projects/modules.
+ plugins {
+     id("com.android.application") version "8.1.3" apply false
