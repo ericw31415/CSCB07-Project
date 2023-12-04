@@ -63,4 +63,9 @@ public class Announcement implements Serializable {
 
     public String getEventID(){return EventID;}
     public void setEventID(String EventID){this.EventID = EventID;}
+
+    public static String generateUniqueId() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Events");
+        return databaseReference.push().getKey();
+    }
 }
