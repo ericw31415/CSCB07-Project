@@ -87,7 +87,7 @@ public class AddAnnouncmentFragment extends Fragment {
         sendToAllCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 eventsRecyclerView.setVisibility(View.VISIBLE);
-                // Clear Event Topic when checkbox is checked
+                // Clear Event Topic when the checkbox is checked
                 eventTopic = null;
             } else {
                 eventsRecyclerView.setVisibility(View.GONE);
@@ -143,23 +143,43 @@ public class AddAnnouncmentFragment extends Fragment {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference announcementsRef = database.getReference("Announcements");
-        String AnnouncementId = announcementsRef.push().getKey();
+        String announcementId = announcementsRef.push().getKey();
 
-        if (AnnouncementId != null) {
-            announcement = new Announcement(title, formattedDate, details, AnnouncementId, eventTopic);
+        if (announcementId != null) {
+            announcement = new Announcement(title, formattedDate, details, announcementId, eventTopic);
 
             if (sendToAllCheckBox.isChecked()) {
                 announcement.setEventID(eventTopic);
-                subscribeToEventTopic(eventTopic);
             } else {
                 announcement.setEventID("blank");
             }
 
-            announcementsRef.child(AnnouncementId).setValue(announcement)
+            announcementsRef.child(announcementId).setValue(announcement)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Announcement posted", Toast.LENGTH_SHORT).show();
-                            sendFCMNotification("Announcements", title, details);
+
+                            // Step 1: Retrieve the list of all user tokens
+                            DatabaseReference allUserTokensRef = database.getReference("UserFCMTokens");
+                            allUserTokensRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        for (DataSnapshot userTokenSnapshot : dataSnapshot.getChildren()) {
+                                            String userFCMToken = userTokenSnapshot.getValue(String.class);
+
+                                            // Step 2: Send FCM notification to each user
+                                            sendFCMNotification(userFCMToken, title, details);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Log.e("Database", "Error retrieving all user tokens: " + databaseError.getMessage());
+                                }
+                            });
+
                             sendPushNotification(title, details);
                             getParentFragmentManager().popBackStack();
                         } else {
@@ -167,17 +187,6 @@ public class AddAnnouncmentFragment extends Fragment {
                         }
                     });
         }
-    }
-
-    private void subscribeToEventTopic(String topic) {
-        FirebaseMessaging.getInstance().subscribeToTopic(topic)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("FCM", "Subscribed to event topic: " + topic);
-                    } else {
-                        Log.e("FCM", "Subscription to event topic " + topic + " failed");
-                    }
-                });
     }
 
     private void sendPushNotification(String title, String details) {
@@ -201,7 +210,7 @@ public class AddAnnouncmentFragment extends Fragment {
         notificationManager.notify(1, builder.build());
     }
 
-    private void sendFCMNotification(String topic, String title, String details) {
+    private void sendFCMNotification(String userFCMToken, String title, String details) {
         // Use the Server Key obtained from Firebase Console
         String serverKey = "AAAAhExjLj8:APA91bFuA8VZGbZ8OZlgKxu9DOGIdBTmJbU9L36sfyQmV0mDAv6apgh0O-tWbnsRCyFi_Xq6lPZYzP16JaL2-tFCcJsu2wJTt808m2GjCgvbvBCDLYsLGRmRDmWBKiyuvT2ZDQLhUk0n";
 
@@ -212,7 +221,7 @@ public class AddAnnouncmentFragment extends Fragment {
             data.put("title", title);
             data.put("details", details);
             message.put("data", data);
-            message.put("to", "/topics/" + topic);
+            message.put("to", userFCMToken);
         } catch (JSONException e) {
             e.printStackTrace();
         }

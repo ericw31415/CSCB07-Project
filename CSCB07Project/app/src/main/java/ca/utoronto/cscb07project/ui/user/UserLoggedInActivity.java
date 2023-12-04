@@ -58,6 +58,19 @@ public class UserLoggedInActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference userRef = database.getReference("users").child(currentUser.getUid());
         Log.d("ID", currentUser.getUid().toString());
+
+        // Step 1: Retrieve and Store FCM Token
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String fcmToken = task.getResult();
+                        saveUserFCMToken(currentUser.getUid(), fcmToken);
+                    } else {
+                        Log.e("FCM", "Error getting FCM token");
+                    }
+
+                });
+
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -74,89 +87,20 @@ public class UserLoggedInActivity extends AppCompatActivity {
                     } else {
                         loadFragment(new UserHome());
 
-                        // Unsubscribe from all topics before subscribing again
-                        unsubscribeFromAllTopics();
-
                         // Subscribe the user to the "announcements" topic
-                        subscribeToAnnouncementsTopic();
-
-                        // Subscribe the user to event topics based on RSVP
-                        subscribeToEventTopics(currentUser.getUid());
+                        subscribeToAnnouncementsTopic(currentUser.getUid());
                     }
                 } else {
                     Log.d("User Data", "DataSnapshot does not exist");
                 }
             }
 
-            private void subscribeToAnnouncementsTopic() {
+            private void subscribeToAnnouncementsTopic(String userId) {
                 String announcementsTopic = "Announcements";
-                FirebaseMessaging.getInstance().subscribeToTopic(announcementsTopic)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                subscribedTopics.add(announcementsTopic);
-                                Log.d("FCM", "Subscribed to announcements topic");
-                            } else {
-                                Log.e("FCM", "Subscription to announcements topic failed");
-                            }
-                        });
+                subscribeToTopic(userId, announcementsTopic);
             }
 
-            private void subscribeToEventTopics(String userId) {
-                DatabaseReference userEventsRef = database.getReference("UserEvents").child(userId);
-                userEventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                            String eventId = eventSnapshot.getKey();
-                            if (eventId != null) {
-                                checkRSVPAndSubscribeToTopic(eventId, userId);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.d("Error", "Database Error: " + error.getMessage());
-                    }
-                });
-            }
-
-            private void checkRSVPAndSubscribeToTopic(String eventId, String userId) {
-                DatabaseReference rsvpsRef = database.getReference("Events").child(eventId).child("rsvps");
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-                if (currentUser != null) {
-                    String currentUserEmail = currentUser.getEmail();
-
-                    if (currentUserEmail != null && !currentUserEmail.isEmpty()) {
-                        rsvpsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                                    String email = childSnapshot.getValue(String.class);
-
-                                    // Check if the retrieved email matches the current user's email
-                                    if (email != null && email.equals(currentUserEmail)) {
-                                        subscribeToTopic(eventId);
-                                        Log.d("RSVP", "User has RSVP'd to event: " + eventId);
-                                        return;  // Exit the loop early since you found a match
-                                    }
-                                }
-
-                                // If the loop completes without finding a match, the user hasn't RSVP'd
-                                Log.d("RSVP", "User has not RSVP'd to event: " + eventId);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Log.d("Error", "Database Error: " + error.getMessage());
-                            }
-                        });
-                    }
-                }
-            }
-
-            private void subscribeToTopic(String topic) {
+            private void subscribeToTopic(String userId, String topic) {
                 FirebaseMessaging.getInstance().subscribeToTopic(topic)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
@@ -168,24 +112,20 @@ public class UserLoggedInActivity extends AppCompatActivity {
                         });
             }
 
-            private void unsubscribeFromAllTopics() {
-                for (String topic : subscribedTopics) {
-                    FirebaseMessaging.getInstance().unsubscribeFromTopic(topic);
-                    Log.d("FCM", "Unsubscribed from topic: " + topic);
-                }
-                subscribedTopics.clear();
-            }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("Error", "Database Error: " + error.getMessage());
             }
         });
+
+
     }
 
-    /**
-     * The rest of your UserLoggedInActivity methods...
-     */
+    private void saveUserFCMToken(String userId, String fcmToken) {
+        FirebaseDatabase.getInstance().getReference("UserFCMTokens").child(userId).setValue(fcmToken);
+    }
+
+    // Other methods...
 
     public void goToMajOrMin(View view) {
         startActivity(new Intent(this, MajOrMin.class));
@@ -218,4 +158,5 @@ public class UserLoggedInActivity extends AppCompatActivity {
         loadFragment(new All_Announcement_Fragment());
     }
 
+    // Other methods...
 }
