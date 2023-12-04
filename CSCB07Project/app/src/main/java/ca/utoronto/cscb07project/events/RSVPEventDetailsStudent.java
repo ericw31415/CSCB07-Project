@@ -32,6 +32,8 @@ public class RSVPEventDetailsStudent extends Fragment {
     private TextView eventLocation;
     private TextView eventDescription;
 
+    private FirebaseAuth auth;
+
     public RSVPEventDetailsStudent() {
         // Required empty public constructor
     }
@@ -98,6 +100,8 @@ public class RSVPEventDetailsStudent extends Fragment {
                 databaseError.toException().printStackTrace();
             }
         });
+
+
 
         return view;
     }

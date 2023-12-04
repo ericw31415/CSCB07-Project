@@ -61,61 +61,74 @@ public class EventDetailsStudent extends Fragment {
         eventDateTime = view.findViewById(R.id.eventDateUser);
         eventLocation = view.findViewById(R.id.eventLocationUser);
         eventDescription = view.findViewById(R.id.eventDescUser);
-        this.eventId = getArguments().getString("eventID");
 
-        Button rsvpButton = view.findViewById(R.id.toRSVP); // Assuming the button ID is "rsvpButton"
+        if (getArguments() != null) {
+            this.eventId = getArguments().getString(ARG_EVENT_ID);
+        } else {
+            Log.e("EventDetailsStudent", "Arguments are null");
+            // Handle this case or return an empty view
+            return view;
+        }
+
+        Button rsvpButton = view.findViewById(R.id.toRSVP);
 
         rsvpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle RSVP button click
                 performRSVP();
             }
         });
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String eventId = getArguments().getString("eventId");
-        DatabaseReference eventsRef = database.getReference("Events").child(eventId);
-        eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String title = dataSnapshot.child("title").getValue(String.class);
-                    String dateTime = dataSnapshot.child("dateTime").getValue(String.class);
-                    String location = dataSnapshot.child("location").getValue(String.class);
-                    String description = dataSnapshot.child("description").getValue(String.class);
+        if (eventId != null) {
+            DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId);
 
-                    eventTitle.setText(title);
-                    eventDateTime.setText(dateTime);
-                    eventLocation.setText(location);
-                    eventDescription.setText(description);
-                } else {
-                    Log.d("Why", "Not working");
+            eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        String title = dataSnapshot.child("title").getValue(String.class);
+                        String dateTime = dataSnapshot.child("dateTime").getValue(String.class);
+                        String location = dataSnapshot.child("location").getValue(String.class);
+                        String description = dataSnapshot.child("description").getValue(String.class);
+
+                        if (title != null && dateTime != null && location != null && description != null) {
+                            // Set text only if all values are non-null
+                            eventTitle.setText(title);
+                            eventDateTime.setText(dateTime);
+                            eventLocation.setText(location);
+                            eventDescription.setText(description);
+                        } else {
+                            Log.e("EventDetailsStudent", "One or more properties are null");
+                        }
+                    } else {
+                        Log.d("EventDetailsStudent", "Event not found");
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("EventDetailsStudent", "Database error: " + databaseError.getMessage());
+                }
+            });
+        } else {
+            Log.e("EventDetailsStudent", "Event ID is null");
+            // Handle this case or return an empty view
+        }
 
         return view;
     }
 
     private void performRSVP() {
-        // Get the current user from FirebaseAuth
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
-            // Get the current user's email
             String userEmail = currentUser.getEmail();
 
             if (userEmail != null) {
-                String eventId = getArguments().getString("eventId");
+                // Use ARG_EVENT_ID consistently
+                String eventId = getArguments().getString(ARG_EVENT_ID);
 
                 if (eventId != null) {
-                    // Check if the RSVP entry already exists
                     DatabaseReference rsvpsRef = FirebaseDatabase.getInstance().getReference("RSVPS");
                     Query query = rsvpsRef.orderByChild("eventID").equalTo(eventId);
 
@@ -128,7 +141,6 @@ public class EventDetailsStudent extends Fragment {
                                 RSVP rsvp = snapshot.getValue(RSVP.class);
 
                                 if (rsvp != null && rsvp.getEmail().equalsIgnoreCase(userEmail)) {
-                                    // Entry already exists, handle accordingly
                                     Log.d("RSVP", "RSVP already exists for Event ID: " + eventId);
                                     hasExistingRSVP = true;
                                     break;
@@ -136,14 +148,13 @@ public class EventDetailsStudent extends Fragment {
                             }
 
                             if (!hasExistingRSVP) {
-                                // Entry does not exist, add a new RSVP
                                 addRSVPToDatabase(eventId, userEmail);
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle errors
+                            Log.e("RSVP", "Database error: " + databaseError.getMessage());
                         }
                     });
                 } else {
@@ -167,16 +178,12 @@ public class EventDetailsStudent extends Fragment {
                 if (dataSnapshot.exists()) {
                     Event event = dataSnapshot.getValue(Event.class);
                     if (event != null) {
-                        // Add the RSVP to the event
                         boolean rsvpAdded = event.addRSVP(userEmail);
                         if (rsvpAdded) {
-                            // Update the event in the database
                             eventRef.setValue(event);
-                            // Add your logic to handle successful RSVP
                             Log.d("RSVP", "RSVP added for Event ID: " + eventId);
                         } else {
                             Log.d("RSVP", "The event is full and cannot accept more RSVPs");
-                            // Add your logic to handle this case (e.g., show a message)
                         }
                     } else {
                         Log.e("RSVP", "Event is null");
@@ -188,10 +195,11 @@ public class EventDetailsStudent extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
+                Log.e("RSVP", "Database error: " + databaseError.getMessage());
             }
         });
     }
+
 
 // ...
 
