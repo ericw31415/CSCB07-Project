@@ -225,18 +225,20 @@ public class AddAnnouncmentFragment extends Fragment {
 
     private void retrieveUserFCMTokenAndSendNotification(String userEmail) {
         // Encode the email address to create a valid Firebase Database path
-        String encodedEmail = Base64.encodeToString(userEmail.getBytes(), Base64.NO_WRAP);
+        DatabaseReference userFCMTokensRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens");
 
-        DatabaseReference userFCMTokenRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens").child(encodedEmail);
-        userFCMTokenRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        userFCMTokensRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Decode the email address to use in the notification
-                    String decodedEmail = new String(Base64.decode(dataSnapshot.getKey(), Base64.NO_WRAP));
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        String userFCMToken = userSnapshot.child("token").getValue(String.class);
+                        Log.d("Firebase", "User FCM Token: " + userFCMToken);
 
-                    String userFCMToken = dataSnapshot.child("token").getValue(String.class);
-                    sendFCMNotification(userFCMToken, announcement.getTitle(), announcement.getDescription());
+                        sendFCMNotification(userFCMToken, announcement.getTitle(), announcement.getDescription());
+                    }
+                } else {
+                    Log.d("Firebase", "User FCM Token not found for encoded email: " + userEmail);
                 }
             }
 
@@ -246,6 +248,8 @@ public class AddAnnouncmentFragment extends Fragment {
             }
         });
     }
+
+
 
 
 
