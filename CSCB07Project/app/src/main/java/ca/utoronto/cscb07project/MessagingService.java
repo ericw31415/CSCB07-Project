@@ -39,7 +39,7 @@ public class MessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Message received: " + remoteMessage.getData());
 
         // Extract announcement title and details
-        String title = "NEW ANNOUNCEMENT: " + remoteMessage.getData().get("title");
+        String title = remoteMessage.getData().get("title");
         String details = "DETAILS: " + remoteMessage.getData().get("details");
 
         // Display a toast on the main thread (UI thread)
