@@ -63,9 +63,9 @@ public class RSVPEventAdapter extends RecyclerView.Adapter<RSVPEventAdapter.RSVP
         }
 
         public void bind(final Event event, final OnItemClickListener listener) {
-            titleTextView.setText(event.getTitle());
-            locationTextView.setText(event.getLocation());
-            dateTimeTextView.setText(event.getDateTime());
+            titleTextView.setText("Event: " + event.getTitle());
+            locationTextView.setText("Location: " + event.getLocation());
+            dateTimeTextView.setText("Date and Time: " + event.getDateTime());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -86,10 +86,10 @@ public class EventDetailsStudent extends Fragment {
                     String location = dataSnapshot.child("location").getValue(String.class);
                     String description = dataSnapshot.child("description").getValue(String.class);
 
-                    eventTitle.setText("Event: " + title);
-                    eventDateTime.setText("Date and Time: " + dateTime);
-                    eventLocation.setText("Location: " + location);
-                    eventDescription.setText("Details: " + description);
+                    eventTitle.setText(title);
+                    eventDateTime.setText(dateTime);
+                    eventLocation.setText(location);
+                    eventDescription.setText(description);
                 } else {
                     Log.d("Why", "Not working");
                 }

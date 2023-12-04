@@ -63,9 +63,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         }
 
         public void bind(final Event event, final OnItemClickListener listener) {
-            titleTextView.setText(event.getTitle());
-            locationTextView.setText(event.getLocation());
-            dateTimeTextView.setText(event.getDateTime());
+            titleTextView.setText("Event: " + event.getTitle());
+            locationTextView.setText("Location: " + event.getLocation());
+            dateTimeTextView.setText("Date and Time: " + event.getDateTime());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
