@@ -1,11 +1,6 @@
 package ca.utoronto.cscb07project.ui.user;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;

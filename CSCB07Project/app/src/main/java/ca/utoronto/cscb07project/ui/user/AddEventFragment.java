@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
@@ -25,9 +26,19 @@ import android.widget.Toast;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -167,18 +178,40 @@ public class AddEventFragment extends Fragment {
             DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("Events");
             eventsRef.child(eventId).setValue(event);
 
-            String announcementTitle = title;
+            String announcementTitle = "NEW EVENT: " + title;
             String announcmentDescrption = description;
             String announcementDate = dateTime;
             String announcementID = Announcement.generateUniqueID();
 
-
             Announcement announcement = new Announcement(announcementTitle, announcementDate, announcmentDescrption, announcementID, eventId);
             DatabaseReference announcementsRef = FirebaseDatabase.getInstance().getReference("Announcements");
             announcementsRef.child(announcementID).setValue(announcement);
+            sendPushNotificationToAllUsers(title, description);
         }
 
     }
+
+    private void sendPushNotificationToAllUsers(String title, String details) {
+        // Fetch all user FCM tokens from the database
+        DatabaseReference allUserTokensRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens");
+        allUserTokensRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userTokenSnapshot : dataSnapshot.getChildren()) {
+                        String userFCMToken = userTokenSnapshot.child("token").getValue(String.class);
+                        sendFCMNotification(userFCMToken, title, details);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Database", "Error retrieving all user tokens: " + databaseError.getMessage());
+            }
+        });
+    }
+
 
     private void sendPushNotification(String title, String details) {
         // Create a notification channel for Android Oreo and higher
@@ -203,5 +236,42 @@ public class AddEventFragment extends Fragment {
         NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
     }
+
+    private void sendFCMNotification(String userFCMToken, String title, String details) {
+        String serverKey = "AAAAhExjLj8:APA91bFuA8VZGbZ8OZlgKxu9DOGIdBTmJbU9L36sfyQmV0mDAv6apgh0O-tWbnsRCyFi_Xq6lPZYzP16JaL2-tFCcJsu2wJTt808m2GjCgvbvBCDLYsLGRmRDmWBKiyuvT2ZDQLhUk0n";
+        JSONObject message = new JSONObject();
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put("title", title);
+            data.put("details", details);
+            message.put("data", data);
+            message.put("to", userFCMToken);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new Thread(() -> {
+            try {
+                URL url = new URL("https://fcm.googleapis.com/fcm/send");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Authorization", "key=" + serverKey);
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setDoOutput(true);
+
+                OutputStream outputStream = conn.getOutputStream();
+                outputStream.write(message.toString().getBytes("UTF-8"));
+                outputStream.close();
+
+                int responseCode = conn.getResponseCode();
+                Log.d("FCM Response", "Response Code: " + responseCode);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
 
 }
