@@ -64,7 +64,7 @@ public class UserLoggedInActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
                         String fcmToken = task.getResult();
-                        saveUserFCMToken(currentUser.getUid(), fcmToken);
+                        saveUserFCMToken(currentUser.getUid(), currentUser.getEmail(), fcmToken);
                     } else {
                         Log.e("FCM", "Error getting FCM token");
                     }
@@ -121,9 +121,16 @@ public class UserLoggedInActivity extends AppCompatActivity {
 
     }
 
-    private void saveUserFCMToken(String userId, String fcmToken) {
-        FirebaseDatabase.getInstance().getReference("UserFCMTokens").child(userId).setValue(fcmToken);
+    private void saveUserFCMToken(String userId, String userEmail, String fcmToken) {
+        DatabaseReference userFCMTokenRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens").child(userId);
+
+        // Assuming you want to store the email along with the FCM token
+        userFCMTokenRef.child("email").setValue(userEmail);
+
+        // Storing the FCM token
+        userFCMTokenRef.child("token").setValue(fcmToken);
     }
+
 
     // Other methods...
 

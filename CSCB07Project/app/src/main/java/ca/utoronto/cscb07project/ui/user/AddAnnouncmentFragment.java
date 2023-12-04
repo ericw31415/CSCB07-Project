@@ -178,28 +178,29 @@ public class AddAnnouncmentFragment extends Fragment {
 
     private void retrieveAndSendNotificationsForEvent() {
         if (eventTopic != null) {
-            DatabaseReference eventParticipantsRef = FirebaseDatabase.getInstance().getReference(eventTopic).child("rsvps");
-            eventParticipantsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseReference userEventsRef = FirebaseDatabase.getInstance().getReference("UserEvents");
+
+            userEventsRef.child(eventTopic).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        for (DataSnapshot participantSnapshot : dataSnapshot.getChildren()) {
-                            String userId = participantSnapshot.getKey();
-                            retrieveUserFCMTokenAndSendNotification(userId);
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            String userEmail = userSnapshot.getKey();
+                            Log.d("TEST", userEmail);
+                            retrieveUserFCMTokenAndSendNotification(userEmail);
                         }
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e("Database", "Error retrieving event participants: " + databaseError.getMessage());
+                    Log.e("Database", "Error retrieving users for the event: " + databaseError.getMessage());
                 }
             });
         } else {
             Log.e("Database", "Event topic is null");
         }
     }
-
 
     private void retrieveAndSendNotificationsForAllUsers() {
         DatabaseReference allUserTokensRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens");
@@ -208,7 +209,7 @@ public class AddAnnouncmentFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot userTokenSnapshot : dataSnapshot.getChildren()) {
-                        String userFCMToken = userTokenSnapshot.getValue(String.class);
+                        String userFCMToken = userTokenSnapshot.child("token").getValue(String.class);
                         sendFCMNotification(userFCMToken, announcement.getTitle(), announcement.getDescription());
                     }
                 }
@@ -221,13 +222,13 @@ public class AddAnnouncmentFragment extends Fragment {
         });
     }
 
-    private void retrieveUserFCMTokenAndSendNotification(String userId) {
-        DatabaseReference userFCMTokenRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens").child(userId);
+    private void retrieveUserFCMTokenAndSendNotification(String userEmail) {
+        DatabaseReference userFCMTokenRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens").child(userEmail);
         userFCMTokenRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String userFCMToken = dataSnapshot.getValue(String.class);
+                    String userFCMToken = dataSnapshot.child("token").getValue(String.class);
                     sendFCMNotification(userFCMToken, announcement.getTitle(), announcement.getDescription());
                 }
             }
