@@ -176,13 +176,13 @@ public class AddAnnouncmentFragment extends Fragment {
 
     private void handleAnnouncementPostSuccess() {
         if (!("blank".equals(eventTopic))) {
-            // Specific event case
-            Log.d("Test", "Specific");
-            retrieveAndSendNotificationsForEvent();
-        } else {
-            // Default case
             Log.d("Default", "Announcement");
             retrieveAndSendNotificationsForAllUsers();
+            // Specific event case
+        } else {
+            // Default case
+            Log.d("Test", "Specific");
+            retrieveAndSendNotificationsForEvent();
         }
 
         // Common actions after posting announcement
