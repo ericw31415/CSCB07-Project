@@ -57,7 +57,6 @@ public class AddAnnouncmentFragment extends Fragment {
 
     private CheckBox sendToAllCheckBox;
     private Announcement announcement;
-
     private String eventTopic;
 
     @Override
@@ -87,6 +86,7 @@ public class AddAnnouncmentFragment extends Fragment {
         eventAdapter = new EventAdapter(requireContext(), R.layout.event_item, eventsList);
         eventsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         eventsRecyclerView.setAdapter(eventAdapter);
+        eventTopic = "blank";
 
         submitButton.setOnClickListener(v -> postAnnouncement());
     }
@@ -119,10 +119,9 @@ public class AddAnnouncmentFragment extends Fragment {
         sendToAllCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 eventsRecyclerView.setVisibility(View.VISIBLE);
-                // Clear Event Topic when the checkbox is checked
-                eventTopic = null;
             } else {
                 eventsRecyclerView.setVisibility(View.GONE);
+                eventTopic = "blank";
             }
         });
 
@@ -130,9 +129,7 @@ public class AddAnnouncmentFragment extends Fragment {
             if (sendToAllCheckBox.isChecked()) {
                 Toast.makeText(requireContext(), "EventId: " + event.getId(), Toast.LENGTH_SHORT).show();
                 eventTopic = event.getId();
-            } else {
-                Toast.makeText(requireContext(), "Checkbox is unchecked", Toast.LENGTH_SHORT).show();
-                eventTopic = null;
+                Log.d("Check", eventTopic);
             }
         });
     }
@@ -154,14 +151,9 @@ public class AddAnnouncmentFragment extends Fragment {
         String announcementId = announcementsRef.push().getKey();
 
         if (announcementId != null) {
+            Log.d("TESTICLES", eventTopic);
             announcement = new Announcement(title, formattedDate, details, announcementId, eventTopic);
-
-            if (sendToAllCheckBox.isChecked()) {
-                announcement.setEventID(eventTopic);
-            } else {
-                announcement.setEventID("blank");
-            }
-
+            announcement.setEventID(eventTopic);
             announcementsRef.child(announcementId).setValue(announcement)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -175,19 +167,14 @@ public class AddAnnouncmentFragment extends Fragment {
     }
 
     private void handleAnnouncementPostSuccess() {
-        if (!("blank".equals(eventTopic))) {
+        if ("blank".equals(eventTopic)) {
             Log.d("Default", "Announcement");
             retrieveAndSendNotificationsForAllUsers();
-            // Specific event case
         } else {
             // Default case
             Log.d("Test", "Specific");
             retrieveAndSendNotificationsForEvent();
         }
-
-        // Common actions after posting announcement
-        sendPushNotification(announcement.getTitle(), announcement.getDescription());
-        getParentFragmentManager().popBackStack();
     }
 
     private void retrieveAndSendNotificationsForEvent() {
@@ -233,31 +220,6 @@ public class AddAnnouncmentFragment extends Fragment {
                 Log.e("Database", "Error retrieving all user tokens: " + databaseError.getMessage());
             }
         });
-    }
-
-    private void sendPushNotification(String title, String details) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    "default_channel_id",
-                    "Default Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-            NotificationManager manager = requireContext().getSystemService(NotificationManager.class);
-            if (manager != null) {
-                manager.createNotificationChannel(channel);
-            }
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), "default_channel_id")
-                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                .setContentTitle(title)
-                .setContentText(details)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null) {
-            notificationManager.notify(1, builder.build());
-        }
     }
 
     private void retrieveUserFCMTokenAndSendNotification(String userId) {
