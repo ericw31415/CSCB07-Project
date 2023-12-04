@@ -151,7 +151,6 @@ public class AddAnnouncmentFragment extends Fragment {
         String announcementId = announcementsRef.push().getKey();
 
         if (announcementId != null) {
-            Log.d("TESTICLES", eventTopic);
             announcement = new Announcement(title, formattedDate, details, announcementId, eventTopic);
             announcement.setEventID(eventTopic);
             announcementsRef.child(announcementId).setValue(announcement)
@@ -168,11 +167,11 @@ public class AddAnnouncmentFragment extends Fragment {
 
     private void handleAnnouncementPostSuccess() {
         if ("blank".equals(eventTopic)) {
-            Log.d("Default", "Announcement");
+            Log.d("Default", "EVERYONE");
             retrieveAndSendNotificationsForAllUsers();
         } else {
             // Default case
-            Log.d("Test", "Specific");
+            Log.d("Test", "NOT EVERYONE");
             retrieveAndSendNotificationsForEvent();
         }
     }
