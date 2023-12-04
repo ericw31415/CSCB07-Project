@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.utoronto.cscb07project.R;
+import ca.utoronto.cscb07project.announcements.Announcement;
 import ca.utoronto.cscb07project.events.Event;
 
 import android.widget.Button;
@@ -165,6 +166,16 @@ public class AddEventFragment extends Fragment {
             // Set the event in the "Events" level with the same ID
             DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("Events");
             eventsRef.child(eventId).setValue(event);
+
+            String announcementTitle = title;
+            String announcmentDescrption = description;
+            String announcementDate = dateTime;
+            String announcementID = Announcement.generateUniqueID();
+
+
+            Announcement announcement = new Announcement(announcementTitle, announcementDate, announcmentDescrption, announcementID, eventId);
+            DatabaseReference announcementsRef = FirebaseDatabase.getInstance().getReference("Announcements");
+            announcementsRef.child(announcementID).setValue(announcement);
         }
 
     }
