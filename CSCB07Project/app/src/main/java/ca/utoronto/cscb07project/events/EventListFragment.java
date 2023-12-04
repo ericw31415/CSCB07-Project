@@ -58,9 +58,9 @@ public class EventListFragment extends Fragment {
                     TextView locationTextView = itemView.findViewById(R.id.locationTextView);
                     TextView dateTimeTextView = itemView.findViewById(R.id.dateTimeTextView);
 
-                    titleTextView.setText(event.getTitle());
-                    locationTextView.setText(event.getLocation());
-                    dateTimeTextView.setText(event.getDateTime());
+                    titleTextView.setText("Event: " + event.getTitle());
+                    locationTextView.setText("Location: " + event.getLocation());
+                    dateTimeTextView.setText("Date and Time: " + event.getDateTime());
                 }
 
                 return itemView;
