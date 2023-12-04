@@ -1,6 +1,8 @@
 package ca.utoronto.cscb07project.ui.user;
 
+import android.content.Intent;
 import android.os.Bundle;
+import ca.utoronto.cscb07project.events.AttendeesListActivity;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import ca.utoronto.cscb07project.R;
@@ -108,6 +111,20 @@ public class AdminHome extends Fragment {
                 Log.d("Test", isAdmin.toString());
             }
         });
+
+        // Inside the onCreateView method
+
+        Button viewAttendeesButton = view.findViewById(R.id.viewAttendeesButton);
+        viewAttendeesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start the AttendeesListActivity
+                Intent intent = new Intent(getActivity(), AttendeesListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+// Remaining code in the onCreateView method
 
         return view;
     }

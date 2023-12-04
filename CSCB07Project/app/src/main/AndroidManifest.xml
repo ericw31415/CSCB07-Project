@@ -43,6 +43,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="ca.utoronto.cscb07project.events.AttendeesListActivity"
+            android:exported="true"
+            android:label="Attendees List" />
+
     </application>
 
 </manifest>
