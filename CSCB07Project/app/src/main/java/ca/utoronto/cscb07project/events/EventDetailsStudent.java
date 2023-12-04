@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -173,6 +174,9 @@ public class EventDetailsStudent extends Fragment {
                         eventRef.setValue(event);
                         // Add your logic to handle successful RSVP
                         Log.d("RSVP", "RSVP added for Event ID: " + eventId);
+                        // Display toast message for successful RSVP
+                        String toastMessage = "RSVP'd for event: " + event.getTitle();
+                        Toast.makeText(getActivity().getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
                     } else {
                         Log.e("RSVP", "Event is null");
                     }
