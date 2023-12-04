@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -177,29 +178,29 @@ public class AddAnnouncmentFragment extends Fragment {
     }
 
     private void retrieveAndSendNotificationsForEvent() {
-        if (eventTopic != null) {
-            DatabaseReference userEventsRef = FirebaseDatabase.getInstance().getReference("UserEvents");
+        DatabaseReference eventParticipantsRef = FirebaseDatabase.getInstance().getReference("Events")
+                .child(eventTopic)
+                .child("rsvps");
 
-            userEventsRef.child(eventTopic).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            String userEmail = userSnapshot.getKey();
-                            Log.d("TEST", userEmail);
-                            retrieveUserFCMTokenAndSendNotification(userEmail);
-                        }
+        eventParticipantsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("Test", "TESTICLES");
+                if (dataSnapshot.exists()) {
+                    Log.d("Test", "NO TESTICLES");
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        String userEmail = userSnapshot.getValue(String.class);
+                        Log.d("TEST", userEmail);
+                        retrieveUserFCMTokenAndSendNotification(userEmail);
                     }
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e("Database", "Error retrieving users for the event: " + databaseError.getMessage());
-                }
-            });
-        } else {
-            Log.e("Database", "Event topic is null");
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Database", "Error retrieving users for the event: " + databaseError.getMessage());
+            }
+        });
     }
 
     private void retrieveAndSendNotificationsForAllUsers() {
@@ -223,11 +224,17 @@ public class AddAnnouncmentFragment extends Fragment {
     }
 
     private void retrieveUserFCMTokenAndSendNotification(String userEmail) {
-        DatabaseReference userFCMTokenRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens").child(userEmail);
+        // Encode the email address to create a valid Firebase Database path
+        String encodedEmail = Base64.encodeToString(userEmail.getBytes(), Base64.NO_WRAP);
+
+        DatabaseReference userFCMTokenRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens").child(encodedEmail);
         userFCMTokenRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    // Decode the email address to use in the notification
+                    String decodedEmail = new String(Base64.decode(dataSnapshot.getKey(), Base64.NO_WRAP));
+
                     String userFCMToken = dataSnapshot.child("token").getValue(String.class);
                     sendFCMNotification(userFCMToken, announcement.getTitle(), announcement.getDescription());
                 }
@@ -239,6 +246,8 @@ public class AddAnnouncmentFragment extends Fragment {
             }
         });
     }
+
+
 
     private void sendFCMNotification(String userFCMToken, String title, String details) {
         String serverKey = "AAAAhExjLj8:APA91bFuA8VZGbZ8OZlgKxu9DOGIdBTmJbU9L36sfyQmV0mDAv6apgh0O-tWbnsRCyFi_Xq6lPZYzP16JaL2-tFCcJsu2wJTt808m2GjCgvbvBCDLYsLGRmRDmWBKiyuvT2ZDQLhUk0n";
