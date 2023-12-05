@@ -1,18 +1,32 @@
 package ca.utoronto.cscb07project.ui.complaints;
 
-public class complaints  {
+public class complaints {
     private String complaintId;
     private String title;
+    private String userEmail;
+    private String date;
     private String details;
 
-    // Constructor
-    public complaints(String complaintId, String title, String details) {
+    public complaints(){
+
+    }
+    public complaints(String complaintId, String title, String userEmail,
+                      String date, String details) {
         this.complaintId = complaintId;
         this.title = title;
+        this.userEmail = userEmail;
+        this.date = date;
         this.details = details;
     }
 
-    // Getters and setters for each field
+    public String getDate(){
+        return date;
+    }
+
+    public void setDate(String date){
+        this.date = date;
+    }
+
     public String getComplaintId() {
         return complaintId;
     }
@@ -25,15 +39,25 @@ public class complaints  {
         return title;
     }
 
+
+
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getDetails() {
-        return details;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setDetails(String details) {
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getDetails() {
+        return this.details;
+    }
+
+    public void setDetails(String details){
         this.details = details;
     }
 }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -12,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CSCB07Project"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.user.EventFeedback"
+            android:exported="false" />
         <activity
             android:name=".ui.user.UserLoggedInActivity"
             android:exported="false" />
@@ -28,16 +33,10 @@
             android:name=".ui.POStCheck.POStCheckCalc"
             android:exported="false" />
         <activity
-            android:name=".ui.signup.SignupActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.POStCheck.POStCheckActivity"
             android:exported="false" />
         <activity
             android:name=".ui.complaints.ComplaintActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".ui.loginsignout.LoginSignoutActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -49,6 +48,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".MessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <activity
+            android:name="ca.utoronto.cscb07project.events.AttendeesListActivity"
+            android:label="Attendees List Activity">
+        </activity>
+
     </application>
 
 </manifest>

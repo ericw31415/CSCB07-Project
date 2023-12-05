@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/AnnouncementTitleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Announcement Title"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <CheckBox
+        android:id="@+id/sendToAllCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose related Event (Default visible for all)" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewEvent"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="5dp"
+        android:background="@android:color/white"
+        android:visibility="gone" /> <!-- Initially hidden -->
+
+    <EditText
+        android:id="@+id/AnnouncementDescriptionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="223dp"
+        android:hint="Enter Announcement Description"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/postAnnouncementButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Post Announcement" />
+
+</LinearLayout>

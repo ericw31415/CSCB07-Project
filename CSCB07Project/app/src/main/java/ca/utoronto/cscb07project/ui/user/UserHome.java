@@ -29,7 +29,6 @@ public class UserHome extends Fragment {
     private TextView fnameTextView;
 
     public UserHome() {
-        // Required empty public constructor
     }
 
     /**
@@ -66,14 +65,11 @@ public class UserHome extends Fragment {
 
         fnameTextView = view.findViewById(R.id.userfirstname);
 
-        // Inflate the layout for this fragment
         userDataViewModel = new ViewModelProvider(requireActivity()).get(UserDataViewModel.class);
 
-        // Observe changes to first name
         userDataViewModel.getFirstName().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String firstName) {
-                // Update UI with the first name d
                 userDataViewModel.getLastName().observe(getViewLifecycleOwner(), new Observer<String>() {
                     @Override
                     public void onChanged(String lastName) {
@@ -85,20 +81,16 @@ public class UserHome extends Fragment {
             }
         });
 
-        // Observe changes to email
         userDataViewModel.getUserEmail().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String email) {
-                // Update UI with the email
                 Log.d("Test", email);
             }
         });
 
-        // Observe changes to isAdmin
         userDataViewModel.getIsAdmin().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isAdmin) {
-                // Update UI with the isAdmin status
                 Log.d("Test", isAdmin.toString());
             }
         });

@@ -1,6 +1,8 @@
 package ca.utoronto.cscb07project.ui.user;
 
+import android.content.Intent;
 import android.os.Bundle;
+import ca.utoronto.cscb07project.events.AttendeesListActivity;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import ca.utoronto.cscb07project.R;
@@ -35,7 +38,6 @@ public class AdminHome extends Fragment {
     private TextView fnameTextView;
 
     public AdminHome() {
-        // Required empty public constructor
     }
 
     /**
@@ -72,14 +74,11 @@ public class AdminHome extends Fragment {
 
         fnameTextView = view.findViewById(R.id.userfirstname);
 
-        // Inflate the layout for this fragment
         userDataViewModel = new ViewModelProvider(requireActivity()).get(UserDataViewModel.class);
 
-        // Observe changes to first name
         userDataViewModel.getFirstName().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String firstName) {
-                // Update UI with the first name d
                 userDataViewModel.getLastName().observe(getViewLifecycleOwner(), new Observer<String>() {
                     @Override
                     public void onChanged(String lastName) {
@@ -91,23 +90,30 @@ public class AdminHome extends Fragment {
             }
         });
 
-        // Observe changes to email
         userDataViewModel.getUserEmail().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String email) {
-                // Update UI with the email
                 Log.d("Test", email);
             }
         });
 
-        // Observe changes to isAdmin
         userDataViewModel.getIsAdmin().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isAdmin) {
-                // Update UI with the isAdmin status
                 Log.d("Test", isAdmin.toString());
             }
         });
+
+
+        Button viewAttendeesButton = view.findViewById(R.id.viewAttendeesButton);
+        viewAttendeesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AttendeesListActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         return view;
     }

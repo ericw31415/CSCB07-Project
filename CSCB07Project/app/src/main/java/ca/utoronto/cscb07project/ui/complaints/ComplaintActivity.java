@@ -11,13 +11,11 @@ public class ComplaintActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_complaint); // Make sure you have this layout file
+        setContentView(R.layout.activity_complaint);
 
 
-            // Create an instance of the ComplaintFragment
             ComplaintFragment complaintFragment = new ComplaintFragment();
 
-            // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, complaintFragment).commit();
         }
