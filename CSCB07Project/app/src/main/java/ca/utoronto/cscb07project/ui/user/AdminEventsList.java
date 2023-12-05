@@ -34,7 +34,6 @@ public class AdminEventsList extends Fragment{
     private List<Event> events;
     private DatabaseReference eventsRef;
 
-    //private TextView revCountTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,10 +67,8 @@ public class AdminEventsList extends Fragment{
                     titleTextView.setText("Event: " + event.getTitle());
                     locationTextView.setText("Location: " + event.getLocation());
                     dateTimeTextView.setText("Date and Time: " + event.getDateTime());
-                    //revCountTextView.setText();
-                    //avgRatingTextView.setText();
 
-                    // Now, fetch and display the reviews count for each event
+
                     countReviewsForEvent(event.getId(), new CountReviewsCallback() {
                         @Override
                         public void onCountReceived(long reviewsCount, double averageRating) {
@@ -99,18 +96,15 @@ public class AdminEventsList extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Handle item click, e.g., open detail fragment
                 Event event = events.get(position);
                 openFeedbackFragment(event);
             }
         });
 
 
-        // Initialize Realtime Database reference
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         eventsRef = database.getReference("Events");
 
-        // Fetch events from Realtime Database
         fetchEventsFromFirebase();
     }
 
@@ -161,7 +155,6 @@ public class AdminEventsList extends Fragment{
                 double totalRating = 0;
 
                 for (DataSnapshot reviewSnapshot : dataSnapshot.getChildren()) {
-                    // Assuming there's a child named "rating" under each review
                     double rating = reviewSnapshot.child("rating").getValue(Double.class);
                     totalRating += rating;
                 }

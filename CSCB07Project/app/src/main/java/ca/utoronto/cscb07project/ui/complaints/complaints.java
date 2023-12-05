@@ -10,7 +10,6 @@ public class complaints {
     public complaints(){
 
     }
-    // Constructor
     public complaints(String complaintId, String title, String userEmail,
                       String date, String details) {
         this.complaintId = complaintId;
@@ -28,7 +27,6 @@ public class complaints {
         this.date = date;
     }
 
-    // Getters and setters for each field
     public String getComplaintId() {
         return complaintId;
     }

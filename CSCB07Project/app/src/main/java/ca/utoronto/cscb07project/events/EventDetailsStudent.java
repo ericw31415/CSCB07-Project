@@ -67,7 +67,6 @@ public class EventDetailsStudent extends Fragment {
             this.eventId = getArguments().getString(ARG_EVENT_ID);
         } else {
             Log.e("EventDetailsStudent", "Arguments are null");
-            // Handle this case or return an empty view
             return view;
         }
 
@@ -90,13 +89,11 @@ public class EventDetailsStudent extends Fragment {
                         Event event = dataSnapshot.getValue(Event.class);
 
                         if (event != null) {
-                            // Set text only if all values are non-null
                             eventTitle.setText(event.getTitle());
                             eventDateTime.setText(event.getDateTime());
                             eventLocation.setText(event.getLocation());
                             eventDescription.setText(event.getDescription());
 
-                            // Check if the event is full and disable RSVP button
                             if (event.getParticipantCount() >= event.getParticipantLimit()) {
                                 rsvpButton.setEnabled(false);
                                 rsvpButton.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
@@ -117,7 +114,6 @@ public class EventDetailsStudent extends Fragment {
             });
         } else {
             Log.e("EventDetailsStudent", "Event ID is null");
-            // Handle this case or return an empty view
         }
 
         return view;
@@ -144,21 +140,17 @@ public class EventDetailsStudent extends Fragment {
                                 Event event = dataSnapshot.getValue(Event.class);
 
                                 if (event != null) {
-                                    // Check if the event is full
                                     if (event.getParticipantCount() >= event.getParticipantLimit()) {
                                         Log.d("RSVP", "The event is full and cannot accept more RSVPs");
                                         return;
                                     }
 
-                                    // Add RSVP to the event
                                     boolean rsvpAdded = event.addRSVP(userEmail);
 
                                     if (rsvpAdded) {
-                                        // Update the event in the database
                                         eventsRef.setValue(event);
                                         Log.d("RSVP", "RSVP added for Event ID: " + eventId);
 
-                                        // Update UserEvents collection
                                         updateUserEventsCollection(eventId, userEmail);
                                     } else {
                                         Log.d("RSVP", "User has already RSVP'd for Event ID: " + eventId);
@@ -187,7 +179,6 @@ public class EventDetailsStudent extends Fragment {
         }
     }
     private void updateUserEventsCollection(String eventId, String userEmail) {
-        // Encode the email address to create a valid Firebase Database path
         String encodedEmail = encodeEmail(userEmail);
 
         DatabaseReference userEventsRef = FirebaseDatabase.getInstance().getReference("UserEvents").child(encodedEmail);
@@ -202,46 +193,10 @@ public class EventDetailsStudent extends Fragment {
                 });
     }
     private String encodeEmail(String email) {
-        // Replace forbidden characters with valid ones for Firebase Database paths
         return email.replace(".", ",");
     }
 
 
-    // ...
-
-    /*private void addRSVPToDatabase(String eventId, String userEmail) {
-        DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId);
-        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Event event = dataSnapshot.getValue(Event.class);
-                    if (event != null) {
-                        boolean rsvpAdded = event.addRSVP(userEmail);
-                        if (rsvpAdded) {
-                            eventRef.setValue(event);
-                            Log.d("RSVP", "RSVP added for Event ID: " + eventId);
-                        } else {
-                            Log.d("RSVP", "The event is full and cannot accept more RSVPs");
-                        }
-                    } else {
-                        Log.e("RSVP", "Event is null");
-                    }
-                } else {
-                    Log.e("RSVP", "Event does not exist");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("RSVP", "Database error: " + databaseError.getMessage());
-            }
-        });
-    }
-    */
-
-
-// ...
 
 
 

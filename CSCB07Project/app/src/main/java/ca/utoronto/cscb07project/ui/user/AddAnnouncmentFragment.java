@@ -58,13 +58,10 @@ public class AddAnnouncmentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_announcment, container, false);
 
-        // Initialize UI elements
         initUIElements(view);
 
-        // Fetch events from Firebase
         fetchEventsFromFirebase();
 
-        // Handle checkbox changes
         handleCheckboxChanges();
 
         return view;
@@ -218,7 +215,6 @@ public class AddAnnouncmentFragment extends Fragment {
     }
 
     private void retrieveUserFCMTokenAndSendNotification(String userEmail) {
-        // Encode the email address to create a valid Firebase Database path
         DatabaseReference userFCMTokensRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens");
 
         userFCMTokensRef.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {

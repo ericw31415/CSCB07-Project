@@ -32,15 +32,12 @@ public class MinPOStCalc extends AppCompatActivity {
         }
         else{
             result.setText("You do not meet the requirements for the Computer Science Minor POSt.");
-            //check if requirement 1 is checked off
             if(req1Checked){
                 pass1.setText("Status: PASSED");
-                //pass2.setText("Status: PASSED");
             }
             else{
                 pass1.setText("Status: FAILED");
             }
-            //check if all 3 required boxes of Req2 are checked off
             if(!(a08Checked && a48Checked && Check3)){
                 pass2.setText("Status: FAILED");
             }

@@ -6,7 +6,6 @@ public class RSVP {
     private String email;
 
     public RSVP() {
-        // Default constructor required for Firebase
     }
 
     public RSVP(String eventID, String email) {

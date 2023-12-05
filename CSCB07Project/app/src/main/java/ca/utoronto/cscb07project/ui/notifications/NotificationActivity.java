@@ -22,7 +22,6 @@ public class NotificationActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_notifications);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create the notification channel
             NotificationChannel channel = new NotificationChannel(
                     "default_channel_id",
                     "Default Channel",
@@ -32,9 +31,8 @@ public class NotificationActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
         }
 
-        // Delayed notification sending for demonstration purposes
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(() -> sendNotification(), 3000); // Send notification after 3 seconds
+        handler.postDelayed(() -> sendNotification(), 3000);
     }
 
     private void sendNotification() {

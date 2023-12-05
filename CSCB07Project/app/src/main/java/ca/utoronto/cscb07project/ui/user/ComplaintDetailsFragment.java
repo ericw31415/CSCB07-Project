@@ -42,7 +42,6 @@ public class ComplaintDetailsFragment extends Fragment {
     private String mParam2;
 
     public ComplaintDetailsFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -103,13 +102,12 @@ public class ComplaintDetailsFragment extends Fragment {
                             ((TextView) view.findViewById(R.id.studentName)).setText("Student Name: "+ firstName + " " + lastName);
                         }
                     } else {
-                        // User with the given email does not exist
+
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Handle errors
                 }
             });
         }

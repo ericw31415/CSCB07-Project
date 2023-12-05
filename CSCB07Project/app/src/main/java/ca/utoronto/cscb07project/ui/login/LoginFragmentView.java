@@ -22,7 +22,6 @@ public class LoginFragmentView extends Fragment {
     private LoginFragmentPresenter presenter;
 
     public LoginFragmentView() {
-        // Required empty public constructor
     }
 
     @Override
@@ -34,7 +33,6 @@ public class LoginFragmentView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = FragmentLoginBinding.inflate(inflater, container, false);
 
         binding.tologin.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +56,6 @@ public class LoginFragmentView extends Fragment {
     }
 
     public void successfulLogin() {
-        // TODO: Use a fragment instead
         Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), UserLoggedInActivity.class);
         startActivity(intent);

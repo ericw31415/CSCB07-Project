@@ -37,11 +37,9 @@ public class AdminComplaintsFragment extends Fragment {
         adapter = new ComplaintAdapter(requireContext(), complaints);
         listView.setAdapter(adapter);
 
-        // Initialize Firebase
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("complaints");
 
-        // Read data from Firebase
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -109,7 +107,6 @@ public class AdminComplaintsFragment extends Fragment {
         private String mParam2;
 
         public Add_announcementFragment() {
-            // Required empty public constructor
         }
 
         /**
@@ -142,7 +139,6 @@ public class AdminComplaintsFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
             return inflater.inflate(R.layout.fragment_admin_complaints, container, false);
         }
     }

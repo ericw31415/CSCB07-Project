@@ -14,7 +14,6 @@ public class Announcement implements Serializable {
 
 
     public Announcement() {
-        // Required empty public constructor for Firebase
     }
 
     public Announcement(String title, String date, String description, String announcementID, String EventID) {

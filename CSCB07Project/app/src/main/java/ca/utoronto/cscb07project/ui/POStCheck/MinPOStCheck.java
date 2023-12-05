@@ -31,7 +31,6 @@ public class MinPOStCheck extends AppCompatActivity {
     }
 
     public void ToMinPOStCalc(View view) {
-        //startActivity(new Intent(this, MinPOStCalc.class));
         boolean req1Checked = credsComplete.isChecked();
         boolean a08Checked = a08.isChecked();
         boolean a48Checked = a48.isChecked();

@@ -26,12 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private final int NOTIFICATION_PERMISSION_REQUEST_CODE = 123;
 
-    // Result launcher for notification settings
     private final ActivityResultLauncher<Intent> notificationSettingsLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     result -> {
                         if (!isNotificationEnabled()) {
-                            // Notify the user that notifications are still not enabled
                             Toast.makeText(this, "Please enable notifications for this app", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -43,22 +41,12 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Checking and requesting notification permissions
         if (!isNotificationEnabled()) {
             requestNotificationPermission();
         }
 
-        // Other initialization code
-        // ...
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_events, R.id.navigation_notifications)
-                .build();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
     @Override

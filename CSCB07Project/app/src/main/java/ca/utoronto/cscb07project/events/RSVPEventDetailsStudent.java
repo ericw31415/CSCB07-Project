@@ -35,7 +35,6 @@ public class RSVPEventDetailsStudent extends Fragment {
     private FirebaseAuth auth;
 
     public RSVPEventDetailsStudent() {
-        // Required empty public constructor
     }
 
     public static RSVPEventDetailsStudent newInstance(String eventId) {
@@ -89,14 +88,12 @@ public class RSVPEventDetailsStudent extends Fragment {
                     eventLocation.setText(location);
                     eventDescription.setText(description);
                 } else {
-                    // Handle case where event does not exist
                     Toast.makeText(getContext(), "Event not found", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
                 databaseError.toException().printStackTrace();
             }
         });

@@ -33,26 +33,21 @@ public class ComplaintFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_complaint, container, false);
 
-        // Initialize UI elements
         titleEditText = view.findViewById(R.id.complaintTitleEditText);
         complaintDetailsEditText = view.findViewById(R.id.complaintDetailsEditText);
         Button submitButton = view.findViewById(R.id.submitComplaintButton);
 
-        // Set up the submit button click listener
         submitButton.setOnClickListener(v -> submitComplaint());
 
         return view;
     }
 
     private void submitComplaint() {
-        // Collect input data
         String title = titleEditText.getText().toString().trim();
         String details = complaintDetailsEditText.getText().toString().trim();
 
-        // Validate input
         if (title.isEmpty()) {
             Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
@@ -69,7 +64,6 @@ public class ComplaintFragment extends Fragment {
                 Locale.getDefault());
         String formattedDate = dateFormat.format(currentDate);
 
-        // Submit the complaint to Firebase
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference complaintsRef = database.getReference("complaints");
         String complaintId = complaintsRef.push().getKey();

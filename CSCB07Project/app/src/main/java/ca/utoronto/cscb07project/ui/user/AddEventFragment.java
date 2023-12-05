@@ -69,7 +69,6 @@ public class AddEventFragment extends Fragment {
     private TextView eventLocation;
 
     public AddEventFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -106,7 +105,6 @@ public class AddEventFragment extends Fragment {
                 .build();
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            // Handle selected date
             String selectedDate = formatDate(selection);
             showTimePicker(selectedDate);
         });
@@ -172,14 +170,11 @@ public class AddEventFragment extends Fragment {
             int limit = Integer.parseInt(this.participantLimit.getText().toString());
             Log.d("", dateTime);
 
-            // Generate a unique ID for the event
             String eventId = Event.generateUniqueId();
             sendPushNotification(title, description);
 
-            // Create the Event with the generated ID
             Event event = new Event(eventId, title, dateTime, location, description, limit);
 
-            // Set the event in the "Events" level with the same ID
             DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("Events");
             eventsRef.child(eventId).setValue(event);
 
@@ -196,7 +191,6 @@ public class AddEventFragment extends Fragment {
     }
 
     private void sendPushNotificationToAllUsers(String title1, String details1) {
-        // Fetch all user FCM tokens from the database
         DatabaseReference allUserTokensRef = FirebaseDatabase.getInstance().getReference("UserFCMTokens");
         allUserTokensRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -218,7 +212,6 @@ public class AddEventFragment extends Fragment {
 
 
     private void sendPushNotification(String title, String details) {
-        // Create a notification channel for Android Oreo and higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     "default_channel_id",
@@ -229,14 +222,12 @@ public class AddEventFragment extends Fragment {
             manager.createNotificationChannel(channel);
         }
 
-        // Construct the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), "default_channel_id")
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                 .setContentTitle(title) // Use the announcement title as notification title
                 .setContentText(details) // Use the announcement details as notification content
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        // Display the notification
         NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
     }

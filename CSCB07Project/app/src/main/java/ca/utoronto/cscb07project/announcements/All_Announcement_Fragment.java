@@ -107,7 +107,7 @@ public class All_Announcement_Fragment extends Fragment {
                                 if (currentUserEmail != null && !currentUserEmail.isEmpty()) {
                                     DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference().child("Events");
 
-                                    // Add a null check for eventID
+
                                     if (eventID != null) {
                                         DatabaseReference rsvpsRef = eventsRef.child(eventID).child("rsvps");
 
@@ -119,28 +119,26 @@ public class All_Announcement_Fragment extends Fragment {
                                                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                                                     String email = childSnapshot.getValue(String.class);
 
-                                                    // Check if the retrieved email matches the current user's email
+
                                                     if (email != null && email.equals(currentUserEmail)) {
                                                         userRSVPd = true;
                                                         Log.d("RSVP", "User has RSVP'd" + announcement.getAnnouncementID());
-                                                        // No need to add to announcements here; we'll do that outside the loop
-                                                        // Exit the loop early since you found a match
+
                                                         break;
                                                     }
                                                 }
 
-                                                // If the user has RSVP'd, add the announcement
+
                                                 if (userRSVPd) {
                                                     announcements.add(announcement);
                                                 }
 
-                                                // Notify the adapter here after determining RSVP status
+
                                                 adapter.notifyDataSetChanged();
                                             }
 
                                             @Override
                                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                // Handle any errors that may occur
                                                 databaseError.toException().printStackTrace();
                                             }
                                         });
@@ -151,7 +149,7 @@ public class All_Announcement_Fragment extends Fragment {
                     }
                 }
 
-                // Notify the adapter here after checking all announcements
+
                 adapter.notifyDataSetChanged();
             }
 

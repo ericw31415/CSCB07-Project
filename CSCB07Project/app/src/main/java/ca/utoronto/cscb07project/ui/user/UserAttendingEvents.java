@@ -56,7 +56,6 @@ public class UserAttendingEvents extends Fragment {
             }
         });
 
-        // Initialize Realtime Database reference
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
 
@@ -64,7 +63,6 @@ public class UserAttendingEvents extends Fragment {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             eventsRef = database.getReference("Events");
 
-            // Fetch RSVP'd events from Realtime Database
             fetchRSVPEventsFromFirebase(currentUser.getEmail());
         }
     }
@@ -78,7 +76,6 @@ public class UserAttendingEvents extends Fragment {
                 for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                     Event event = eventSnapshot.getValue(Event.class);
 
-                    // Check if the current user's email is in the RSVP list
                     if (event != null && event.getRsvps() != null && event.getRsvps().contains(userEmail)) {
                         rsvpEvents.add(event);
                     }

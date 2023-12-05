@@ -40,14 +40,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.EventV
         Review currentRev = reviews.get(position);
         holder.bind(currentRev, listener);
 
-        //added
-        /**
-        if (TextUtils.isEmpty(currentRev.getReviewText())) {
-            holder.reviewText.setText("No response");
-        } else {
-            holder.reviewText.setText(currentRev.getReviewText());
-        }
-         */
+
     }
 
     @Override
@@ -65,22 +58,17 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.EventV
         private TextView rating;
         private TextView reviewText;
 
-        //private TextView eventId;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             userEmail = itemView.findViewById(R.id.userEmail);
             rating = itemView.findViewById(R.id.rating);
             reviewText = itemView.findViewById(R.id.reviewText);
-            //eventId = itemView.findViewById(R.id.eventId);
         }
 
         public void bind(final Review review, final OnItemClickListener listener) {
             userEmail.setText(review.getUserEmail());
-            rating.setText(String.valueOf(review.getRating())); // Convert rating to String
-            //reviewText.setText(review.getReviewText());
-            //eventId.setText(review.getEventId());
-            // Set text comment or "No response" if it's empty
+            rating.setText(String.valueOf(review.getRating()));
             if (TextUtils.isEmpty(review.getReviewText())) {
                 reviewText.setText("No response");
             } else {

@@ -17,7 +17,6 @@ public class Event {
     private List<String> rsvps;
 
     public Event() {
-        // Default constructor required for Firebase
     }
 
     public Event(String id, String title, String dateTime, String location, String description, int participantLimit) {
@@ -26,9 +25,9 @@ public class Event {
         this.dateTime = dateTime;
         this.location = location;
         this.description = description;
-        this.participantLimit = participantLimit; // setting participantLimit
-        this.participantCount = 0; // initialize participantCount to 0
-        this.rsvps = new ArrayList<>(); // initialize rsvps list
+        this.participantLimit = participantLimit;
+        this.participantCount = 0;
+        this.rsvps = new ArrayList<>();
     }
 
 
@@ -86,7 +85,6 @@ public class Event {
         this.rsvps = rsvps;
     }
 
-    // Add this method to the Event class
     public boolean isUserRSVP(String userEmail) {
         return rsvps != null && rsvps.contains(userEmail);
     }
@@ -114,7 +112,6 @@ public class Event {
             rsvps.add(userEmail);
             participantCount = rsvps.size();
 
-            // Update both participantCount and rsvps on Firebase
             updateEventOnFirebase();
 
             return true;
@@ -133,7 +130,6 @@ public class Event {
             rsvps.remove(userEmail);
             participantCount = rsvps.size();
 
-            // Update both participantCount and rsvps on Firebase
             updateEventOnFirebase();
 
             return true;

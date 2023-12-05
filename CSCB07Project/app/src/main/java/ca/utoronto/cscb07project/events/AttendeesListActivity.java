@@ -40,13 +40,10 @@ public class AttendeesListActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, events);
         listView.setAdapter(adapter);
 
-        // Initialize Firebase Database reference
         eventsRef = FirebaseDatabase.getInstance().getReference("Events");
 
-        // Retrieve events from Firebase
         retrieveEventsFromFirebase();
 
-        // Set item click listener for the ListView
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -87,7 +84,6 @@ public class AttendeesListActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
             }
         });
     }
@@ -129,7 +125,6 @@ public class AttendeesListActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
             }
         });
     }

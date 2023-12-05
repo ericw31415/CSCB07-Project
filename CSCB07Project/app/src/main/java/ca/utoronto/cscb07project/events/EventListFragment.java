@@ -72,17 +72,14 @@ public class EventListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Handle item click, e.g., open detail fragment
                 Event event = events.get(position);
                 openDetailFragment(event);
             }
         });
 
-        // Initialize Realtime Database reference
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         eventsRef = database.getReference("Events");
 
-        // Fetch events from Realtime Database
         fetchEventsFromFirebase();
     }
 

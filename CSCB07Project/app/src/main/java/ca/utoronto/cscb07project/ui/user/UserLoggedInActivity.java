@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +28,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.HashSet;
 import java.util.Set;
 
+import ca.utoronto.cscb07project.MainActivity;
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.announcements.All_Announcement_Fragment;
 import ca.utoronto.cscb07project.events.*;
@@ -152,12 +154,12 @@ public class UserLoggedInActivity extends AppCompatActivity {
     }
 
     public void logOut(View view) {
-        /*
+
         mAuth.signOut();
         Toast.makeText(this,"You are now logged out!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-         */
+
     }
 
     public void goToAddEvents(View view) {
@@ -180,5 +182,4 @@ public class UserLoggedInActivity extends AppCompatActivity {
         loadFragment(new All_Announcement_Fragment());
     }
 
-    // Other methods...
 }

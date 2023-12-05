@@ -97,10 +97,6 @@ public class AdminAnnouncements extends Fragment {
     }
 
     private void openAddAnnouncementFragment() {
-        // Replace this with the code to open a new fragment for adding announcements
-        // For example, you can create a new fragment and replace the current fragment
-        // using FragmentTransaction.
-        // Ensure to pass any necessary data or arguments to the new fragment.
         AddAnnouncmentFragment addAnnouncementFragment = new AddAnnouncmentFragment();
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
         transaction.replace(R.id.userFrame, addAnnouncementFragment);

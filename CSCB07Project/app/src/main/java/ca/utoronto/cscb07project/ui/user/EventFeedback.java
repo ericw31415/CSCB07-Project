@@ -37,7 +37,6 @@ public class EventFeedback extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_feedback, container, false);
         setupRecyclerView(view);
-        //countReviewsForEvent();
         return view;
     }
 
@@ -45,13 +44,9 @@ public class EventFeedback extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         reviews = new ArrayList<>();
 
-        // Retrieve the eventId from arguments
         String eventId = getArguments() != null ? getArguments().getString("eventId") : null;
 
-        // Check if recyclerView is not null before proceeding
         if (recyclerView != null) {
-            //Toast.makeText(getContext(), "Test RecyclerView", Toast.LENGTH_SHORT).show();
-            // Create FeedbackAdapter and set it to the RecyclerView
             adapter = new FeedbackAdapter(getContext(), R.layout.review_item, reviews);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(adapter);
@@ -63,19 +58,15 @@ public class EventFeedback extends Fragment {
                 }
             });
 
-            // Initialize Realtime Database reference
             DatabaseReference reviewsRef = FirebaseDatabase.getInstance().getReference("Reviews");
 
-            // Check if eventId is not null before fetching reviews
             if (eventId != null) {
-                //Toast.makeText(getContext(), "EventId good", Toast.LENGTH_SHORT).show();
                 fetchFeedbackFromFirebase(reviewsRef, eventId);
             }
         }
     }
 
     private void fetchFeedbackFromFirebase(DatabaseReference reviewsRef, String eventId) {
-        // Assume eventId is not null, make sure you handle cases where it might be null in your actual code
         reviewsRef.orderByChild("eventId").equalTo(eventId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -97,6 +88,5 @@ public class EventFeedback extends Fragment {
     }
 
     private void openFeedbackFragment(Review review) {
-        // Handle the action when a review is clicked, e.g., navigate to a detailed view
     }
 }
