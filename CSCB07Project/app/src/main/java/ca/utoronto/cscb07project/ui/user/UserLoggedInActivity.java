@@ -1,16 +1,17 @@
 package ca.utoronto.cscb07project.ui.user;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,12 +29,11 @@ import java.util.Set;
 
 import ca.utoronto.cscb07project.R;
 import ca.utoronto.cscb07project.announcements.All_Announcement_Fragment;
-import ca.utoronto.cscb07project.events.EventListFragment;
+import ca.utoronto.cscb07project.events.*;
 import ca.utoronto.cscb07project.ui.POStCheck.MajOrMin;
 import ca.utoronto.cscb07project.ui.complaints.ComplaintActivity;
 
 public class UserLoggedInActivity extends AppCompatActivity {
-
     private FirebaseAuth mAuth;
 
     // Keep track of subscribed topics to simulate unsubscription
@@ -119,8 +119,6 @@ public class UserLoggedInActivity extends AppCompatActivity {
                 Log.d("Error", "Database Error: " + error.getMessage());
             }
         });
-
-
     }
 
     private void saveUserFCMToken(String userId, String userEmail, String fcmToken) {
@@ -145,7 +143,22 @@ public class UserLoggedInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // Other methods...
+    public void toAdminComplaints(View view){
+        loadFragment(new AdminComplaintsFragment());
+    }
+
+    public void toAdminEventFeedback(View view){
+        loadFragment(new AdminEventsList());
+    }
+
+    public void logOut(View view) {
+        /*
+        mAuth.signOut();
+        Toast.makeText(this,"You are now logged out!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+         */
+    }
 
     public void goToAddEvents(View view) {
         loadFragment(new AddEventFragment());

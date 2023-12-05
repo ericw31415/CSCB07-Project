@@ -1,0 +1,64 @@
+<!-- res/layout/review_item.xml -->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User: "
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/userEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="userEmail"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rating: "
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rating"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Review: "
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/reviewText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="review text"
+            android:textSize="14sp"/>
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
