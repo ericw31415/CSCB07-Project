@@ -1,6 +1,6 @@
-# CS Department Communication App
+# UTSC CS Department Communication App 
 
-Welcome to the CS Department Communication App! This Android application serves as a platform for students and the Computer Science department to efficiently share information, manage events, and facilitate communication. Final project for CSCB07 Software Design Fall 2023 Group 2 Submission. 
+Welcome to the UTSC Computer Science Student Experience App! This Android application serves as a platform for students and the Computer Science department to efficiently share information, manage events, and facilitate communication. Final project for CSCB07 Software Design Fall 2023 Group 2 Submission. 
 
 ## Features
 
@@ -34,16 +34,6 @@ Project management was carried out using Jira, a powerful tool that helped organ
 - **Development Methodology:** Agile with Scrum
 - **Project Management:** Jira
 - **Authentication and Database:** Firebase Authentication and Firebase Realtime Database
-
-## How to Contribute
-
-If you're interested in contributing to the development of the CS Department Communication App, please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your feature (`git checkout -b feature/YourFeatureName`).
-3. Make your changes and commit them (`git commit -m 'Add some feature'`).
-4. Push to the branch (`git push origin feature/YourFeatureName`).
-5. Create a new Pull Request.
 
 ## Team Members
 
