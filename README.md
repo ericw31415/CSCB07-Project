@@ -53,6 +53,50 @@ Welcome to the UTSC Computer Science Student Experience App! This Android applic
 15. **Event Feedback Summary:**
     - As an administrator, view a summarized view of feedback for each event, including the average rating and the number of student comments, to quickly gauge the overall reception of the event.
 
+## App Screenshots
+
+<details>
+  <summary>Click to expand!</summary>
+
+  ### Student App Screenshots
+
+  #### Login
+  <img src="CSCB07Project/Screenshot_20240106_150934.png" alt="User Authentication" width="300">
+
+  #### Authentication
+  <img src="CSCB07Project/LoginSuccess.png" alt="User Authentication" width="300">
+
+  #### Program Qualification Checker
+  <img src="CSCB07Project/POSTCHECK.png" alt="Program Qualification Checker" width="300">
+
+  #### Complaint Submission Platform
+  <img src="CSCB07Project/SubmitComplaint.png" alt="Complaint Submission Platform" width="300">
+
+  #### Important Announcements and Event Notifications
+  <img src="CSCB07Project/ViewAnnouncements.png" alt="Announcements and Notifications" width="300">
+
+  #### Leave Event Review
+  <img src="CSCB07Project/LeaveReview.png" alt="Leave Event Review" width="300">
+
+  #### RSVP Events
+  <img src="CSCB07Project/RSVPEvent.png" alt="RSVP Events" width="300">
+
+  #### Submit Complaints
+  <img src="CSCB07Project/SubmitComplaint.png" alt="Submit Complaints" width="300">
+
+  ### Admin App Screenshots
+
+  #### Post Announcements
+  <img src="CSCB07Project/PostAnnouncement.png" alt="Post Announcements" width="300">
+
+  #### Schedule Department Events
+  <img src="CSCB07Project/NewEvent.png" alt="Schedule Department Events" width="300">
+
+  #### Access Event Feedback Data
+  <img src="CSCB07Project/ViewEventFeedback.png" alt="Access Event Feedback Data" width="300">
+
+</details>
+
 ## Development Process
 
 The CS Department Communication App was developed using Agile methodologies, specifically the Scrum framework. Ten user stories were created, five representing the needs of students and five addressing the requirements of administrators. These user stories were broken down into manageable tasks and organized into short, time-bound iterations known as sprints. Daily stand-up meetings facilitated open communication within the team, enabling prompt addressing of any roadblocks or adjustments needed to meet project goals.
