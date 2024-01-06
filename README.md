@@ -1,4 +1,4 @@
-# UTSC CS Department Communication App 
+# UTSC Computer Science Student Experience App 
 
 Welcome to the UTSC Computer Science Student Experience App! This Android application serves as a platform for students and the Computer Science department to efficiently share information, manage events, and facilitate communication. Final project for CSCB07 Software Design Fall 2023 Group 2 Submission. 
 
